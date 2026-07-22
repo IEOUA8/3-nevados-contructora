@@ -7,7 +7,9 @@ import { ProjectCards } from "@/components/sections/ProjectCards";
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
-import { getHome, getProjects } from "@/lib/content";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { getHome, getProjects, getSettings } from "@/lib/content";
+import { homeJsonLd } from "@/lib/seo/jsonld";
 
 /**
  * HOME — §10.1
@@ -29,7 +31,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [home, projects] = await Promise.all([getHome(), getProjects()]);
+  const [home, projects, settings] = await Promise.all([
+    getHome(),
+    getProjects(),
+    getSettings(),
+  ]);
 
   const cards = projects.map((project) => ({
     slug: project.slug,
@@ -40,6 +46,8 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={homeJsonLd(settings)} />
+
       {/* — Bloque 1 · Entrada — sin CTA. Se hace scroll. */}
       <HeroFullBleed
         image={home.hero.image}

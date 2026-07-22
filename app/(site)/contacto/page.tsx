@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { ContactBlock } from "@/components/sections/ContactBlock";
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getSettings } from "@/lib/content";
+import { contactJsonLd } from "@/lib/seo/jsonld";
 
 export const metadata: Metadata = {
   title: "Contacto",
@@ -18,6 +20,8 @@ export default async function ContactPage() {
 
   return (
     <>
+      <JsonLd data={contactJsonLd(settings)} />
+
       <Section tone="cream" className="pb-0 pt-32 md:pt-40">
         <Container size="read">
           <Kicker>Contacto</Kicker>

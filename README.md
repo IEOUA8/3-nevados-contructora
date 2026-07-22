@@ -72,13 +72,29 @@ el home completo; en 4G cada 100 KB de más son décimas de segundo de LCP.
 
 ## Estado
 
-**Fases 1–5 del orden de construcción** (§27): setup, design system, home,
-plantilla de ficha, y el resto de páginas. Sin integraciones.
+**Fases 1–5 y 9** del orden de construcción (§27): setup, design system, home,
+plantilla de ficha, el resto de páginas y el SEO técnico. Sin integraciones.
 
 Lo que funciona hoy: las seis páginas públicas, la plantilla replicable con los
 dos proyectos poblados con contenido real de la marca, el formulario de lead de
-punta a punta con validación, honeypot, control de tiempo y rate limit, y los
-eventos de analítica listos para conectarse a GA4.
+punta a punta con validación, honeypot, control de tiempo y rate limit, los
+eventos de analítica listos para conectarse a GA4, y la capa de SEO completa.
+
+### SEO
+
+- **Tarjetas para compartir** generadas por `opengraph-image.tsx` en home,
+  manifiesto y cada ficha. Fondo Pine Tree, nombre en serif, sin adornos. Se
+  prerrenderizan en el build, así que no cuestan nada en runtime.
+  Las fuentes viven en `assets/fonts/` como TTF estáticos porque satori no lee
+  woff2 ni fuentes variables; son solo para el servidor y nunca llegan al
+  navegador (de esas se encarga `next/font`). Licencias OFL incluidas.
+- **JSON-LD** por tipo de página, con una regla dura: **no se emite ningún dato
+  que la marca no haya confirmado**. Sin dirección de sala de ventas, sin
+  coordenadas, sin `offers`. Un `address` inventado alimenta el Knowledge Graph
+  de Google con información falsa y corregirlo después cuesta mucho más que
+  haber esperado. Hay una prueba que lo vigila.
+- Metadata única por ruta, canonical absoluto, sitemap y `robots.txt`
+  generados desde el contenido.
 
 ## Decisiones que se apartan del documento
 

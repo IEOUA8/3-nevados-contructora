@@ -4,7 +4,9 @@ import Link from "next/link";
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
-import { getCompany } from "@/lib/content";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { getCompany, getSettings } from "@/lib/content";
+import { companyJsonLd } from "@/lib/seo/jsonld";
 
 /**
  * LA CONSTRUCTORA — §10.4
@@ -24,10 +26,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CompanyPage() {
-  const company = await getCompany();
+  const [company, settings] = await Promise.all([getCompany(), getSettings()]);
 
   return (
     <Section tone="cream" className="pt-32 md:pt-40">
+      <JsonLd data={companyJsonLd(settings)} />
+
       <Container size="read">
         <Kicker>{company.kicker}</Kicker>
         <h1 className="mt-6 font-display text-display-l text-text">

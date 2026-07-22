@@ -12,7 +12,9 @@ import { TypologyGrid } from "@/components/sections/TypologyGrid";
 import { Container, Section } from "@/components/ui/Layout";
 import { Reveal } from "@/components/ui/Reveal";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getProject, getProjectSlugs, getSettings } from "@/lib/content";
+import { breadcrumbJsonLd, projectJsonLd } from "@/lib/seo/jsonld";
 
 /**
  * FICHA DE PROYECTO — plantilla replicable. §10.3
@@ -40,14 +42,20 @@ export async function generateMetadata({
   if (!project) return {};
 
   return {
-    title: project.seo.title,
+    // `absolute` evita que el layout raíz añada « | Tres Nevados»: el nombre de
+    // Reserva ya lleva la marca, y con el sufijo el título se pasaba de los 60
+    // caracteres que Google muestra. Cada ficha controla su título entero.
+    title: { absolute: project.seo.title },
     description: project.seo.description,
     alternates: { canonical: `/proyectos/${project.slug}` },
     openGraph: {
       title: project.seo.title,
       description: project.seo.description,
       url: `/proyectos/${project.slug}`,
-      images: [{ url: project.heroImage.src }],
+      // Sin `images` a propósito: declararlas aquí pisa la tarjeta de
+      // `opengraph-image.tsx`, que es la que pide el §16.4. Un render sin
+      // texto encima se parece demasiado a un enlace de spam en WhatsApp;
+      // la tarjeta con el nombre del proyecto se lee como algo legítimo.
     },
   };
 }
@@ -64,6 +72,14 @@ export default async function ProjectPage({
 
   return (
     <>
+      <JsonLd data={projectJsonLd(project, settings)} />
+      <JsonLd
+        data={breadcrumbJsonLd(settings, [
+          { name: "Inicio", path: "/" },
+          { name: project.name, path: `/proyectos/${project.slug}` },
+        ])}
+      />
+
       {/* — A · Entrada — */}
       <HeroFullBleed
         image={project.heroImage}

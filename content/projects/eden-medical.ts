@@ -175,7 +175,8 @@ export const eden: Project = {
   ],
 
   seo: {
-    title: "Edén Medical · Consultorios médicos en Armenia",
+    // Título completo: la ficha no recibe el sufijo de marca del layout.
+    title: "Edén Medical · Consultorios en Armenia | Tres Nevados",
     description:
       "Torre médica especializada en Armenia, Quindío. Infraestructura diseñada desde cero para salud, habilitable para cualquier especialidad.",
   },
