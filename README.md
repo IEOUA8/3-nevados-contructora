@@ -13,12 +13,15 @@ que cualquier decisión rara del código se pueda rastrear hasta su razón.
 npm install && npm run dev
 ```
 
+Queda en **http://localhost:3007**, no en el 3000. El 3000 lo usa cualquier
+proyecto y el navegador termina sirviendo la caché del último que corrió ahí.
+
 No hace falta ninguna variable de entorno. Sin credenciales, los adaptadores de
 Supabase, CRM y analítica quedan inactivos y el sitio funciona igual.
 
 | Comando | Qué hace |
 |---|---|
-| `npm run dev` | Servidor de desarrollo en `localhost:3000` |
+| `npm run dev` | Servidor de desarrollo en `localhost:3007` |
 | `npm run build` | Build de producción (todas las páginas estáticas) |
 | `npm run typecheck` | TypeScript en modo estricto |
 | `npm run lint` | ESLint, incluidas las reglas del compilador de React |
