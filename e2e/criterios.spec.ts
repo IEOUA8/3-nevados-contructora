@@ -8,7 +8,11 @@ import { expect, test } from "@playwright/test";
  */
 
 test.describe("Criterio 02 · «Lo esencial» se lee en una pantalla de celular", () => {
-  for (const slug of ["tres-nevados-reserva", "eden-medical"]) {
+  for (const slug of [
+    "tres-nevados-reserva",
+    "eden-medical",
+    "mall-comercial-tres-nevados",
+  ]) {
     test(`${slug} · el bloque cabe en 375×667`, async ({ page }) => {
       await page.goto(`/proyectos/${slug}`);
 
@@ -69,6 +73,7 @@ test.describe("Criterio 01 · no suena a anuncio inmobiliario", () => {
     "/contacto",
     "/proyectos/tres-nevados-reserva",
     "/proyectos/eden-medical",
+    "/proyectos/mall-comercial-tres-nevados",
   ];
 
   for (const ruta of RUTAS) {
@@ -145,5 +150,48 @@ test.describe("Barra de acción · §10.3", () => {
     await page.waitForTimeout(500);
 
     await expect(bar).not.toHaveClass(/translate-y-full/);
+  });
+});
+
+test.describe("Experiencia de exploración de proyectos", () => {
+  test("los tres proyectos se apilan y conservan el ancho táctil en móvil", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const cards = page.locator('main a[href^="/proyectos/"]');
+    await expect(cards).toHaveCount(3);
+
+    const boxes = await Promise.all(
+      [0, 1, 2].map((index) => cards.nth(index).boundingBox()),
+    );
+
+    for (const box of boxes) {
+      expect(box).not.toBeNull();
+      expect(box!.width).toBeGreaterThanOrEqual(320);
+    }
+
+    expect(boxes[1]!.y).toBeGreaterThan(boxes[0]!.y + boxes[0]!.height);
+    expect(boxes[2]!.y).toBeGreaterThan(boxes[1]!.y + boxes[1]!.height);
+  });
+
+  test("la galería navega y abre un visor de detalle", async ({ page }) => {
+    await page.goto("/proyectos/eden-medical");
+
+    const openButton = page.getByRole("button", {
+      name: /abrir imagen 1 de 6 en pantalla completa/i,
+    });
+    await openButton.scrollIntoViewIfNeeded();
+    await openButton.click();
+
+    const dialog = page.getByRole("dialog", { name: /visor de infraestructura/i });
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toContainText("01 / 06");
+
+    await dialog.getByRole("button", { name: /imagen siguiente en visor/i }).click();
+    await expect(dialog).toContainText("02 / 06");
+
+    await dialog.getByRole("button", { name: /cerrar visor/i }).click();
+    await expect(dialog).toHaveCount(0);
   });
 });

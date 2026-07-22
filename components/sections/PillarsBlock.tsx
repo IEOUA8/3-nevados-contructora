@@ -22,41 +22,37 @@ export function PillarsBlock({ pillars }: { pillars: Pillar[] }) {
       <Container>
         <Kicker>Los tres pilares</Kicker>
 
-        <ul className="mt-8 flex flex-col gap-12 md:gap-24">
+        <ul className="mt-8 grid gap-10 md:grid-cols-3 md:gap-6">
           {pillars.map((pillar, index) => (
-            <Reveal as="li" key={pillar.number}>
-              <div
-                className={
-                  "grid items-center gap-6 md:grid-cols-2 md:gap-16 " +
-                  // Alterna el lado de la imagen. Ritmo, no decoración.
-                  (index % 2 === 1 ? "md:[&>*:first-child]:order-2" : "")
-                }
-              >
+            <Reveal as="li" key={pillar.number} delay={index * 0.06}>
+              <article className="border-t border-text/15 pt-5">
                 {pillar.image && (
-                  <div className="relative aspect-4/5 overflow-hidden md:aspect-square">
+                  <div className="relative aspect-4/3 overflow-hidden">
                     <Image
                       src={pillar.image.src}
                       alt={pillar.image.alt}
                       fill
                       loading="lazy"
-                      sizes="(min-width: 768px) 46vw, 100vw"
+                      sizes="(min-width: 768px) 31vw, 100vw"
                       className="object-cover"
                     />
                   </div>
                 )}
 
-                <div>
+                <div className="mt-6 grid grid-cols-[2rem_1fr] gap-3">
                   <p className="text-kicker font-medium uppercase text-secondary">
                     {pillar.number}
                   </p>
-                  <h3 className="mt-3 font-display text-display-m text-text">
-                    {pillar.title}
-                  </h3>
-                  <p className="mt-4 measure text-body-l text-text">
-                    {pillar.text}
-                  </p>
+                  <div>
+                    <h3 className="font-display text-display-m text-text">
+                      {pillar.title}
+                    </h3>
+                    <p className="mt-3 text-body-s text-text-muted">
+                      {pillar.text}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </article>
             </Reveal>
           ))}
         </ul>

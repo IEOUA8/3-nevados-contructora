@@ -112,6 +112,57 @@
   }
 }
 
+/* Ritmo transversal. Tres escalas bastan para evitar que cada página invente
+   su propio aire y para reducir los vacíos acumulados entre bloques afines. */
+@layer components {
+  .section-space-sm {
+    padding-block: 4rem;
+  }
+
+  .section-space-md {
+    padding-block: 6rem;
+  }
+
+  .section-space-lg {
+    padding-block: 7.5rem;
+  }
+
+  @media (min-width: 48rem) {
+    .section-space-sm {
+      padding-block: 5rem;
+    }
+
+    .section-space-md {
+      padding-block: 8rem;
+    }
+
+    .section-space-lg {
+      padding-block: 11rem;
+    }
+  }
+
+  .project-theme--eden {
+    --color-bg: #eee6d9;
+    --color-bg-alt: #ffffff;
+    --color-accent: #70898c;
+    --color-accent-hover: #5d777a;
+    --color-secondary: #a69180;
+    --color-cool: #dfe6e2;
+    --color-border: rgb(112 137 140 / 0.24);
+    --color-border-soft: rgb(112 137 140 / 0.14);
+  }
+
+  .project-theme--mall {
+    --color-bg: #f1eadf;
+    --color-bg-alt: #ffffff;
+    --color-accent: #727a4d;
+    --color-secondary: #9b765b;
+    --color-cool: #dce4d4;
+    --color-border: rgb(44 42 41 / 0.16);
+    --color-border-soft: rgb(44 42 41 / 0.09);
+  }
+}
+
 /* =========================================================================
    MOTION · §12
    prefers-reduced-motion desactiva todo. No es opcional.

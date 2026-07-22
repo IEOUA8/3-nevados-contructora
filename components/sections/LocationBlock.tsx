@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
 import type { ProjectLocation } from "@/content/types";
@@ -17,61 +19,77 @@ import type { ProjectLocation } from "@/content/types";
  */
 export function LocationBlock({ location }: { location: ProjectLocation }) {
   const hasMap = typeof location.lat === "number" && typeof location.lng === "number";
+  const hasMapImage = Boolean(location.mapImage);
   const hasContext = location.context.length > 0;
 
-  if (!hasMap && !hasContext && !location.address) return null;
+  if (!hasMap && !hasMapImage && !hasContext && !location.address) return null;
 
-  const mapsUrl = hasMap
+  const mapsUrl = location.mapUrl ?? (hasMap
     ? `https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`
-    : null;
+    : null);
 
   return (
-    <Section tone="cream">
+    <Section tone="cream" className="border-t border-border-soft">
       <Container>
-        <Kicker>Ubicación</Kicker>
-
-        {location.address && (
-          <p className="mt-4 measure text-body-l text-text">{location.address}</p>
-        )}
-
-        {/* PENDIENTE · el mapa estático (Mapbox Static Images con estilo en los
-            tonos de la paleta) se genera cuando la marca entregue las
-            coordenadas del lote. Sin ellas no se dibuja nada: un pin en el
-            lugar equivocado es peor que ningún mapa. */}
-        {mapsUrl && (
-          <p className="mt-6">
+        <div className={hasMapImage ? "grid gap-10 lg:grid-cols-[1.25fr_0.75fr] lg:items-start" : ""}>
+          {location.mapImage && (
             <a
-              href={mapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-body-s text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
+              href={mapsUrl ?? undefined}
+              target={mapsUrl ? "_blank" : undefined}
+              rel={mapsUrl ? "noopener noreferrer" : undefined}
+              className="group relative block aspect-[1.25/1] overflow-hidden border border-border bg-bg-alt"
+              aria-label={mapsUrl ? "Abrir ubicación en mapas" : undefined}
             >
-              Ver en el mapa
+              <Image
+                src={location.mapImage.src}
+                alt={location.mapImage.alt}
+                fill
+                sizes="(min-width: 1024px) 60vw, 100vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.015]"
+              />
             </a>
-          </p>
-        )}
+          )}
 
-        {hasContext && (
-          <>
-            <h3 className="mt-12 font-display text-display-m text-text">
-              Qué hay alrededor
-            </h3>
-            {/* Texto puro, sin iconos. §10.3.F */}
-            <dl className="mt-6 max-w-read">
-              {location.context.map((item) => (
-                <div
-                  key={item.place}
-                  className="flex justify-between gap-6 border-b border-border-soft py-3"
+          <div>
+            <Kicker>Ubicación</Kicker>
+            {location.address && (
+              <p className="mt-4 measure text-body-l text-text">{location.address}</p>
+            )}
+            {mapsUrl && (
+              <p className="mt-5">
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-body-s text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
                 >
-                  <dt className="text-body-s text-text">{item.place}</dt>
-                  <dd className="shrink-0 text-body-s text-text-muted">
-                    {item.distance}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </>
-        )}
+                  Abrir en mapas
+                </a>
+              </p>
+            )}
+
+            {hasContext && (
+              <>
+                <h3 className="mt-10 font-display text-display-m text-text">
+                  En el entorno
+                </h3>
+                <dl className="mt-5 max-w-read">
+                  {location.context.map((item) => (
+                    <div
+                      key={item.place}
+                      className="flex justify-between gap-6 border-b border-border-soft py-3"
+                    >
+                      <dt className="text-body-s text-text">{item.place}</dt>
+                      <dd className="shrink-0 text-body-s text-text-muted">
+                        {item.distance}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
+            )}
+          </div>
+        </div>
       </Container>
     </Section>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
@@ -87,11 +88,21 @@ export function MobileMenu({
         open ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
       )}
     >
-      <div className="flex h-16 items-center justify-end px-6">
+      <div className="flex h-20 items-center justify-between border-b border-border px-6">
+        <Link href="/" onClick={onClose} aria-label="Tres Nevados — inicio">
+          <Image
+            src="/images/brand/logo-dark.png"
+            alt="Tres Nevados Constructora"
+            width={416}
+            height={120}
+            unoptimized
+            className="h-7 w-auto"
+          />
+        </Link>
         <button
           type="button"
           onClick={onClose}
-          className="-mr-2 flex size-11 items-center justify-center text-text"
+          className="-mr-1 flex size-12 items-center justify-center border border-text/25 text-text"
           aria-label="Cerrar menú"
         >
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
@@ -105,42 +116,84 @@ export function MobileMenu({
         </button>
       </div>
 
-      <nav aria-label="Principal" className="px-6 pt-8">
-        <ul className="flex flex-col gap-6">
-          {NAV_ITEMS.map((item) =>
+      <div className="flex h-[calc(100%-5rem)] flex-col overflow-y-auto">
+        <nav aria-label="Principal" className="px-6 pb-8 pt-7">
+          <p className="mb-5 text-[0.625rem] font-medium uppercase tracking-[0.22em] text-text-muted">
+            Navegación
+          </p>
+          <ul className="border-t border-border">
+          {NAV_ITEMS.map((item, index) =>
             item.children ? (
-              <li key={item.label}>
-                <p className="text-kicker font-medium uppercase text-secondary">
+              <li key={item.label} className="border-b border-border py-5">
+                <p className="flex items-center gap-3 text-kicker font-medium uppercase text-secondary">
+                  <span className="text-[0.625rem] text-text-muted">0{index + 1}</span>
                   {item.label}
                 </p>
-                <ul className="mt-4 flex flex-col gap-4 pl-0">
-                  {item.children.map((child) => (
+                <ul className="mt-3">
+                  {item.children.map((child, childIndex) => (
                     <li key={child.href}>
                       <Link
                         href={child.href}
                         onClick={onClose}
-                        className="font-display text-display-m text-text"
+                        className="grid min-h-[4.75rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 border-t border-border-soft font-display text-[1.45rem] leading-tight text-text"
                       >
-                        {child.label}
+                        <span className="font-sans text-[0.625rem] text-text-muted">0{childIndex + 1}</span>
+                        <span>
+                          <span className="block font-sans text-[0.5625rem] font-medium uppercase tracking-[0.18em] text-secondary">
+                            {child.category}
+                          </span>
+                          <span className="mt-1 block">{child.label}</span>
+                        </span>
+                        <ArrowIcon />
                       </Link>
                     </li>
                   ))}
                 </ul>
               </li>
             ) : (
-              <li key={item.href}>
+              <li key={item.href} className="border-b border-border">
                 <Link
                   href={item.href!}
                   onClick={onClose}
-                  className="font-display text-display-m text-text"
+                  className="grid min-h-[5.25rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 font-display text-[1.65rem] leading-tight text-text"
                 >
+                  <span className="font-sans text-[0.625rem] text-text-muted">0{index + 1}</span>
                   {item.label}
+                  <ArrowIcon />
                 </Link>
               </li>
             ),
           )}
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+
+        <div className="mt-auto grid grid-cols-[1fr_auto] border-t border-text/20 bg-bg-inverse text-text-inverse">
+          <Link
+            href="/contacto"
+            onClick={onClose}
+            className="flex min-h-20 flex-col justify-center px-6"
+          >
+            <span className="text-[0.625rem] font-medium uppercase tracking-[0.2em] text-secondary">Contacto directo</span>
+            <span className="mt-1 font-display text-[1.45rem]">Hablemos.</span>
+          </Link>
+          <Link
+            href="/contacto"
+            onClick={onClose}
+            aria-label="Ir a contacto"
+            className="flex min-h-20 min-w-20 items-center justify-center border-l border-text-inverse/20"
+          >
+            <ArrowIcon />
+          </Link>
+        </div>
+      </div>
     </div>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }

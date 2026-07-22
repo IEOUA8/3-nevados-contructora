@@ -29,6 +29,7 @@ export default async function ProjectsIndexPage() {
             projects={projects.map((project) => ({
               slug: project.slug,
               name: project.name,
+              category: project.category,
               line: project.cardLine,
               image: project.cardImage,
             }))}

@@ -48,27 +48,58 @@ export default async function CompanyPage() {
           </div>
         </Reveal>
 
-        <Reveal>
-          <div className="mt-16">
-            <Kicker>{company.whereWeBuild.title}</Kicker>
-            <p className="mt-3 text-body-l text-text">
-              {company.whereWeBuild.text}
-            </p>
-          </div>
-        </Reveal>
+      </Container>
 
-        <Reveal>
-          <div className="mt-16">
-            <Kicker>{company.backing.title}</Kicker>
-            <ul className="mt-3 flex flex-col gap-1">
-              {company.backing.items.map((item) => (
-                <li key={item} className="text-body-l text-text">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Reveal>
+      <Container className="mt-20 md:mt-28">
+        <Kicker>Cómo decidimos</Kicker>
+        <div className="mt-8 grid border-t border-border md:grid-cols-2">
+          {company.principles.map((principle, index) => (
+            <Reveal key={principle.title} delay={(index % 2) * 0.06}>
+              <article
+                className={
+                  "grid min-h-48 grid-cols-[2rem_1fr] gap-4 border-b border-border py-7 md:min-h-56 md:px-8 " +
+                  (index % 2 === 0 ? "md:border-r md:pl-0" : "md:pr-0")
+                }
+              >
+                <span className="text-[0.6875rem] text-secondary">0{index + 1}</span>
+                <div>
+                  <h2 className="font-display text-display-m text-text">
+                    {principle.title}
+                  </h2>
+                  <p className="mt-4 max-w-md text-body-s text-text-muted">
+                    {principle.text}
+                  </p>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </Container>
+
+      <Container size="read" className="mt-20 md:mt-28">
+        <div className="grid gap-12 border-y border-border py-10 md:grid-cols-2 md:gap-16">
+          <Reveal>
+            <div>
+              <Kicker>{company.whereWeBuild.title}</Kicker>
+              <p className="mt-3 text-body-l text-text">
+                {company.whereWeBuild.text}
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal>
+            <div>
+              <Kicker>{company.backing.title}</Kicker>
+              <ul className="mt-3 flex flex-col gap-1">
+                {company.backing.items.map((item) => (
+                  <li key={item} className="text-body text-text">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+        </div>
 
         {/* PENDIENTE marca — sin texto de trayectoria, la sección no se pinta.
             Un titular con el cuerpo vacío se lee como un sitio sin terminar. */}

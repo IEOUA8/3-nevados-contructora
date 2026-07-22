@@ -16,6 +16,14 @@ export const eden: Project = {
   slug: "eden-medical",
   order: 2,
   isPublished: true,
+  category: "Salud",
+  theme: "eden",
+  brandLogo: {
+    src: "/images/eden/brand/logo-wordmark.png",
+    alt: "Edén Medical",
+    width: 1784,
+    height: 700,
+  },
 
   // — A · Entrada —
   heroImage: {
@@ -24,7 +32,7 @@ export const eden: Project = {
     width: 2400,
     height: 1350,
   },
-  tagline: "El espacio donde un especialista ejerce mejor.",
+  tagline: "Atender bien empieza por el lugar donde atiendes.",
 
   cardImage: {
     src: "/images/eden/card.jpg",
@@ -33,38 +41,71 @@ export const eden: Project = {
     height: 788,
   },
   cardLine:
-    "Consultorios médicos. Infraestructura diseñada desde cero para salud.",
+    "Consultorios, suites y espacios especializados para ejercer la medicina.",
 
   // — B · Qué se vive aquí —
   experience: [
-    "Un consultorio no es un cuarto con una camilla.",
-    "Es el lugar donde alguien confía.",
-    "Aquí la infraestructura no estorba. Acompaña.",
+    "La confianza también se construye con luz, silencio y recorridos claros.",
+    "Edén reúne las condiciones para que la medicina ocurra.",
+    "Armonía en bienestar.",
+  ],
+
+  productTypes: [
+    {
+      name: "Consultorios",
+      range: "22–44 m²",
+      description: "Espacios médicos para distintas especialidades.",
+    },
+    {
+      name: "Consultorios VIP",
+      range: "28–41 m²",
+      description: "Ambientes de atención con una experiencia más privada.",
+    },
+    {
+      name: "Suites médicas",
+      range: "Rango por confirmar",
+      description: "Espacios para atención y permanencia médica especializada.",
+    },
+    {
+      name: "Quirófanos",
+      range: "Infraestructura especializada",
+      description: "Espacios planteados para procedimientos y atención clínica.",
+    },
+    {
+      name: "Locales",
+      range: "34–140 m²",
+      description: "Servicios complementarios dentro del ecosistema médico.",
+    },
   ],
 
   // — C · Lo esencial —
   essentials: [
-    { label: "Tipo", value: "Torre médica especializada", status: "confirmed" },
+    { label: "Tipo", value: "Ecosistema médico", status: "confirmed" },
     {
-      label: "Infraestructura",
-      value: "Diseñada desde cero para salud",
+      label: "Área",
+      value: "Más de 18.000 m²",
       status: "confirmed",
     },
     {
-      label: "Normativa",
-      value: "Cumple accesibilidad, bioseguridad y ventilación vigentes",
+      label: "Niveles médicos",
+      value: "10 niveles",
       status: "confirmed",
     },
     {
-      label: "Habilitación",
-      value:
-        "Espacios habilitables para cualquier especialidad, escalables y acreditables",
+      label: "Sótanos",
+      value: "5 niveles",
       status: "confirmed",
     },
-    // PENDIENTE marca · §26 R1 — fecha límite fin de semana 5.
-    { label: "Ubicación", status: "pending" },
-    { label: "Tipologías", status: "pending" },
-    { label: "Áreas", status: "pending" },
+    {
+      label: "Ubicación",
+      value: "Sector médico de Armenia",
+      status: "confirmed",
+    },
+    {
+      label: "Productos",
+      value: "Consultorios, suites, quirófanos y locales",
+      status: "confirmed",
+    },
     { label: "Respaldo", status: "pending" },
     { label: "Estado", status: "pending" },
   ],
@@ -76,8 +117,8 @@ export const eden: Project = {
   pillars: [
     {
       number: "01",
-      title: "Ecosistema que conecta",
-      text: "Toda la salud en un edificio.",
+      title: "Confort",
+      text: "Espacios pensados para recibir, esperar y atender con calma.",
       image: {
         src: "/images/eden/g-2.jpg",
         alt: "Acceso al lobby principal de Edén Medical.",
@@ -87,8 +128,8 @@ export const eden: Project = {
     },
     {
       number: "02",
-      title: "Infraestructura que eleva",
-      text: "Habilitable para cualquier especialidad.",
+      title: "Conexión",
+      text: "Servicios médicos y complementarios reunidos en un mismo lugar.",
       image: {
         src: "/images/eden/g-3.jpg",
         alt: "Hall de elevadores de la torre médica.",
@@ -98,8 +139,8 @@ export const eden: Project = {
     },
     {
       number: "03",
-      title: "Especialidades que potencia",
-      text: "Un mercado sin saturar.",
+      title: "Celebración",
+      text: "Una visión del bienestar que también reconoce la vida cotidiana.",
       image: {
         src: "/images/eden/g-1.jpg",
         alt: "Fachada de acceso de Edén Medical desde la calle.",
@@ -156,13 +197,29 @@ export const eden: Project = {
     },
   ],
 
-  // — F · Ubicación — PENDIENTE marca. Sin coordenadas no se pinta mapa. §20.5
   location: {
     lat: undefined,
     lng: undefined,
-    address: undefined,
-    context: [],
+    address: "Calle 3 Norte #12-87, Armenia, Quindío",
+    mapImage: {
+      src: "/images/eden/location/localizacion.jpg",
+      alt: "Plano de localización de Edén Medical en el sector médico de Armenia.",
+      width: 2019,
+      height: 1615,
+    },
+    mapUrl:
+      "https://www.google.com/maps/search/?api=1&query=Calle+3+Norte+12-87+Armenia+Quindio",
+    context: [
+      { place: "Parque de la Vida", distance: "Cercano" },
+      { place: "Parque de los Fundadores", distance: "Cercano" },
+      { place: "Oncólogos de Occidente", distance: "En el sector" },
+      { place: "Clínica Central", distance: "En el sector" },
+      { place: "Clínica del Café", distance: "En el sector" },
+    ],
   },
+
+  disclaimer:
+    "Las imágenes son representaciones ilustrativas y pueden presentar modificaciones durante el desarrollo del proyecto.",
 
   brochure: undefined,
 

@@ -46,15 +46,28 @@ export default async function ManifestoPage() {
           {manifesto.title}
         </h1>
 
-        {/* measure 48ch, line-height 1.8, --space-12 entre párrafos. §10.2 */}
-        <div className="mt-16 flex flex-col gap-24">
-          {manifesto.paragraphs.map((paragraph) => (
-            <p
-              key={paragraph}
-              className="measure-narrow text-body-l leading-[1.8] text-text"
+        <div className="mt-16 border-l border-border pl-6 md:mt-24 md:pl-10">
+          {manifesto.stanzas.map((stanza, index) => (
+            <div
+              key={stanza[0]}
+              className="relative mb-16 last:mb-0 md:mb-24"
             >
-              {paragraph}
-            </p>
+              <span className="absolute -left-[2.15rem] top-1 text-[0.625rem] font-medium tracking-[0.18em] text-secondary md:-left-[3.15rem]">
+                0{index + 1}
+              </span>
+              <div
+                className={
+                  "measure-narrow flex flex-col gap-2 text-text " +
+                  (index === manifesto.stanzas.length - 1
+                    ? "font-display text-[clamp(1.85rem,3.4vw,2.7rem)] leading-[1.2]"
+                    : "text-body-l leading-[1.75]")
+                }
+              >
+                {stanza.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </Container>
@@ -73,7 +86,7 @@ export default async function ManifestoPage() {
       )}
 
       <Container size="read">
-        <p className="mt-24">
+        <p className="mt-20 border-t border-border pt-8 md:mt-28">
           <Link
             href="/proyectos/tres-nevados-reserva"
             className="text-body-s text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"

@@ -58,13 +58,20 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-40 transition-[background-color,border-color,transform] duration-200",
-          solid ? "bg-bg border-b border-border" : "bg-transparent border-b border-transparent",
+          "fixed inset-x-0 top-0 z-40 transition-[background-color,border-color,transform,box-shadow] duration-200",
+          solid
+            ? "border-b border-border bg-bg/95 shadow-[0_1px_0_rgb(44_42_41/0.04)] backdrop-blur-md"
+            : "border-b border-text-inverse/20 bg-transparent",
           hidden && !menuOpen && "-translate-y-full",
         )}
       >
-        <div className="mx-auto flex h-16 max-w-site items-center justify-between px-6 md:h-20 md:px-8">
-          <Link href="/" aria-label="Tres Nevados Constructora — inicio">
+        <div className="mx-auto flex h-16 max-w-site items-center justify-between px-6 md:h-24 md:px-8">
+          <div className="flex items-center gap-5">
+            <Link
+              href="/"
+              aria-label="Tres Nevados Constructora — inicio"
+              className="shrink-0"
+            >
             {/* `unoptimized`: el logo es una marca plana de dos colores. Pasarlo
                 por el optimizador no ahorra bytes y además hace que sharp se
                 cuelgue codificando el PNG de paleta a AVIF.
@@ -76,9 +83,28 @@ export function Header() {
               height={120}
               priority
               unoptimized
-              className="h-6 w-auto md:h-7"
+              className="h-7 w-auto md:h-8"
             />
-          </Link>
+            </Link>
+
+            <div
+              className={cn(
+                "hidden border-l pl-5 lg:block",
+                solid ? "border-border" : "border-text-inverse/30",
+              )}
+            >
+              <p
+                className={cn(
+                  "text-[0.625rem] font-medium uppercase leading-[1.45] tracking-[0.2em]",
+                  solid ? "text-text-muted" : "text-text-inverse/75",
+                )}
+              >
+                Constructora
+                <br />
+                Armenia · Quindío
+              </p>
+            </div>
+          </div>
 
           <DesktopNav solid={solid} />
 
@@ -86,12 +112,15 @@ export function Header() {
             type="button"
             onClick={() => setMenuOpen(true)}
             className={cn(
-              "-mr-2 flex size-11 items-center justify-center md:hidden",
-              solid ? "text-text" : "text-text-inverse",
+              "-mr-1 flex min-h-12 items-center gap-3 border px-3.5 text-[0.6875rem] font-medium uppercase tracking-[0.16em] md:hidden",
+              solid
+                ? "border-text/25 text-text"
+                : "border-text-inverse/45 text-text-inverse",
             )}
             aria-label="Abrir menú"
             aria-expanded={menuOpen}
           >
+            <span aria-hidden="true">Menú</span>
             <MenuIcon />
           </button>
         </div>
@@ -108,52 +137,111 @@ function DesktopNav({ solid }: { solid: boolean }) {
   return (
     <nav
       aria-label="Principal"
-      className={cn(
-        "hidden items-center gap-8 text-body-s md:flex",
-        solid ? "text-text" : "text-text-inverse",
-      )}
+      className={cn("hidden items-stretch md:flex", solid ? "text-text" : "text-text-inverse")}
     >
-      {NAV_ITEMS.map((item) =>
+      {NAV_ITEMS.map((item, index) =>
         item.children ? (
           // Desplegable por :hover y :focus-within — sin JS y accesible por teclado.
-          <div key={item.label} className="group relative">
-            <span className="cursor-default py-2">{item.label}</span>
-            <div
+          <div key={item.label} className="group relative flex">
+            <button
+              type="button"
               className={cn(
-                "invisible absolute left-1/2 top-full -translate-x-1/2 pt-3 opacity-0",
-                "transition-opacity duration-200",
-                "group-hover:visible group-hover:opacity-100",
-                "group-focus-within:visible group-focus-within:opacity-100",
+                "flex min-h-12 items-center gap-2.5 border-l px-5 text-left transition-colors",
+                solid
+                  ? "border-border hover:bg-text/5"
+                  : "border-text-inverse/20 hover:bg-text-inverse/10",
               )}
             >
-              <ul className="min-w-56 border border-border bg-bg py-2 text-text">
-                {item.children.map((child) => (
-                  <li key={child.href}>
+              <span className={cn("text-[0.625rem]", solid ? "text-text-muted" : "text-text-inverse/60")}>02</span>
+              <span className="text-body-s">{item.label}</span>
+              <ChevronDown />
+            </button>
+            <div
+              className={cn(
+                "invisible absolute right-0 top-full w-[26rem] pt-3 opacity-0",
+                "translate-y-1 transition-[opacity,transform] duration-200",
+                "group-hover:visible group-hover:opacity-100",
+                "group-hover:translate-y-0 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100",
+              )}
+            >
+              <div className="border border-border bg-bg p-2 text-text shadow-[0_20px_60px_rgb(44_42_41/0.12)]">
+                <p className="px-4 pb-3 pt-2 text-[0.625rem] font-medium uppercase tracking-[0.2em] text-text-muted">
+                  Elige un proyecto
+                </p>
+                <ul>
+                  {item.children.map((child, childIndex) => (
+                    <li key={child.href} className="border-t border-border">
                     <Link
                       href={child.href}
-                      className="block px-4 py-2.5 hover:text-accent"
+                      className="group/link grid min-h-20 grid-cols-[2rem_1fr_auto] items-center gap-3 px-4 transition-colors hover:bg-cool/45"
                     >
-                      {child.label}
+                      <span className="text-[0.6875rem] text-text-muted">0{childIndex + 1}</span>
+                      <span>
+                        <span className="block text-[0.5625rem] font-medium uppercase tracking-[0.18em] text-secondary">
+                          {child.category}
+                        </span>
+                        <span className="mt-1 block font-display text-[1.35rem] leading-tight">
+                          {child.label}
+                        </span>
+                      </span>
+                      <ArrowUpRight className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
                     </Link>
                   </li>
-                ))}
-              </ul>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
+        ) : item.href === "/contacto" ? (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "ml-3 flex min-h-12 items-center gap-3 border px-5 text-body-s font-medium transition-colors",
+              solid
+                ? "border-accent bg-accent text-text-inverse hover:bg-accent-hover"
+                : "border-text-inverse/55 bg-text-inverse/10 text-text-inverse hover:bg-text-inverse hover:text-text",
+            )}
+          >
+            Hablemos
+            <ArrowUpRight />
+          </Link>
         ) : (
           <Link
             key={item.href}
             href={item.href!}
             className={cn(
-              "py-2 transition-colors hover:text-accent",
-              pathname === item.href && "text-accent",
+              "flex min-h-12 items-center gap-2.5 border-l px-5 text-body-s transition-colors",
+              solid
+                ? "border-border hover:bg-text/5"
+                : "border-text-inverse/20 hover:bg-text-inverse/10",
+              pathname === item.href && (solid ? "bg-text/5" : "bg-text-inverse/10"),
             )}
           >
-            {item.label}
+            <span className={cn("text-[0.625rem]", solid ? "text-text-muted" : "text-text-inverse/60")}>
+              0{index + 1}
+            </span>
+            <span>{item.label}</span>
           </Link>
         ),
       )}
     </nav>
+  );
+}
+
+function ArrowUpRight({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+      <path d="M4 11 11 4M5 4h6v6" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChevronDown() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <path d="m3 4.5 3 3 3-3" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 

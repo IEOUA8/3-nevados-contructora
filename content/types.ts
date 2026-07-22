@@ -26,6 +26,8 @@ export type ImageRef = {
   caption?: string;
 };
 
+export type ProjectTheme = "reserva" | "eden" | "mall";
+
 /** §9.1 bloque C — el estado gobierna cómo se pinta el campo. §20.2 */
 export type EssentialStatus = "confirmed" | "pending" | "hidden";
 
@@ -36,8 +38,11 @@ export type EssentialField = {
 };
 
 export type Typology = {
+  /** Código comercial del plano: RTB T1, RTC T3, etc. */
+  code?: string;
   name: string;
-  area: string;
+  /** Se omite mientras la ficha comercial no lo haya validado. */
+  area?: string;
   tower?: string;
   /** Planta o render, ratio 3:4. */
   image: ImageRef;
@@ -60,6 +65,22 @@ export type ProjectLocation = {
   lng?: number;
   address?: string;
   context: NearbyPlace[];
+  mapImage?: ImageRef;
+  mapUrl?: string;
+};
+
+export type ProductType = {
+  name: string;
+  range: string;
+  description: string;
+};
+
+export type RelatedOffering = {
+  slug: string;
+  category: string;
+  name: string;
+  text: string;
+  image: ImageRef;
 };
 
 export type Brochure = {
@@ -80,6 +101,10 @@ export type Project = {
   slug: string;
   order: number;
   isPublished: boolean;
+  category: string;
+  theme: ProjectTheme;
+  /** Logotipo de la submarca cuando existe y está aprobado. */
+  brandLogo?: ImageRef;
 
   // — A · Entrada —
   heroImage: ImageRef;
@@ -94,6 +119,9 @@ export type Project = {
 
   // — B · Qué se vive aquí —
   experience: string[];
+
+  /** Portafolio o soluciones disponibles dentro del proyecto. */
+  productTypes?: ProductType[];
 
   // — C · Lo esencial · máx 9 campos —
   essentials: EssentialField[];
@@ -110,6 +138,11 @@ export type Project = {
 
   // — F · Ubicación —
   location: ProjectLocation;
+
+  /** Conecta ofertas cercanas sin mezclarlas en una misma ficha. */
+  relatedOffering?: RelatedOffering;
+
+  disclaimer?: string;
 
   // — G · Ficha descargable (opcional) —
   brochure?: Brochure;
@@ -145,7 +178,7 @@ export type HomeContent = {
 export type ManifestoContent = {
   kicker: string;
   title: string;
-  paragraphs: string[];
+  stanzas: string[][];
   image?: ImageRef;
   outroLabel: string;
   seo: Seo;
@@ -155,6 +188,7 @@ export type CompanyContent = {
   kicker: string;
   title: string;
   origin: string[];
+  principles: { title: string; text: string }[];
   whereWeBuild: { title: string; text: string };
   backing: { title: string; items: string[] };
   trajectory: { title: string; text: string };

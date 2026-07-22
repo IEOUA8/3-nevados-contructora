@@ -53,12 +53,12 @@ export function Section({
     cool: "bg-cool text-text",
     plain: "",
   } as const;
+  const hasExplicitSpacing = className?.includes("section-space-");
 
   return (
     <Component
       id={id}
-      // 96px móvil · 192px desktop. Este es el piso, no el objetivo. §5.3
-      className={cn("py-24 md:py-48", tones[tone], className)}
+      className={cn(!hasExplicitSpacing && "section-space-md", tones[tone], className)}
     >
       {children}
     </Component>

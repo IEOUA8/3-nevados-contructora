@@ -10,6 +10,8 @@ export const reserva: Project = {
   slug: "tres-nevados-reserva",
   order: 1,
   isPublished: true,
+  category: "Residencial",
+  theme: "reserva",
 
   // — A · Entrada —
   heroImage: {
@@ -18,7 +20,7 @@ export const reserva: Project = {
     width: 1535,
     height: 1024,
   },
-  tagline: "Vive viendo los nevados.",
+  tagline: "El día empieza con la luz antes que con el ruido.",
 
   cardImage: {
     src: "/images/reserva/card.jpg",
@@ -27,13 +29,13 @@ export const reserva: Project = {
     height: 788,
   },
   cardLine:
-    "Apartamentos de 1, 2 y 3 alcobas. Norte de Armenia. Vista a los nevados.",
+    "Apartamentos en el norte de Armenia, con la cordillera en el horizonte.",
 
   // — B · Qué se vive aquí —
   experience: [
-    "Hay días que empiezan con ruido.",
-    "Y hay días que empiezan con luz.",
-    "Aquí la mañana entra por la ventana antes que el resto del día.",
+    "Hay mañanas que empiezan con una vista.",
+    "Hay regresos que se sienten como volver al lugar correcto.",
+    "Aquí la inmensidad hace parte de la vida cotidiana.",
   ],
 
   // — C · Lo esencial · 9 campos, el máximo. §10.3 —
@@ -45,7 +47,7 @@ export const reserva: Project = {
     },
     {
       label: "Tipologías",
-      value: "Apartamentos de 1, 2 y 3 alcobas",
+      value: "15 configuraciones en torres B y C",
       status: "confirmed",
     },
     {
@@ -75,43 +77,31 @@ export const reserva: Project = {
     { label: "Entrega", status: "pending" },
   ],
 
-  // — D · Tipologías —
-  // TODO verificar con la marca qué planta corresponde a cada tipología antes
-  // de publicar. El orden de los archivos de render no lo confirma.
+  // Los códigos corresponden a los planos entregados para las torres B y C.
+  // Las áreas particulares se mantienen fuera hasta validar la ficha vigente.
   typologies: [
-    {
-      name: "1 alcoba",
-      area: "Desde 33 m²",
-      tower: "B · C",
+    ...Array.from({ length: 8 }, (_, index) => ({
+      code: `RTB T${index + 1}`,
+      name: `Tipo ${index + 1}`,
+      tower: "B",
       image: {
-        src: "/images/reserva/t-1.jpg",
-        alt: "Planta amoblada del apartamento de una alcoba, vista superior.",
-        width: 1200,
-        height: 1080,
+        src: `/images/reserva/typologies/rtb-t${index + 1}.jpg`,
+        alt: `Plano ambientado RTB T${index + 1} de la Torre B de Tres Nevados Reserva.`,
+        width: 1600,
+        height: 1200,
       },
-    },
-    {
-      name: "2 alcobas",
-      area: "Desde 45 m²",
-      tower: "B · C",
+    })),
+    ...Array.from({ length: 7 }, (_, index) => ({
+      code: `RTC T${index + 1}`,
+      name: `Tipo ${index + 1}`,
+      tower: "C",
       image: {
-        src: "/images/reserva/t-2.jpg",
-        alt: "Planta amoblada del apartamento de dos alcobas, vista superior.",
-        width: 1200,
-        height: 994,
+        src: `/images/reserva/typologies/rtc-t${index + 1}.jpg`,
+        alt: `Plano ambientado RTC T${index + 1} de la Torre C de Tres Nevados Reserva.`,
+        width: 1600,
+        height: 1200,
       },
-    },
-    {
-      name: "3 alcobas",
-      area: "Desde 61 m²",
-      tower: "B · C",
-      image: {
-        src: "/images/reserva/t-3.jpg",
-        alt: "Planta amoblada del apartamento de tres alcobas, vista superior.",
-        width: 1200,
-        height: 741,
-      },
-    },
+    })),
   ],
 
   // — E · Zonas comunes —
@@ -170,6 +160,22 @@ export const reserva: Project = {
     // PENDIENTE marca · §25 H — distancias reales a verificar.
     context: [],
   },
+
+  relatedOffering: {
+    slug: "mall-comercial-tres-nevados",
+    category: "Comercial",
+    name: "Mall Comercial Tres Nevados",
+    text: "Una oferta comercial con acceso directo desde la vía y relación con el entorno residencial.",
+    image: {
+      src: "/images/mall/hero.jpg",
+      alt: "Fachada del Mall Comercial Tres Nevados sobre la vía principal.",
+      width: 1600,
+      height: 900,
+    },
+  },
+
+  disclaimer:
+    "Los planos y renders son ilustrativos. Áreas particulares, disponibilidad y especificaciones se confirman con el equipo comercial.",
 
   // — G · Ficha —
   // PENDIENTE marca · sin PDF cargado, el botón no se renderiza. §20.3

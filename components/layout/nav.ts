@@ -1,14 +1,13 @@
 /**
  * Menú del sitio. §6.2 — cuatro entradas más el logo. Nada más.
  *
- * «Proyectos» no lleva a una página índice: despliega los dos proyectos
- * directamente. Con dos proyectos, una página intermedia es un paso muerto que
- * resta un clic de conversión. §6.3
+ * «Proyectos» despliega las tres ofertas directamente para conservar un acceso
+ * de un solo gesto desde cualquier página.
  */
 export type NavItem = {
   href?: string;
   label: string;
-  children?: { href: string; label: string }[];
+  children?: { href: string; label: string; category: string }[];
 };
 
 export const NAV_ITEMS: NavItem[] = [
@@ -16,8 +15,17 @@ export const NAV_ITEMS: NavItem[] = [
   {
     label: "Proyectos",
     children: [
-      { href: "/proyectos/tres-nevados-reserva", label: "Tres Nevados Reserva" },
-      { href: "/proyectos/eden-medical", label: "Edén Medical" },
+      {
+        href: "/proyectos/tres-nevados-reserva",
+        label: "Tres Nevados Reserva",
+        category: "Residencial",
+      },
+      { href: "/proyectos/eden-medical", label: "Edén Medical", category: "Salud" },
+      {
+        href: "/proyectos/mall-comercial-tres-nevados",
+        label: "Mall Comercial",
+        category: "Comercial",
+      },
     ],
   },
   { href: "/constructora", label: "La constructora" },

@@ -152,19 +152,15 @@ en cada ejecución. Estado medido a 375×667:
 
 | Proyecto | Contenido | Disponible | |
 |---|---|---|---|
-| Edén Medical | 582px | 602px | cabe |
-| Tres Nevados Reserva | 647px | 602px | **se pasa por 45px** |
+| Edén Medical | 488px | 602px | cabe |
+| Tres Nevados Reserva | 598px | 602px | cabe |
 
 El espacio disponible descuenta los 65px del header fijo.
 
-Reserva no cabe porque tres valores ocupan dos líneas: *Ubicación*, *Incluye* y
-*Respaldo*. El brief prevé exactamente este caso — «si hay que sacrificar algo
-de diseño para que quepa en una pantalla, se sacrifica» — pero acortar textos de
-la marca es decisión de la marca, no del proveedor. Recortar cualquiera de esos
-tres a una línea cierra la brecha.
-
-La prueba queda en rojo a propósito. Es el marcador del criterio 02, y en verde
-solo debe ponerse arreglando la causa.
+En móvil, los nueve datos se organizan como una matriz técnica de dos columnas.
+Esto conserva completos los textos de marca, mantiene el tamaño tipográfico y
+reduce el recorrido vertical sin introducir scroll interno. El criterio 02
+queda en verde para ambos proyectos.
 
 ## Estructura
 

@@ -18,16 +18,16 @@ export const home: HomeContent = {
   },
 
   idea: {
-    text: "La vida está pasando ahora. Muchas personas viven como si pasara después. Construimos las condiciones para que ocurra.",
+    text: "Hay lugares que le devuelven tiempo al día. Luz a la mañana. Cercanía a lo que importa. Construimos esas condiciones.",
     linkLabel: "Leer el manifiesto",
   },
 
   projectsKicker: "Los proyectos",
 
   backing: [
-    { label: "Respaldo", value: "Aval Fiduciaria" },
-    { label: "Crédito constructor", value: "Grupo Bancolombia" },
-    { label: "Dónde", value: "Armenia, Quindío" },
+    { label: "Territorio", value: "Armenia, Quindío" },
+    { label: "Proyectos", value: "Vivienda, salud y comercio" },
+    { label: "Respaldo", value: "Aval Fiduciaria · Grupo Bancolombia" },
   ],
 
   contact: {
@@ -42,30 +42,33 @@ export const home: HomeContent = {
   },
 };
 
-/**
- * MANIFIESTO — §10.2
- *
- * PENDIENTE MARCA · bloqueante de la Fase 1.6.
- * El brief es explícito: «El manifiesto completo lo entrega la marca. El
- * proveedor no redacta ni resume.» Los párrafos de abajo son los únicos textos
- * de manifiesto que existen hoy, tomados literalmente del brief (§1 «Quiénes
- * somos» y §2 bloque 2). Sirven para validar el ritmo, la tipografía y el
- * espaciado de la página; NO son el manifiesto final.
- *
- * Al recibir el texto definitivo: reemplazar `paragraphs` completo y verificar
- * que no exceda 600 palabras (§10.2). Si excede, se reporta a la marca — no se
- * recorta unilateralmente.
- */
+/** Manifiesto cultural definitivo · Espacios para la vida, página 7. */
 export const manifesto: ManifestoContent = {
   kicker: "Manifiesto",
   title: "Espacios para la vida",
-  paragraphs: [
-    "La vida está pasando ahora.",
-    "Muchas personas viven como si pasara después.",
-    "Construimos las condiciones para que ocurra.",
-    "La marca nace de tres nevados: el Ruiz, el Tolima, Santa Isabel. Regulan la temperatura del Eje Cafetero. Crean las condiciones para que la vida ocurra.",
-    "Eso hacemos. Construimos las condiciones.",
-    "No vendemos apartamentos. No vendemos consultorios. Vendemos el lugar donde la mañana entra por la ventana. Donde el médico atiende mejor. Donde alguien decide quedarse.",
+  stanzas: [
+    [
+      "Hay ciudades que prometen mucho y le quitan a uno todo.",
+      "Te quitan el silencio.",
+      "Te quitan la mañana.",
+      "Te quitan el tiempo con los tuyos.",
+      "Te quitan la posibilidad de mirar lejos.",
+    ],
+    [
+      "Nosotros no construimos contra esa ciudad.",
+      "Construimos lo que esa ciudad no puede dar.",
+    ],
+    [
+      "Construimos espacios donde el día empieza con vista,",
+      "donde el aire entra antes que el ruido,",
+      "donde la naturaleza es la primera ventana de la mañana.",
+    ],
+    [
+      "No construimos edificios.",
+      "Construimos las condiciones para que la vida ocurra.",
+      "Espacios para la vida.",
+      "Y la vida está pasando ahora.",
+    ],
   ],
   image: undefined,
   outroLabel: "Ver los proyectos",
@@ -84,6 +87,32 @@ export const company: CompanyContent = {
     "Regulan la temperatura del Eje Cafetero.",
     "Crean las condiciones para que la vida ocurra.",
     "Eso hacemos. Construimos las condiciones.",
+  ],
+  principles: [
+    {
+      title: "La vida ocurre ahora",
+      text: "Diseñamos para el presente: la mañana, el trabajo y el tiempo compartido.",
+    },
+    {
+      title: "La inmensidad cabe cerca",
+      text: "Una vista, una ventana y la cordillera pueden cambiar la escala de un día.",
+    },
+    {
+      title: "La verdad antes que el adjetivo",
+      text: "Primero la experiencia. Después, los datos que la sostienen.",
+    },
+    {
+      title: "Personas, no perfiles",
+      text: "Hablamos de cómo alguien vive, atiende, regresa o decide quedarse.",
+    },
+    {
+      title: "Comunidad, no clientela",
+      text: "Cada proyecto se piensa como parte de una ciudad y de una vida compartida.",
+    },
+    {
+      title: "La naturaleza es socia",
+      text: "No funciona como fondo. Orienta la luz, la vista y la manera de habitar.",
+    },
   ],
   whereWeBuild: {
     title: "Dónde construimos",

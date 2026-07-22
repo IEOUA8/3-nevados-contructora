@@ -9,6 +9,7 @@ const RUTAS_INDEXABLES = [
   "/contacto",
   "/proyectos/tres-nevados-reserva",
   "/proyectos/eden-medical",
+  "/proyectos/mall-comercial-tres-nevados",
 ];
 
 async function leerJsonLd(page: import("@playwright/test").Page) {

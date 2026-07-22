@@ -50,7 +50,7 @@ export function EssentialsBlock({
       <Container size="read">
         <Kicker>Lo esencial</Kicker>
 
-        <dl className="mt-4 md:mt-6 md:grid md:grid-cols-2 md:gap-x-8">
+        <dl className="mt-2 grid grid-cols-2 gap-x-4 md:mt-6 md:gap-x-8">
           {confirmed.map((field) => (
             <EssentialRow key={field.label} field={field} />
           ))}
@@ -66,7 +66,7 @@ export function EssentialsBlock({
         {/* Cuando hay dos o más pendientes, la ausencia se convierte en un
             motivo de contacto en lugar de una fuga. §20.2 */}
         {pending.length >= 2 && (
-          <p className="mt-4 text-body-s text-text-muted">
+          <p className="mt-2 text-body-s text-text-muted md:mt-4">
             Estos datos se confirman con el equipo comercial.{" "}
             <WhatsAppLink
               number={whatsappNumber}
@@ -96,14 +96,13 @@ function EssentialRow({
   field: EssentialField;
   pending?: boolean;
 }) {
-  // Los pendientes van en una sola línea, etiqueta a la izquierda y valor a la
-  // derecha, tal como el esquema del §10.3. Ocupan la mitad de alto que una
-  // fila normal, que es exactamente lo que hace que el bloque quepa.
+  // Los pendientes conservan el mismo módulo de la matriz en móvil. En
+  // escritorio recuperan la lectura horizontal etiqueta–valor del §10.3.
   if (pending) {
     return (
-      <div className={`${ROW} flex items-baseline justify-between gap-4`}>
+      <div className={`${ROW} md:flex md:items-baseline md:justify-between md:gap-4`}>
         <dt className={LABEL}>{field.label}</dt>
-        <dd className="text-[0.9375rem] italic text-secondary">Por confirmar</dd>
+        <dd className="mt-1 text-[0.9375rem] italic text-secondary md:mt-0">Por confirmar</dd>
       </div>
     );
   }

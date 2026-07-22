@@ -7,6 +7,8 @@ import { Gallery } from "@/components/sections/Gallery";
 import { HeroFullBleed } from "@/components/sections/HeroFullBleed";
 import { LocationBlock } from "@/components/sections/LocationBlock";
 import { PillarsBlock } from "@/components/sections/PillarsBlock";
+import { ProductTypesBlock } from "@/components/sections/ProductTypesBlock";
+import { RelatedOfferingBlock } from "@/components/sections/RelatedOfferingBlock";
 import { StickyActionBar } from "@/components/sections/StickyActionBar";
 import { TypologyGrid } from "@/components/sections/TypologyGrid";
 import { Container, Section } from "@/components/ui/Layout";
@@ -80,91 +82,110 @@ export default async function ProjectPage({
         ])}
       />
 
-      {/* — A · Entrada — */}
-      <HeroFullBleed
-        image={project.heroImage}
-        title={project.name}
-        subtitle={project.tagline}
-      />
+      <div className={`project-theme--${project.theme}`}>
+        {/* — A · Entrada — */}
+        <HeroFullBleed
+          image={project.heroImage}
+          title={project.name}
+          subtitle={project.tagline}
+          subtitleLabel="Idea del proyecto"
+          category={project.category}
+          brandLogo={project.brandLogo}
+        />
 
-      {/* — B · Qué se vive aquí — */}
-      <Section tone="cream" className="py-24 md:py-48">
-        <Container size="read">
-          <Reveal>
-            <div className="measure-narrow mx-auto flex flex-col gap-2 text-body-l text-text">
-              {project.experience.map((line) => (
-                <p key={line}>{line}</p>
-              ))}
-            </div>
-          </Reveal>
-        </Container>
-      </Section>
+        {/* — B · Qué se vive aquí — */}
+        <Section tone="cream" className="section-space-lg">
+          <Container size="read">
+            <Reveal>
+              <p className="mb-6 text-kicker font-medium uppercase tracking-[0.18em] text-secondary">
+                {project.category}
+              </p>
+              <div className="measure-narrow flex flex-col gap-3 font-display text-[clamp(1.75rem,3vw,2.65rem)] leading-[1.18] text-text">
+                {project.experience.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+            </Reveal>
+          </Container>
+        </Section>
 
-      {/* — C · Lo esencial — no más de dos scrolls desde el hero. §10.3 */}
-      <EssentialsBlock
-        fields={project.essentials}
-        whatsappNumber={settings.whatsapp.number}
-        whatsappMessage={project.whatsappMessage}
-        projectSlug={project.slug}
-      />
+        {/* — C · Lo esencial — no más de dos scrolls desde el hero. §10.3 */}
+        <EssentialsBlock
+          fields={project.essentials}
+          whatsappNumber={settings.whatsapp.number}
+          whatsappMessage={project.whatsappMessage}
+          projectSlug={project.slug}
+        />
 
-      {/* — D · Tipologías, o Pilares en su lugar cuando no hay. §20.4 */}
-      {project.typologies && project.typologies.length > 0 && (
-        <TypologyGrid typologies={project.typologies} projectSlug={project.slug} />
-      )}
-      {project.pillars && project.pillars.length > 0 && (
-        <PillarsBlock pillars={project.pillars} />
-      )}
+        {project.productTypes && project.productTypes.length > 0 && (
+          <ProductTypesBlock products={project.productTypes} />
+        )}
 
-      {/* — E · Zonas comunes / Infraestructura — */}
-      {project.gallery && (
-        <Gallery title={project.galleryTitle} images={project.gallery} />
-      )}
+        {/* — D · Tipologías, o Pilares en su lugar cuando no hay. §20.4 */}
+        {project.typologies && project.typologies.length > 0 && (
+          <TypologyGrid typologies={project.typologies} projectSlug={project.slug} />
+        )}
+        {project.pillars && project.pillars.length > 0 && (
+          <PillarsBlock pillars={project.pillars} />
+        )}
 
-      {/* — F · Ubicación — */}
-      <LocationBlock location={project.location} />
+        {/* — E · Zonas comunes / Infraestructura — */}
+        {project.gallery && (
+          <Gallery title={project.galleryTitle} images={project.gallery} />
+        )}
 
-      {/* — G · Descargar ficha —
-          §20.3 — sin PDF cargado, el botón no se renderiza. En su lugar, el
-          camino real: la ficha se pide por WhatsApp. */}
-      <Section tone="cream" id="descargar-ficha" className="py-24 md:py-48">
-        <Container size="read">
-          {project.brochure ? (
-            <p className="text-body-s text-text-muted">
-              {/* El gate de correo llega en la fase de integraciones. §23 fase 3.3 */}
-              Ficha del proyecto · PDF {project.brochure.sizeMb} MB
-            </p>
-          ) : (
-            <p className="text-body-s text-text-muted">
-              La ficha del proyecto se envía por WhatsApp.{" "}
-              <WhatsAppLink
-                number={settings.whatsapp.number}
-                message={`Hola, quiero la ficha de ${project.name}.`}
-                projectSlug={project.slug}
-                location="brochure_fallback"
-                className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
-              >
-                Solicitarla
-              </WhatsAppLink>
-            </p>
-          )}
-        </Container>
-      </Section>
+        {/* — F · Ubicación — */}
+        <LocationBlock location={project.location} />
 
-      {/* — H · Contacto — con el proyecto resuelto y bloqueado. */}
-      <ContactBlock
-        title="Hablemos."
-        projectSlug={project.slug}
-        whatsappMessage={project.whatsappMessage}
-        formLocation="ficha"
-      />
+        {project.relatedOffering && (
+          <RelatedOfferingBlock offering={project.relatedOffering} />
+        )}
 
-      <StickyActionBar
-        whatsappNumber={settings.whatsapp.number}
-        whatsappMessage={project.whatsappMessage}
-        projectSlug={project.slug}
-        brochure={project.brochure}
-      />
+        {(project.brochure || project.disclaimer) && (
+          <Section tone="cream" id="descargar-ficha" className="section-space-sm border-t border-border-soft">
+            <Container>
+              <div className="grid gap-5 md:grid-cols-2 md:items-start md:gap-12">
+                <p className="text-body-s text-text-muted">
+                  {project.disclaimer}
+                </p>
+                <p className="text-body-s text-text-muted md:text-right">
+                  {project.brochure ? (
+                    <>Ficha del proyecto · PDF {project.brochure.sizeMb} MB</>
+                  ) : (
+                    <>
+                      La ficha vigente se solicita por{" "}
+                      <WhatsAppLink
+                        number={settings.whatsapp.number}
+                        message={`Hola, quiero la ficha de ${project.name}.`}
+                        projectSlug={project.slug}
+                        location="brochure_fallback"
+                        className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
+                      >
+                        WhatsApp
+                      </WhatsAppLink>
+                    </>
+                  )}
+                </p>
+              </div>
+            </Container>
+          </Section>
+        )}
+
+        {/* — H · Contacto — con el proyecto resuelto y bloqueado. */}
+        <ContactBlock
+          title="Hablemos."
+          projectSlug={project.slug}
+          whatsappMessage={project.whatsappMessage}
+          formLocation="ficha"
+        />
+
+        <StickyActionBar
+          whatsappNumber={settings.whatsapp.number}
+          whatsappMessage={project.whatsappMessage}
+          projectSlug={project.slug}
+          brochure={project.brochure}
+        />
+      </div>
     </>
   );
 }

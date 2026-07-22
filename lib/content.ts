@@ -2,6 +2,7 @@ import "server-only";
 
 import { company, home, manifesto } from "@/content/pages";
 import { eden } from "@/content/projects/eden-medical";
+import { mall } from "@/content/projects/mall-comercial";
 import { reserva } from "@/content/projects/tres-nevados-reserva";
 import { site } from "@/content/site";
 import type {
@@ -25,7 +26,7 @@ import type {
  * ni ningún componente se tocan. Es la parte barata de mantener abierta.
  */
 
-const PROJECTS: Project[] = [reserva, eden];
+const PROJECTS: Project[] = [reserva, eden, mall];
 
 export async function getSettings(): Promise<SiteSettings> {
   return site;
