@@ -109,7 +109,7 @@ export default async function ProjectPage({
       <LocationBlock location={project.location} />
 
       {/* — G · Descargar ficha —
-          §20.3 — sin PDF en el CMS el botón no se renderiza. En su lugar, el
+          §20.3 — sin PDF cargado, el botón no se renderiza. En su lugar, el
           camino real: la ficha se pide por WhatsApp. */}
       <Section tone="cream" id="descargar-ficha" className="py-24 md:py-48">
         <Container size="read">

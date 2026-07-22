@@ -15,7 +15,7 @@ import type { EssentialField } from "@/content/types";
  * nunca se reduce el tamaño del tipo.
  *
  * NO EXISTE CAMPO DE PRECIO. No está en el tipo `EssentialField`, no está en el
- * schema de Sanity, no está aquí. Agregarlo por error es imposible.
+ * contrato de contenido, no está aquí. Agregarlo por error es imposible.
  */
 export function EssentialsBlock({
   fields,

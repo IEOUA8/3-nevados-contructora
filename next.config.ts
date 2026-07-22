@@ -25,7 +25,6 @@ const nextConfig: NextConfig = {
   // §17.3 — AVIF primero, WebP como respaldo.
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
   },
 
   // Sin cabecera que revele el framework.

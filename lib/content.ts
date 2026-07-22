@@ -14,15 +14,15 @@ import type {
 } from "@/content/types";
 
 /**
- * PUNTO DE INTERCAMBIO CON EL CMS.
+ * ÚNICA FRONTERA CON LA FUENTE DE CONTENIDO.
  *
- * Este archivo es la única frontera entre las páginas y la fuente de contenido.
- * Hoy lee de `content/`; cuando existan las credenciales de Sanity, cada
- * función pasa a hacer su consulta GROQ y devuelve los mismos tipos. Ningún
- * componente ni ninguna página se toca en esa migración.
+ * El proyecto no lleva CMS (decisión de julio 2026, ver `content/types.ts`).
+ * Estas funciones leen de `content/` y las páginas no saben de dónde sale el
+ * dato.
  *
- * Todas las funciones son async desde ahora, precisamente para que el cambio
- * no altere ninguna firma.
+ * Se mantienen `async` a propósito, aunque hoy no haga falta: si en el futuro
+ * el contenido pasa a venir de una API, cambia este archivo y ninguna página
+ * ni ningún componente se tocan. Es la parte barata de mantener abierta.
  */
 
 const PROJECTS: Project[] = [reserva, eden];

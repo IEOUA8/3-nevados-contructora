@@ -13,7 +13,7 @@ import { getProjects, isProjectIndexEnabled } from "@/lib/content";
  * bloque 3 del home ya cumple esa función.
  *
  * Se activa sola cuando haya tres proyectos o más. Cuando ese día llegue, no
- * hace falta desarrollo: solo publicar el tercer proyecto en el CMS.
+ * hace falta tocar este archivo: basta con publicar el tercer proyecto.
  */
 export default async function ProjectsIndexPage() {
   if (!(await isProjectIndexEnabled())) notFound();

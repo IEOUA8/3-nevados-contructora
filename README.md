@@ -26,6 +26,49 @@ Supabase, CRM y analítica quedan inactivos y el sitio funciona igual.
 | `npm run typecheck` | TypeScript en modo estricto |
 | `npm run lint` | ESLint, incluidas las reglas del compilador de React |
 | `npm test` | Criterios de aprobación del brief, en Playwright |
+| `npm run images -- <origen> <destino>` | Redimensiona y comprime imágenes hacia `public/images/` |
+
+## Editar el contenido
+
+**El sitio no lleva CMS** (decisión de julio 2026). Xian queda como proveedor de
+cambios, así que todo el contenido vive tipado en `content/` y cada ajuste es un
+commit.
+
+| Qué cambiar | Dónde |
+|---|---|
+| Textos y datos de un proyecto | `content/projects/<slug>.ts` |
+| Home, manifiesto, la constructora | `content/pages.ts` |
+| WhatsApp, redes, sala de ventas | `content/site.ts` |
+
+Que sea TypeScript y no un formulario web tiene una ventaja concreta: si alguien
+borra un campo obligatorio o sube una imagen sin `alt`, **la compilación falla
+antes de llegar a producción**. Un CMS habría avisado; esto lo impide.
+
+Antes de desplegar cualquier cambio de contenido: `npm run typecheck && npm test`.
+
+### Agregar un proyecto nuevo
+
+El requisito de «plantilla replicable» del brief sigue en pie. Crear el proyecto
+3 no toca ni una línea de lógica:
+
+1. Procesar las imágenes: `npm run images -- ~/renders/ proyecto-3/ --max 1800`
+   El script imprime el `ImageRef` con las dimensiones ya medidas — hay que
+   pegarlo tal cual y escribir el `alt`. Poner las dimensiones a ojo es la causa
+   más común de CLS.
+2. Copiar `content/projects/tres-nevados-reserva.ts`, cambiar los datos.
+3. Registrarlo en el array `PROJECTS` de `lib/content.ts`.
+
+Con tres proyectos, la página índice `/proyectos` se activa sola (§6.3). El
+`order` controla la posición y `isPublished` permite prepararlo sin publicarlo.
+
+### Cambiar una imagen
+
+```bash
+npm run images -- ~/Desktop/nuevo-render.jpg reserva/g-3.jpg --max 1800
+```
+
+Avisa si el resultado supera 400 KB. El presupuesto del §17.1 es de 900 KB para
+el home completo; en 4G cada 100 KB de más son décimas de segundo de LCP.
 
 ## Estado
 
@@ -43,8 +86,22 @@ eventos de analítica listos para conectarse a GA4.
 |---|---|
 | **Next 16**, no 15 | `create-next-app` ya no sirve la 15. Mismo App Router y mismos RSC. |
 | **Fraunces + Inter**, no Instrument Serif | El PDF del brief incrusta justo esas dos familias: son las que la marca ya usa. Ambas libres (OFL) y servidas desde nuestro dominio por `next/font`. |
-| **Contenido en `content/`, no en Sanity** | No hay credenciales todavía. Los tipos de `content/types.ts` son el espejo exacto del schema `project` del §9.1, y `lib/content.ts` es la única frontera: al conectar Sanity cambia ese archivo y ningún componente más. |
+| **Sin CMS**, contra el §7.2 | El documento elegía Sanity para que el equipo interno editara sin código. El cliente decidió que Xian sea el proveedor de cambios, así que el CMS pierde su razón de ser. Ver la nota contractual abajo. |
 | **Escala de espaciado con la base de Tailwind** | Poner `--spacing: 0.5rem` para replicar la escala de 8px hacía que `h-6` fueran 48px en vez de 24. La disciplina de 8px se mantiene usando solo números pares. |
+
+## Nota contractual sobre la decisión de no llevar CMS
+
+El brief pedía dos cosas que ya no se cumplen, y conviene dejarlo por escrito
+antes de la entrega en lugar de descubrirlo en la reunión de cierre:
+
+- «El equipo interno edita textos, imágenes, tipologías y estado sin tocar
+  código» — ahora cada cambio pasa por Xian.
+- El entregable **#6, capacitación al equipo interno sobre el CMS**, queda sin
+  objeto. Hay que reemplazarlo o retirarlo del alcance.
+
+En su lugar debería quedar acordado un **acuerdo de soporte**: qué tiempo de
+respuesta tiene un cambio de contenido y cómo se factura. El caso concreto que
+va a aparecer primero es «Estado: Por confirmar» pasando a «En obra».
 
 ## Bloqueantes antes de lanzar
 
@@ -100,8 +157,9 @@ app/(site)/        Páginas públicas, con header y footer
 app/api/lead/      Flujo de lead — el orden de los pasos no es negociable (§14.1)
 components/ui/     Primitivas del design system
 components/sections/  Bloques de página
-content/           Contenido tipado — espejo del schema de Sanity
-lib/content.ts     ← el único archivo que cambia al conectar el CMS
+content/           Todo el contenido, tipado — aquí se edita el sitio
+scripts/           Procesado de imágenes
+lib/content.ts     Única frontera con la fuente de contenido
 e2e/               Los criterios de aprobación del brief, ejecutables
 ```
 

@@ -1,16 +1,23 @@
 /**
  * Contratos de contenido — Documento maestro §9.1.
  *
- * Estos tipos son el espejo exacto del schema `project` de Sanity. Hoy los
- * satisface la capa local de `content/`; cuando lleguen las credenciales del
- * CMS, `lib/content.ts` cambia de fuente y ningún componente se toca.
+ * DECISIÓN (julio 2026): el proyecto NO lleva CMS. Xian queda como proveedor de
+ * cambios, así que el contenido vive aquí, tipado, y cada ajuste pasa por un
+ * commit y un despliegue.
  *
- * REGLA ESTRUCTURAL (§10.3): no existe ningún campo de precio, ni aquí ni en el
- * schema de Sanity. Agregarlo por error es imposible: no hay dónde ponerlo.
+ * La ventaja de que sea TypeScript y no un formulario web: si alguien borra un
+ * campo obligatorio o escribe una imagen sin `alt`, la compilación falla antes
+ * de llegar a producción. Un CMS avisa; esto impide.
+ *
+ * Estos tipos siguen el schema `project` del §9.1 al pie de la letra. Si algún
+ * día entra un CMS, este archivo es el contrato que tendría que satisfacer.
+ *
+ * REGLA ESTRUCTURAL (§10.3): no existe ningún campo de precio. Agregarlo por
+ * error es imposible porque no hay dónde ponerlo.
  */
 
 export type ImageRef = {
-  /** Ruta en /public hoy; URL de Sanity CDN mañana. */
+  /** Ruta dentro de /public, procesada con `npm run images`. */
   src: string;
   /** Obligatorio y descriptivo. Validado en el CMS. §18 */
   alt: string;
