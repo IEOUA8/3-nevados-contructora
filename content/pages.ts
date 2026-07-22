@@ -99,7 +99,9 @@ export const company: CompanyContent = {
     text: "",
   },
   seo: {
-    title: "La constructora · Tres Nevados",
+    // El layout raíz ya añade «| Tres Nevados». Repetir la marca aquí gasta
+    // caracteres de los 60 que Google muestra. §16.2
+    title: "La constructora",
     description:
       "Constructora en Armenia, Quindío. Respaldo de Aval Fiduciaria y crédito constructor de Grupo Bancolombia.",
   },

@@ -6,7 +6,7 @@ import { Kicker } from "@/components/ui/Kicker";
 import { getSettings } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Contacto · Tres Nevados Constructora",
+  title: "Contacto",
   description:
     "Escríbenos por WhatsApp o déjanos tus datos. Armenia, Quindío.",
   alternates: { canonical: "/contacto" },
