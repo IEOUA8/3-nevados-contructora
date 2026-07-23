@@ -194,4 +194,21 @@ test.describe("Experiencia de exploración de proyectos", () => {
     await dialog.getByRole("button", { name: /cerrar visor/i }).click();
     await expect(dialog).toHaveCount(0);
   });
+
+  test("el panel de proyectos se cierra al elegir una opción en escritorio", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/");
+
+    const projectsButton = page.getByRole("button", { name: /proyectos/i });
+    await projectsButton.click();
+
+    const edenLink = page.getByRole("link", { name: /salud edén medical/i });
+    await expect(edenLink).toBeVisible();
+    await edenLink.click();
+
+    await expect(page).toHaveURL(/\/proyectos\/eden-medical$/);
+    await expect(edenLink).toBeHidden();
+  });
 });

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { NAV_ITEMS } from "@/components/layout/nav";
@@ -106,7 +106,7 @@ export function Header() {
             </div>
           </div>
 
-          <DesktopNav solid={solid} />
+          <DesktopNav key={pathname} solid={solid} />
 
           <button
             type="button"
@@ -133,6 +133,30 @@ export function Header() {
 
 function DesktopNav({ solid }: { solid: boolean }) {
   const pathname = usePathname();
+  const [projectsOpen, setProjectsOpen] = useState(false);
+  const projectsMenuRef = useRef<HTMLDivElement>(null);
+  const projectsButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const closeOutside = (event: PointerEvent) => {
+      if (!projectsMenuRef.current?.contains(event.target as Node)) {
+        setProjectsOpen(false);
+      }
+    };
+
+    const closeWithEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setProjectsOpen(false);
+      projectsButtonRef.current?.focus();
+    };
+
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", closeWithEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("keydown", closeWithEscape);
+    };
+  }, []);
 
   return (
     <nav
@@ -141,10 +165,25 @@ function DesktopNav({ solid }: { solid: boolean }) {
     >
       {NAV_ITEMS.map((item, index) =>
         item.children ? (
-          // Desplegable por :hover y :focus-within — sin JS y accesible por teclado.
-          <div key={item.label} className="group relative flex">
+          <div
+            key={item.label}
+            ref={projectsMenuRef}
+            className="group relative flex"
+            onMouseEnter={() => setProjectsOpen(true)}
+            onMouseLeave={() => setProjectsOpen(false)}
+            onFocusCapture={() => setProjectsOpen(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                setProjectsOpen(false);
+              }
+            }}
+          >
             <button
+              ref={projectsButtonRef}
               type="button"
+              onClick={() => setProjectsOpen(true)}
+              aria-haspopup="menu"
+              aria-expanded={projectsOpen}
               className={cn(
                 "flex min-h-12 items-center gap-2.5 border-l px-5 text-left transition-colors",
                 solid
@@ -160,8 +199,7 @@ function DesktopNav({ solid }: { solid: boolean }) {
               className={cn(
                 "invisible absolute right-0 top-full w-[26rem] pt-3 opacity-0",
                 "translate-y-1 transition-[opacity,transform] duration-200",
-                "group-hover:visible group-hover:opacity-100",
-                "group-hover:translate-y-0 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100",
+                projectsOpen && "visible translate-y-0 opacity-100",
               )}
             >
               <div className="border border-border bg-bg p-2 text-text shadow-[0_20px_60px_rgb(44_42_41/0.12)]">
@@ -173,6 +211,7 @@ function DesktopNav({ solid }: { solid: boolean }) {
                     <li key={child.href} className="border-t border-border">
                     <Link
                       href={child.href}
+                      onClick={() => setProjectsOpen(false)}
                       className="group/link grid min-h-20 grid-cols-[2rem_1fr_auto] items-center gap-3 px-4 transition-colors hover:bg-cool/45"
                     >
                       <span className="text-[0.6875rem] text-text-muted">0{childIndex + 1}</span>
