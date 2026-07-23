@@ -23,8 +23,18 @@ export default async function ProjectsIndexPage() {
   return (
     <Section tone="cream" className="pt-32 md:pt-40">
       <Container>
-        <Kicker>Los proyectos</Kicker>
-        <div className="mt-8">
+        <div className="grid gap-8 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-8">
+            <Kicker>Los proyectos · 03</Kicker>
+            <h1 className="mt-6 max-w-4xl font-display text-[clamp(3.25rem,7vw,7.5rem)] leading-[0.9] tracking-[-0.045em] text-text">
+              Tres maneras de vivir la ciudad.
+            </h1>
+          </div>
+          <p className="max-w-sm text-body text-text-muted md:col-span-4 md:pb-2">
+            Vivienda, salud y comercio conectados por una misma forma de entender el entorno.
+          </p>
+        </div>
+        <div className="mt-16 md:mt-24">
           <ProjectCards
             projects={projects.map((project) => ({
               slug: project.slug,

@@ -134,6 +134,7 @@ export function Header() {
 
 function DesktopNav({ solid }: { solid: boolean }) {
   const pathname = usePathname();
+  const projectsActive = pathname.startsWith("/proyectos/");
   const [projectsOpen, setProjectsOpen] = useState(false);
   const projectsMenuRef = useRef<HTMLDivElement>(null);
   const projectsButtonRef = useRef<HTMLButtonElement>(null);
@@ -185,11 +186,13 @@ function DesktopNav({ solid }: { solid: boolean }) {
               onClick={() => setProjectsOpen(true)}
               aria-haspopup="menu"
               aria-expanded={projectsOpen}
+              aria-current={projectsActive ? "page" : undefined}
               className={cn(
-                "flex min-h-12 items-center gap-2.5 border-l px-5 text-left transition-colors",
+                "relative flex min-h-12 items-center gap-2.5 border-l px-5 text-left transition-colors after:absolute after:inset-x-5 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-accent after:transition-transform",
                 solid
                   ? "border-border hover:bg-text/5"
                   : "border-text-inverse/20 hover:bg-text-inverse/10",
+                projectsActive && "after:scale-x-100",
               )}
             >
               <span className={cn("text-[0.625rem]", solid ? "text-text-muted" : "text-text-inverse/60")}>02</span>
@@ -205,7 +208,7 @@ function DesktopNav({ solid }: { solid: boolean }) {
             >
               <div className="border border-border bg-bg p-2 text-text shadow-[0_20px_60px_rgb(44_42_41/0.12)]">
                 <p className="px-4 pb-3 pt-2 text-[0.625rem] font-medium uppercase tracking-[0.2em] text-text-muted">
-                  Elige un proyecto
+                  Explora los proyectos
                 </p>
                 <ul>
                   {item.children.map((child, childIndex) => (
@@ -213,7 +216,11 @@ function DesktopNav({ solid }: { solid: boolean }) {
                     <Link
                       href={child.href}
                       onClick={() => setProjectsOpen(false)}
-                      className="group/link grid min-h-20 grid-cols-[2rem_1fr_auto] items-center gap-3 px-4 transition-colors hover:bg-cool/45"
+                      aria-current={pathname === child.href ? "page" : undefined}
+                      className={cn(
+                        "group/link grid min-h-20 grid-cols-[2rem_1fr_auto] items-center gap-3 px-4 transition-colors hover:bg-cool/45",
+                        pathname === child.href && "bg-cool/45",
+                      )}
                     >
                       <span className="text-[0.6875rem] text-text-muted">0{childIndex + 1}</span>
                       <span>
@@ -236,6 +243,7 @@ function DesktopNav({ solid }: { solid: boolean }) {
           <Link
             key={item.href}
             href={item.href}
+            aria-current={pathname === item.href ? "page" : undefined}
             className={cn(
               "ml-3 flex min-h-12 items-center gap-3 border px-5 text-body-s font-medium transition-colors",
               solid
@@ -250,6 +258,7 @@ function DesktopNav({ solid }: { solid: boolean }) {
           <Link
             key={item.href}
             href={item.href!}
+            aria-current={pathname === item.href ? "page" : undefined}
             className={cn(
               "flex min-h-12 items-center gap-2.5 border-l px-5 text-body-s transition-colors",
               solid

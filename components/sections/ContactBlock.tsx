@@ -27,6 +27,7 @@ export async function ContactBlock({
   formLocation: string;
 }) {
   const [projects, settings] = await Promise.all([getProjects(), getSettings()]);
+  const selectedProject = projects.find((project) => project.slug === projectSlug);
 
   return (
     <Section tone="inverse" id="contacto" className="relative overflow-hidden">
@@ -46,7 +47,9 @@ export async function ContactBlock({
 
             <div className="mt-10 border-t border-text-inverse/25 pt-6 md:mt-16">
               <p className="max-w-sm text-body-s text-text-inverse/65">
-                Elige el proyecto de interés y deja tus datos para iniciar la conversación.
+                {selectedProject
+                  ? `${selectedProject.name} ya está seleccionado. Déjanos tus datos para continuar.`
+                  : "Elige el proyecto que te interesa y cuéntanos cómo podemos orientarte."}
               </p>
             </div>
 
@@ -80,7 +83,7 @@ export async function ContactBlock({
                     Cuéntanos qué buscas.
                   </p>
                 </div>
-                <span className="hidden text-[0.6875rem] text-text-muted sm:block">4 datos</span>
+                <span className="hidden text-[0.6875rem] text-text-muted sm:block">Formulario breve</span>
               </div>
 
               <LeadForm

@@ -118,9 +118,10 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
   return (
     <Link
       href={href}
-      className="flex min-h-12 items-center border-b border-text-inverse/15 text-body-s transition-colors hover:text-secondary md:min-h-10 md:border-0"
+      className="group flex min-h-12 items-center justify-between gap-3 border-b border-text-inverse/15 text-body-s transition-colors hover:text-secondary md:min-h-10 md:border-0"
     >
       {children}
+      <FooterArrow />
     </Link>
   );
 }
@@ -131,9 +132,21 @@ function FooterExternal({ href, children }: { href: string; children: React.Reac
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex min-h-12 items-center border-b border-text-inverse/15 text-body-s transition-colors hover:text-secondary md:min-h-10 md:border-0"
+      className="group flex min-h-12 items-center justify-between gap-3 border-b border-text-inverse/15 text-body-s transition-colors hover:text-secondary md:min-h-10 md:border-0"
     >
       {children}
+      <FooterArrow external />
     </a>
+  );
+}
+
+function FooterArrow({ external = false }: { external?: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="text-text-inverse/35 transition-[color,transform] duration-200 group-hover:translate-x-1 group-hover:text-secondary"
+    >
+      {external ? "↗" : "→"}
+    </span>
   );
 }

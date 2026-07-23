@@ -92,7 +92,7 @@ export function ProjectCards({ projects }: { projects: ProjectCardData[] }) {
               <p className="measure text-body text-text-muted">{project.line}</p>
               <span className="flex items-center gap-3 pt-1 text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-accent">
                 <span className="h-px w-7 bg-accent transition-[width] duration-300 group-hover:w-12" />
-                Conocer
+                Ver proyecto
               </span>
             </div>
           </Link>

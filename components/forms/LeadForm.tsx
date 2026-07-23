@@ -105,7 +105,7 @@ export function LeadForm({
         label="Nombre"
         error={errors.name?.message}
         inverse={inverse}
-        inputProps={{ ...register("name"), autoComplete: "name" }}
+        inputProps={{ ...register("name"), autoComplete: "name", placeholder: "Tu nombre" }}
       />
 
       <Field
@@ -119,6 +119,7 @@ export function LeadForm({
           type: "tel",
           inputMode: "tel",
           autoComplete: "tel-national",
+          placeholder: "300 000 0000",
         }}
       />
 
@@ -126,7 +127,12 @@ export function LeadForm({
         label="Correo"
         error={errors.email?.message}
         inverse={inverse}
-        inputProps={{ ...register("email"), type: "email", autoComplete: "email" }}
+        inputProps={{
+          ...register("email"),
+          type: "email",
+          autoComplete: "email",
+          placeholder: "tu@correo.com",
+        }}
       />
 
       <Select
@@ -144,10 +150,15 @@ export function LeadForm({
         inputProps={register("consent")}
       />
 
-      <div className="flex flex-col gap-3">
-        <Button type="submit" loading={isSubmitting} className="self-start">
-          Enviar
+      <div className="flex flex-col gap-3 border-t border-border pt-6">
+        <Button type="submit" loading={isSubmitting} className="w-full justify-between sm:w-auto">
+          Solicitar información
+          <ArrowRight />
         </Button>
+
+        <p className={inverse ? "text-body-s text-text-inverse/55" : "text-body-s text-text-muted"}>
+          Usaremos tus datos únicamente para atender esta solicitud.
+        </p>
 
         {submitError && (
           <p role="alert" aria-live="polite" className="text-body-s text-error">
@@ -164,6 +175,21 @@ export function LeadForm({
         </p>
       </noscript>
     </form>
+  );
+}
+
+function ArrowRight() {
+  return (
+    <svg
+      className="transition-transform duration-300 group-hover/button:translate-x-1"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 

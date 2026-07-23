@@ -14,14 +14,14 @@ import { cn } from "@/lib/utils";
 
 function labelClasses(inverse: boolean) {
   return cn(
-    "text-kicker font-medium uppercase",
+    "text-kicker font-medium uppercase transition-colors duration-150 group-focus-within:text-accent",
     inverse ? "text-secondary" : "text-secondary",
   );
 }
 
 function controlClasses(inverse: boolean, hasError: boolean) {
   return cn(
-    "min-h-12 w-full border-0 border-b bg-transparent py-2 text-body outline-none",
+    "min-h-12 w-full border-0 border-b bg-transparent py-2 text-body outline-none placeholder:text-text/30",
     "transition-[border-color,border-width] duration-150",
     inverse
       ? "border-b-text-inverse/25 text-text-inverse focus:border-b-2 focus:border-b-secondary"
@@ -47,7 +47,7 @@ export function Field({
   const errorId = `${id}-error`;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="group flex flex-col gap-2">
       <label htmlFor={id} className={labelClasses(inverse)}>
         {label}
       </label>
@@ -100,33 +100,48 @@ export function Select({
   const errorId = `${id}-error`;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="group flex flex-col gap-2">
       <label htmlFor={id} className={labelClasses(inverse)}>
         {label}
       </label>
 
-      <select
-        id={id}
+      <div className="relative">
+        <select
+          id={id}
         // Cuando el proyecto viene resuelto por la ficha, el campo queda visible
         // pero no editable. `disabled` no envía el valor, así que se usa una
         // clase de solo lectura y se bloquea la interacción con pointer-events.
         aria-readonly={disabled || undefined}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
-        className={cn(
-          controlClasses(inverse, Boolean(error)),
-          "appearance-none",
-          disabled && "pointer-events-none opacity-70",
-        )}
-        tabIndex={disabled ? -1 : undefined}
-        {...selectProps}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value} className="text-text">
-            {option.label}
-          </option>
-        ))}
-      </select>
+          className={cn(
+            controlClasses(inverse, Boolean(error)),
+            "appearance-none pr-10",
+            disabled && "pointer-events-none opacity-70",
+          )}
+          tabIndex={disabled ? -1 : undefined}
+          {...selectProps}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value} className="text-text">
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <svg
+          className={cn(
+            "pointer-events-none absolute right-1 top-1/2 -translate-y-1/2",
+            inverse ? "text-text-inverse/55" : "text-text-muted",
+          )}
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path d="m4 6 4 4 4-4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
 
       {error && (
         <p id={errorId} role="alert" aria-live="polite" className="text-body-s text-error">

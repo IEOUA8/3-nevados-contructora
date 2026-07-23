@@ -12,7 +12,7 @@ test.describe("Formulario de lead", () => {
 
     // El honeypot antibots exige más de 2 s desde el montaje. §14.1
     await page.waitForTimeout(2500);
-    await page.getByRole("button", { name: "Enviar" }).click();
+    await page.getByRole("button", { name: "Solicitar información" }).click();
 
     await expect(page).toHaveURL(/\/gracias/);
     await expect(

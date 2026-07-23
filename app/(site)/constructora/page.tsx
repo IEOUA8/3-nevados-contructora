@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
+import { TextLink } from "@/components/ui/TextLink";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getCompany, getSettings } from "@/lib/content";
 import { companyJsonLd } from "@/lib/seo/jsonld";
@@ -115,12 +115,7 @@ export default async function CompanyPage() {
         )}
 
         <p className="mt-16">
-          <Link
-            href="/proyectos/tres-nevados-reserva"
-            className="text-body-s text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
-          >
-            Ver los proyectos
-          </Link>
+          <TextLink href="/proyectos">Explorar los proyectos</TextLink>
         </p>
       </Container>
     </Section>

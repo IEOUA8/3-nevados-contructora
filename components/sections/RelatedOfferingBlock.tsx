@@ -31,7 +31,7 @@ export function RelatedOfferingBlock({ offering }: { offering: RelatedOffering }
               <p className="mt-5 max-w-md text-body text-text-muted">{offering.text}</p>
             </div>
             <p className="mt-10 flex items-center justify-between border-t border-border pt-5 text-body-s font-medium text-accent">
-              Conocer la oferta comercial
+              Explorar la oferta comercial
               <span aria-hidden="true">↗</span>
             </p>
           </div>

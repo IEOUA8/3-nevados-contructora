@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "secondary" | "ghost";
 
 const base =
-  "inline-flex min-h-12 items-center justify-center gap-2 rounded-[2px] " +
-  "px-7 py-3.5 text-body-s font-medium transition-[color,background-color,border-color,transform] duration-[180ms] " +
+  "group/button inline-flex min-h-12 items-center justify-center gap-3 rounded-[2px] border border-transparent " +
+  "px-7 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.11em] transition-[color,background-color,border-color,transform] duration-[180ms] " +
   "motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.985] " +
   "disabled:cursor-not-allowed disabled:opacity-45";
 

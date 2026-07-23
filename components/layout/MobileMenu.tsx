@@ -3,9 +3,11 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { NAV_ITEMS } from "@/components/layout/nav";
+import { cn } from "@/lib/utils";
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 const listVariants = {
@@ -25,6 +27,7 @@ export function MobileMenu({
   onClose: () => void;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
   const openerRef = useRef<HTMLElement | null>(null);
   const reduced = useReducedMotion();
 
@@ -162,7 +165,11 @@ export function MobileMenu({
                             <Link
                               href={child.href}
                               onClick={onClose}
-                              className="group grid min-h-[4.75rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 border-t border-border-soft font-display text-[1.45rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1"
+                              aria-current={pathname === child.href ? "page" : undefined}
+                              className={cn(
+                                "group grid min-h-[4.75rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 border-t border-border-soft font-display text-[1.45rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1",
+                                pathname === child.href && "text-accent",
+                              )}
                             >
                               <span className="font-sans text-[0.625rem] text-text-muted">0{childIndex + 1}</span>
                               <span>
@@ -184,7 +191,11 @@ export function MobileMenu({
                       <Link
                         href={item.href!}
                         onClick={onClose}
-                        className="group grid min-h-[5.25rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 font-display text-[1.65rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1"
+                        aria-current={pathname === item.href ? "page" : undefined}
+                        className={cn(
+                          "group grid min-h-[5.25rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 font-display text-[1.65rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1",
+                          pathname === item.href && "text-accent",
+                        )}
                       >
                         <span className="font-sans text-[0.625rem] text-text-muted">0{index + 1}</span>
                         {item.label}

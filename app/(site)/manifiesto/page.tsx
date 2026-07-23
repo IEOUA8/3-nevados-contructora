@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 
 import { ManifestoTracker } from "@/components/analytics/ManifestoTracker";
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
+import { TextLink } from "@/components/ui/TextLink";
 import { getManifesto } from "@/lib/content";
 
 /**
@@ -87,12 +87,9 @@ export default async function ManifestoPage() {
 
       <Container size="read">
         <p className="mt-20 border-t border-border pt-8 md:mt-28">
-          <Link
-            href="/proyectos/tres-nevados-reserva"
-            className="text-body-s text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
-          >
+          <TextLink href="/proyectos">
             {manifesto.outroLabel}
-          </Link>
+          </TextLink>
         </p>
       </Container>
 

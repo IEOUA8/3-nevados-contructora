@@ -61,16 +61,16 @@ export function StickyActionBar({
         {brochure ? (
           <a
             href="#descargar-ficha"
-            className="flex items-center justify-center text-body-s text-text-inverse"
+            className="flex items-center justify-center gap-2 text-[0.75rem] font-medium uppercase tracking-[0.08em] text-text-inverse transition-colors active:bg-text-inverse/10"
           >
-            Descargar ficha
+            Descargar ficha <span aria-hidden="true">↓</span>
           </a>
         ) : (
           <a
             href="#contacto"
-            className="flex items-center justify-center text-body-s text-text-inverse"
+            className="flex items-center justify-center gap-2 text-[0.75rem] font-medium uppercase tracking-[0.08em] text-text-inverse transition-colors active:bg-text-inverse/10"
           >
-            Dejar mis datos
+            Dejar mis datos <span aria-hidden="true">↓</span>
           </a>
         )}
 
@@ -79,9 +79,9 @@ export function StickyActionBar({
           message={whatsappMessage}
           projectSlug={projectSlug}
           location="action_bar"
-          className="flex items-center justify-center text-body-s text-text-inverse"
+          className="flex items-center justify-center gap-2 text-[0.75rem] font-medium uppercase tracking-[0.08em] text-text-inverse transition-colors active:bg-text-inverse/10"
         >
-          WhatsApp
+          WhatsApp <span aria-hidden="true">↗</span>
         </WhatsAppLink>
       </div>
     </div>

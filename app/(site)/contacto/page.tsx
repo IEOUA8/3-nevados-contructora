@@ -26,22 +26,20 @@ export default async function ContactPage() {
         <Container size="read">
           <Kicker>Contacto</Kicker>
           <h1 className="mt-6 font-display text-display-l text-text">
-            Hablemos.
+            Una conversación puede empezar aquí.
           </h1>
+          <p className="mt-6 measure text-body text-text-muted">
+            Elige el proyecto que quieres conocer o escríbenos directamente por WhatsApp.
+            {!settings.salesRoom.address &&
+              " Las visitas a la sala de ventas se coordinan por ese canal."}
+          </p>
 
-          {/* §26 R5 — circulan dos direcciones de sala de ventas en materiales
-              distintos. No se publica ninguna hasta que la marca confirme cuál
-              es: una dirección equivocada daña la confianza y el SEO local más
-              de lo que ayuda tenerla. */}
-          {!settings.salesRoom.address && (
-            <p className="mt-8 measure text-body-s text-text-muted">
-              La sala de ventas se confirma por WhatsApp.
-            </p>
-          )}
+          {/* §26 R5 — circulan dos direcciones distintas en los materiales.
+              No se publica ninguna hasta que la marca confirme cuál es. */}
         </Container>
       </Section>
 
-      <ContactBlock formLocation="contacto" />
+      <ContactBlock kicker="Tu proyecto" title="Cuéntanos." formLocation="contacto" />
     </>
   );
 }
