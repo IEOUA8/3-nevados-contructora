@@ -1,4 +1,8 @@
+"use client";
+
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
+import { useRef } from "react";
 
 import type { ImageRef } from "@/content/types";
 
@@ -26,17 +30,39 @@ export function HeroFullBleed({
   brandLogo?: ImageRef;
   showScrollHint?: boolean;
 }) {
+  const heroRef = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -56]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.82], [1, 0.2]);
+
   return (
-    <section className="relative h-svh min-h-[560px] w-full overflow-hidden md:h-[96vh]">
-      <Image
-        src={image.src}
-        alt={image.alt}
-        fill
-        priority
-        fetchPriority="high"
-        sizes="100vw"
-        className="object-cover md:object-[center_45%]"
-      />
+    <section
+      ref={heroRef}
+      className="relative h-svh min-h-[560px] w-full overflow-hidden md:h-[96vh]"
+    >
+      <motion.div
+        data-motion="hero-media"
+        className="absolute inset-x-0 -inset-y-[8%]"
+        initial={reduced ? false : { scale: 1.045 }}
+        animate={reduced ? undefined : { scale: 1 }}
+        transition={{ duration: 1.25, ease: [0.16, 1, 0.3, 1] }}
+        style={reduced ? undefined : { y: imageY }}
+      >
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          className="object-cover md:object-[center_45%]"
+        />
+      </motion.div>
 
       {/* §5.5 — gradiente de tres paradas, nunca un negro plano al 50%. */}
       <div
@@ -48,10 +74,24 @@ export function HeroFullBleed({
         }}
       />
 
-      <div aria-hidden="true" className="absolute inset-x-6 bottom-6 top-16 border border-text-inverse/20 md:inset-x-8 md:bottom-8 md:top-24" />
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-x-6 bottom-6 top-16 border border-text-inverse/20 md:inset-x-8 md:bottom-8 md:top-24"
+        initial={reduced ? false : { opacity: 0, scale: 0.985 }}
+        animate={reduced ? undefined : { opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+      />
 
-      <div className="absolute inset-0 flex items-end">
-        <div className="mx-auto w-full max-w-site px-10 pb-20 md:px-16 md:pb-20">
+      <motion.div
+        className="absolute inset-0 flex items-end"
+        style={reduced ? undefined : { y: contentY, opacity: contentOpacity }}
+      >
+        <motion.div
+          className="mx-auto w-full max-w-site px-10 pb-20 md:px-16 md:pb-20"
+          initial={reduced ? false : { opacity: 0, y: 22 }}
+          animate={reduced ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+        >
           <div className="grid items-end gap-8 md:grid-cols-12">
             <div className="md:col-span-9">
               <p className="mb-5 text-[0.625rem] font-medium uppercase tracking-[0.24em] text-text-inverse/70 md:mb-7">
@@ -80,8 +120,8 @@ export function HeroFullBleed({
               </div>
             )}
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* El único adorno permitido en todo el sitio: aclara que hay más abajo. */}
       {showScrollHint && (

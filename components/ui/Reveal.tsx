@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 
 /**
- * LA ÚNICA ANIMACIÓN DE ENTRADA DEL SITIO. §11.1 · §12
+ * Animación editorial de entrada para contenido dentro del recorrido. §11.1 · §12
  *
  * opacity 0→1 + translateY 12px→0 · 600ms · cubic-bezier(0.16, 1, 0.3, 1)
  *
@@ -36,10 +36,10 @@ export function Reveal({
   return (
     <Component
       className={className}
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 18, scale: 0.992, filter: "blur(3px)" }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-15%" }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay }}
+      transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1], delay }}
     >
       {children}
     </Component>

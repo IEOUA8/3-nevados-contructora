@@ -12,7 +12,8 @@ type Variant = "primary" | "secondary" | "ghost";
 
 const base =
   "inline-flex min-h-12 items-center justify-center gap-2 rounded-[2px] " +
-  "px-7 py-3.5 text-body-s font-medium transition-colors duration-[180ms] " +
+  "px-7 py-3.5 text-body-s font-medium transition-[color,background-color,border-color,transform] duration-[180ms] " +
+  "motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.985] " +
   "disabled:cursor-not-allowed disabled:opacity-45";
 
 const variants: Record<Variant, string> = {

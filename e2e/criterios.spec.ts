@@ -211,4 +211,19 @@ test.describe("Experiencia de exploración de proyectos", () => {
     await expect(page).toHaveURL(/\/proyectos\/eden-medical$/);
     await expect(edenLink).toBeHidden();
   });
+
+  test("el sistema de movimiento respeta la preferencia de movimiento reducido", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+
+    await expect(page.locator('[data-motion="route-transition"]')).toHaveCount(0);
+    await expect(page.locator('[data-motion="scroll-progress"]')).toHaveCount(0);
+
+    const heroTransform = await page
+      .locator('[data-motion="hero-media"]')
+      .evaluate((element) => getComputedStyle(element).transform);
+    expect(heroTransform).toBe("none");
+  });
 });

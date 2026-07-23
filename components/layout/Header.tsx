@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { NAV_ITEMS } from "@/components/layout/nav";
@@ -29,6 +29,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const closeMobileMenu = useCallback(() => setMenuOpen(false), []);
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -112,7 +113,7 @@ export function Header() {
             type="button"
             onClick={() => setMenuOpen(true)}
             className={cn(
-              "-mr-1 flex min-h-12 items-center gap-3 border px-3.5 text-[0.6875rem] font-medium uppercase tracking-[0.16em] md:hidden",
+              "group -mr-1 flex min-h-12 items-center gap-3 border px-3.5 text-[0.6875rem] font-medium uppercase tracking-[0.16em] transition-[color,background-color,border-color,transform] duration-200 motion-safe:active:scale-[0.97] md:hidden",
               solid
                 ? "border-text/25 text-text"
                 : "border-text-inverse/45 text-text-inverse",
@@ -126,7 +127,7 @@ export function Header() {
         </div>
       </header>
 
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu open={menuOpen} onClose={closeMobileMenu} />
     </>
   );
 }
@@ -287,8 +288,9 @@ function ChevronDown() {
 /** §11.2 — iconos solo funcionales, trazo 1.5px, sin relleno. */
 function MenuIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-      <path d="M2 7h18M2 15h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <svg className="overflow-visible" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+      <path className="origin-center transition-transform duration-300 group-hover:-translate-x-1" d="M2 7h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path className="origin-center transition-transform duration-300 group-hover:translate-x-1" d="M2 15h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }

@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { PageTransition, ScrollProgress } from "@/components/motion/SiteMotion";
 
 export default function SiteLayout({
   children,
@@ -16,8 +17,11 @@ export default function SiteLayout({
         Ir al contenido
       </a>
 
+      <ScrollProgress />
       <Header />
-      <main id="contenido">{children}</main>
+      <main id="contenido">
+        <PageTransition>{children}</PageTransition>
+      </main>
       <Footer />
     </>
   );
