@@ -1,5 +1,10 @@
 import "server-only";
 
+import {
+  LEGAL_PENDING,
+  legalDocuments,
+  type LegalPendingKey,
+} from "@/content/legal";
 import { company, home, manifesto } from "@/content/pages";
 import { eden } from "@/content/projects/eden-medical";
 import { mall } from "@/content/projects/mall-comercial";
@@ -9,6 +14,7 @@ import type {
   CompanyContent,
   EssentialField,
   HomeContent,
+  LegalDocument,
   ManifestoContent,
   Project,
   SiteSettings,
@@ -64,6 +70,98 @@ export async function getProjectSlugs(): Promise<string[]> {
  */
 export async function isProjectIndexEnabled(): Promise<boolean> {
   return (await getProjects()).length >= 3;
+}
+
+/* ── Documentos legales · §19.1 ─────────────────────────────────────────── */
+
+export async function getLegalDocuments(): Promise<LegalDocument[]> {
+  return [...legalDocuments].sort((a, b) => a.order - b.order);
+}
+
+export async function getLegalDocument(
+  slug: string,
+): Promise<LegalDocument | null> {
+  return legalDocuments.find((doc) => doc.slug === slug) ?? null;
+}
+
+export async function getLegalSlugs(): Promise<string[]> {
+  return legalDocuments.map((doc) => doc.slug);
+}
+
+/** Un fragmento de texto legal ya resuelto: literal o hueco por llenar. */
+export type LegalToken =
+  | { kind: "text"; value: string }
+  | { kind: "pending"; value: string };
+
+const PLACEHOLDER = /\{\{(\w+)\}\}/g;
+
+/**
+ * Convierte `{{razon_social}}` en un hueco visible.
+ *
+ * Lanza si la clave no existe en `LEGAL_PENDING`. Como esto corre al renderizar
+ * páginas estáticas, una clave mal escrita rompe el build en vez de publicar
+ * «{{razon_socail}}» en un documento legal.
+ */
+export function resolveLegalText(text: string): LegalToken[] {
+  const tokens: LegalToken[] = [];
+  let cursor = 0;
+
+  for (const match of text.matchAll(PLACEHOLDER)) {
+    const key = match[1] as LegalPendingKey;
+    const label = LEGAL_PENDING[key];
+
+    if (!label) {
+      throw new Error(
+        `Texto legal con dato inexistente: {{${key}}}. Las claves válidas están en LEGAL_PENDING (content/legal.ts).`,
+      );
+    }
+
+    if (match.index > cursor) {
+      tokens.push({ kind: "text", value: text.slice(cursor, match.index) });
+    }
+    tokens.push({ kind: "pending", value: label });
+    cursor = match.index + match[0].length;
+  }
+
+  if (cursor < text.length) {
+    tokens.push({ kind: "text", value: text.slice(cursor) });
+  }
+
+  return tokens;
+}
+
+/**
+ * Un documento aprobado no puede tener huecos.
+ *
+ * Es la regla que impide el error caro: que alguien marque `approved` para
+ * quitar el aviso de borrador y publique un texto legal que todavía dice
+ * «razón social completa» donde debería ir el NIT. Corre en el render de cada
+ * documento, así que falla en el build y nunca en producción.
+ */
+export function assertLegalIsPublishable(doc: LegalDocument): void {
+  if (doc.status !== "approved") return;
+
+  const pending = doc.sections.flatMap((section) =>
+    section.blocks.flatMap((block) => {
+      const texts =
+        block.kind === "text"
+          ? [block.text]
+          : block.kind === "definitions"
+            ? block.items.map((item) => item.text)
+            : block.items;
+      return texts.flatMap((text) =>
+        resolveLegalText(text)
+          .filter((token) => token.kind === "pending")
+          .map((token) => token.value),
+      );
+    }),
+  );
+
+  if (pending.length > 0) {
+    throw new Error(
+      `El documento «${doc.title}» está marcado como aprobado pero conserva datos sin confirmar: ${[...new Set(pending)].join(", ")}.`,
+    );
+  }
 }
 
 /**

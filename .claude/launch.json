@@ -5,7 +5,13 @@
       "name": "tres-nevados-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "port": 3000
+      "port": 3007
+    },
+    {
+      "name": "tres-nevados-prod",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "start", "-p", "3008"],
+      "port": 3008
     }
   ]
 }

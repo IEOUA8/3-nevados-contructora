@@ -39,7 +39,13 @@ export default async function ContactPage() {
         </Container>
       </Section>
 
-      <ContactBlock kicker="Tu proyecto" title="Cuéntanos." formLocation="contacto" />
+      {/* Sin diferir: aquí el formulario es el motivo de la visita. §17.1 */}
+      <ContactBlock
+        kicker="Tu proyecto"
+        title="Cuéntanos."
+        formLocation="contacto"
+        defer={false}
+      />
     </>
   );
 }

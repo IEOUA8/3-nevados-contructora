@@ -153,7 +153,6 @@ export type Project = {
   // — Interno —
   audience: string[];
   seo: Seo;
-  crmProjectId: string;
 };
 
 export type HomeContent = {
@@ -192,6 +191,50 @@ export type CompanyContent = {
   whereWeBuild: { title: string; text: string };
   backing: { title: string; items: string[] };
   trajectory: { title: string; text: string };
+  seo: Seo;
+};
+
+/**
+ * DOCUMENTOS LEGALES — §19.1
+ *
+ * Cada documento tiene su propia página de detalle y su propio estado. El
+ * `status` es el que gobierna: mientras sea `draft`, la página se pinta con el
+ * aviso de borrador y con `noindex`. Aprobar un documento es cambiar una
+ * palabra en `content/legal.ts`, no tocar una plantilla.
+ *
+ * Los datos de identificación que la constructora todavía no ha entregado no se
+ * inventan: se escriben como `{{clave}}` y se resuelven contra `LEGAL_PENDING`.
+ * Una clave que no exista rompe la compilación, y un documento con pendientes
+ * no se puede marcar como aprobado (lo verifica `assertLegalIsPublishable`).
+ */
+export type LegalBlock =
+  | { kind: "text"; text: string }
+  | { kind: "list"; items: string[] }
+  /** Lista numerada: procedimientos con plazos, donde el orden importa. */
+  | { kind: "steps"; items: string[] }
+  | { kind: "definitions"; items: { term: string; text: string }[] };
+
+export type LegalSection = {
+  /** Ancla del índice lateral. Estable: se cita en correos y en respuestas. */
+  id: string;
+  title: string;
+  blocks: LegalBlock[];
+};
+
+export type LegalDocument = {
+  slug: string;
+  order: number;
+  title: string;
+  /** Una línea: qué resuelve el documento y para quién. */
+  summary: string;
+  /** Norma que lo obliga. Se muestra en el índice de /legal. */
+  basis: string;
+  version: string;
+  /** ISO 8601. Fecha de la última edición del texto, no del despliegue. */
+  updatedAt: string;
+  /** `draft` hasta que el área jurídica de la constructora lo apruebe. */
+  status: "draft" | "approved";
+  sections: LegalSection[];
   seo: Seo;
 };
 

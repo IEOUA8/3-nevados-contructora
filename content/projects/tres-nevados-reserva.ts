@@ -198,5 +198,4 @@ export const reserva: Project = {
   },
 
   // PENDIENTE proveedor CRM · §14.2 punto 3.
-  crmProjectId: "",
 };

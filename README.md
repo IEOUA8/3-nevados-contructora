@@ -39,6 +39,7 @@ commit.
 | Textos y datos de un proyecto | `content/projects/<slug>.ts` |
 | Home, manifiesto, la constructora | `content/pages.ts` |
 | WhatsApp, redes, sala de ventas | `content/site.ts` |
+| Políticas y términos legales | `content/legal.ts` |
 
 Que sea TypeScript y no un formulario web tiene una ventaja concreta: si alguien
 borra un campo obligatorio o sube una imagen sin `alt`, **la compilación falla
@@ -70,15 +71,109 @@ npm run images -- ~/Desktop/nuevo-render.jpg reserva/g-3.jpg --max 1800
 Avisa si el resultado supera 400 KB. El presupuesto del §17.1 es de 900 KB para
 el home completo; en 4G cada 100 KB de más son décimas de segundo de LCP.
 
+## Textos legales
+
+Cuatro documentos, cada uno con su página de detalle, más el índice `/legal`:
+
+| Documento | Ruta | Marco |
+|---|---|---|
+| Política de tratamiento de datos | `/legal/privacidad` | Ley 1581 de 2012 · Decreto 1074 de 2015 |
+| Aviso de privacidad | `/legal/aviso-privacidad` | Decreto 1074, art. 2.2.2.25.3.2 |
+| Términos de uso | `/legal/terminos` | Ley 1480 de 2011 · Código de Comercio |
+| Política de cookies | `/legal/cookies` | Circular Externa 002 de 2015 de la SIC |
+
+**Los cuatro son borradores y ninguno es vigente.** Los redactó el proveedor web
+a partir de lo que el sitio hace de verdad —los campos que pide el formulario,
+los datos técnicos que registra el endpoint, los terceros que intervienen—, para
+que jurídica revise sobre algo concreto en lugar de una hoja en blanco. No son
+asesoría jurídica.
+
+Mientras `status` sea `draft`, cada página se sirve con `noindex` y con el aviso
+de borrador visible. Aprobar un documento es cambiar esa palabra en
+`content/legal.ts`, subir `version` y actualizar `updatedAt`.
+
+Los datos que la constructora todavía no confirmó —razón social, NIT, domicilio
+de notificaciones, correo de protección de datos, teléfono— no se inventan: se
+escriben como `{{clave}}` contra `LEGAL_PENDING` y se pintan como huecos
+resaltados. Dos cosas se rompen solas si alguien se salta el proceso:
+
+- una clave mal escrita (`{{razon_socail}}`) rompe la compilación en vez de
+  publicar el literal en un documento legal;
+- marcar `approved` un documento que conserva huecos también rompe la
+  compilación, con el detalle de qué falta.
+
+### Lo que falta para poder publicarlos
+
+1. Que jurídica revise y apruebe los cuatro textos.
+2. Los datos de identificación de `LEGAL_PENDING`.
+3. El registro de la base de datos ante la SIC (RNBD), que es de la constructora
+   y no del sitio.
+4. Definir el plazo de conservación de los leads que no derivan en negocio: el
+   texto lo remite hoy a «la política de retención de la constructora».
+
+Ojo con la política de cookies: describe el sitio de hoy, que no instala ninguna
+cookie de analítica ni de publicidad. **El día que se conecten GA4 o el Pixel de
+Meta hay que actualizar ese texto y publicar un banner de consentimiento previo**
+antes de instalar nada que no sea estrictamente necesario. La sección «Si en el
+futuro medimos el tráfico» ya deja dicho ese compromiso.
+
 ## Estado
 
-**Fases 1–5 y 9** del orden de construcción (§27): setup, design system, home,
-plantilla de ficha, el resto de páginas y el SEO técnico. Sin integraciones.
+Actualizado el 23 de julio de 2026.
 
-Lo que funciona hoy: las seis páginas públicas, la plantilla replicable con los
-dos proyectos poblados con contenido real de la marca, el formulario de lead de
-punta a punta con validación, honeypot, control de tiempo y rate limit, los
-eventos de analítica listos para conectarse a GA4, y la capa de SEO completa.
+Del orden de construcción del documento maestro (§27) están hechas las **fases
+1–5 y 9**. Encima de eso se ejecutó el [plan de ajustes de contenido y dirección
+visual](PLAN_AJUSTES_CONTENIDO_DISENO.md), aprobado el 22 de julio:
+
+| Fase del plan | Estado |
+|---|---|
+| 0 · Gobierno de contenido | Hecha — cada cifra puede declarar fuente, fecha y estado |
+| 1 · Biblioteca y modelo de datos | Hecha — 43 imágenes procesadas, modelo ampliado |
+| 2 · Corporativo y manifiesto | Hecha — el manifiesto publicado ya es el cultural 2026 |
+| 3 · Edén Medical | Hecha — cinco tipos de producto, localización, CTAs separados |
+| 4 · Reserva residencial | Hecha — narrativa residencial, galería depurada, tipologías |
+| 5 · Mall Comercial | Hecha — página propia en `/proyectos/mall-comercial-tres-nevados` |
+| 6 · QA y optimización | En curso — ver «Rendimiento» |
+
+Lo que funciona hoy: nueve páginas públicas más las cuatro legales, la plantilla
+replicable con los **tres** proyectos poblados con contenido real de la marca, el
+formulario de lead de punta a punta con validación, honeypot, control de tiempo y
+rate limit, los eventos de analítica listos para conectarse a GA4, y la capa de
+SEO completa. Los 44 criterios ejecutables de `e2e/` pasan.
+
+## Rendimiento
+
+Medido sobre el build de producción, sumando los chunks que cada ruta referencia
+en su HTML, comprimidos con gzip. Es el peso que el visitante descarga de
+JavaScript, no una estimación.
+
+| Ruta | Antes | Ahora |
+|---|---|---|
+| Fichas de proyecto | 328,5 KB | **253,3 KB** |
+| Home | 325,9 KB | **250,9 KB** |
+| Contacto | 323,8 KB | **248,8 KB** |
+| Manifiesto, constructora, legales | 247,3 KB | 247,3 KB |
+
+Lo que cambió: `zod` + `react-hook-form` pesan 76,5 KB comprimidos y se
+descargaban en toda página que tuviera bloque de contacto, aunque el formulario
+viviera al final del scroll. Ahora se cargan al acercarse a la pantalla
+(`components/forms/DeferredLeadForm.tsx`). En `/contacto` no se difiere: ahí el
+formulario es el motivo de la visita.
+
+Los dos logotipos de marca pasaron de 43,9 KB a 22,1 KB con cuantización de
+paleta. Son PNG planos: la diferencia máxima por subpíxel contra el original es
+de 3 sobre 255, y ningún subpíxel supera 2. Van con `unoptimized`, así que ese
+peso se descargaba tal cual en cada página.
+
+**Lo que sigue pesando y no se tocó:** `motion` cuesta **56 KB gzip repartidos en
+tres chunks y está en todas las rutas**, porque el layout monta la cortina de
+transición y la barra de progreso de scroll. Reducirlo tiene dos caminos:
+`LazyMotion` con `domAnimation` y el componente `m` (mecánico, conserva el
+comportamiento, ahorro estimado 15–20 KB), o reimplementar `Reveal`, la cortina y
+la barra con CSS e `IntersectionObserver` y sacar la librería del layout (ahorro
+de los 56 KB completos, pero cambia el sistema de movimiento del §11.1 · §12 y
+eso es una decisión de dirección, no de rendimiento). No se hizo ninguno de los
+dos sin aprobación.
 
 ### SEO
 
@@ -104,6 +199,8 @@ eventos de analítica listos para conectarse a GA4, y la capa de SEO completa.
 | **Fraunces + Inter**, no Instrument Serif | El PDF del brief incrusta justo esas dos familias: son las que la marca ya usa. Ambas libres (OFL) y servidas desde nuestro dominio por `next/font`. |
 | **Sin CMS**, contra el §7.2 | El documento elegía Sanity para que el equipo interno editara sin código. El cliente decidió que Xian sea el proveedor de cambios, así que el CMS pierde su razón de ser. Ver la nota contractual abajo. |
 | **Escala de espaciado con la base de Tailwind** | Poner `--spacing: 0.5rem` para replicar la escala de 8px hacía que `h-6` fueran 48px en vez de 24. La disciplina de 8px se mantiene usando solo números pares. |
+| **Sin CRM**, contra el §14 | El CRM Smarthome quedó fuera del alcance el 23 de julio de 2026. El lead se entrega hoy por correo al equipo comercial. Ver la nota contractual abajo. |
+| **Cuatro documentos legales redactados por el proveedor** | El brief los deja en manos del cliente y así sigue siendo: se entregan como borrador con `noindex` y aviso visible, para que jurídica revise sobre algo concreto. Nada se publica como vigente sin su aprobación. |
 
 ## Nota contractual sobre la decisión de no llevar CMS
 

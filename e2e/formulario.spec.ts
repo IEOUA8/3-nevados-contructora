@@ -42,8 +42,25 @@ test.describe("Formulario de lead", () => {
     page,
   }) => {
     await page.goto("/proyectos/eden-medical");
+
+    // El formulario de la ficha carga al acercarse a la pantalla (§17.1), así
+    // que hay que bajar hasta él. Esta prueba vigila las dos cosas a la vez: el
+    // proyecto preseleccionado y que la carga diferida efectivamente monte el
+    // formulario. Si el diferido dejara de funcionar, esto falla.
+    await page.locator("#contacto").scrollIntoViewIfNeeded();
+
     const select = page.getByLabel("Proyecto de interés");
     await expect(select).toHaveValue("eden-medical");
     await expect(select).toHaveAttribute("aria-readonly", "true");
+  });
+
+  test("el formulario diferido del home aparece al bajar", async ({ page }) => {
+    await page.goto("/");
+
+    // Antes de bajar, el bundle de validación no se ha descargado siquiera.
+    await expect(page.getByLabel("Nombre")).toHaveCount(0);
+
+    await page.locator("#contacto").scrollIntoViewIfNeeded();
+    await expect(page.getByLabel("Nombre")).toBeVisible();
   });
 });

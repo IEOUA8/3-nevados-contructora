@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { getProject } from "@/lib/content";
-import { sendToCrm } from "@/lib/crm/smarthome";
-import { insertLead, updateLeadCrmStatus } from "@/lib/leads/store";
+import { notifyTeam } from "@/lib/leads/notify";
+import { insertLead, updateLeadDelivery } from "@/lib/leads/store";
 import { checkRateLimit, hashIp } from "@/lib/rate-limit";
 import {
   CONSENT_TEXT,
@@ -15,8 +15,12 @@ import {
  * POST /api/lead — §14.1
  *
  * EL ORDEN DE LOS PASOS NO ES NEGOCIABLE. El registro propio ocurre ANTES de
- * hablar con el CRM. Si el CRM está caído, el lead ya está a salvo y el usuario
- * ve éxito.
+ * avisar al equipo comercial. Si el correo está caído, el lead ya está a salvo
+ * y el usuario ve éxito.
+ *
+ * El CRM Smarthome quedó fuera del alcance el 23 de julio de 2026, así que el
+ * paso 5 es hoy el aviso por correo. El orden y el contrato son los mismos: lo
+ * que cambió es a quién se le entrega el lead, no cuándo.
  *
  * Principio: el usuario nunca paga el precio de una falla de infraestructura.
  * Si el paso 4 tuvo éxito, la respuesta es 200 aunque todo lo demás falle. La
@@ -87,32 +91,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "storage_failed" }, { status: 500 });
   }
 
-  // 5 · CRM, con timeout y reintentos. A partir de aquí nada puede hacer que
-  //     el usuario vea un error.
-  const crm = await sendToCrm({
-    nombre: lead.name,
-    telefono: toInternationalPhone(lead.phone),
-    email: lead.email,
-    proyecto: project.crmProjectId,
-    origen: utm.source ? `web-${utm.source}` : "web",
-    utm_source: utm.source,
-    utm_medium: utm.medium,
-    utm_campaign: utm.campaign,
-    utm_content: utm.content,
-    pagina_origen: request.headers.get("referer") ?? "",
-    fecha: new Date().toISOString(),
-  });
+  // 5 · Aviso al equipo comercial, con timeout y reintentos. A partir de aquí
+  //     nada puede hacer que el usuario vea un error.
+  const delivery = await notifyTeam(
+    { ...record, phone: toInternationalPhone(record.phone) },
+    project.name,
+  );
 
-  if (crm.status === "sent") {
-    await updateLeadCrmStatus(record.id, "sent", crm.attempts);
-  } else if (crm.status === "failed") {
-    await updateLeadCrmStatus(record.id, "failed", crm.attempts);
-    // TODO Fase 3.1 — registrar en `integration_errors`, enviar email inmediato
-    // al equipo comercial con los datos del lead y disparar la alerta interna.
-    // Sin esto, el compromiso de 15 minutos no es verificable. §14.1
-    console.error("[lead] CRM falló definitivamente", {
+  if (delivery.status === "sent") {
+    await updateLeadDelivery(record.id, "sent", delivery.attempts);
+  } else if (delivery.status === "failed") {
+    await updateLeadDelivery(record.id, "failed", delivery.attempts);
+    // TODO Fase 3.1 — registrar en `integration_errors` y disparar la alerta
+    // interna. Sin esto, un lead cuyo correo falló solo existe en la base y
+    // nadie se entera: el compromiso de 15 minutos no es verificable. §14.1
+    console.error("[lead] el aviso falló definitivamente", {
       id: record.id,
-      error: crm.error,
+      error: delivery.error,
     });
   }
 

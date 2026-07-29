@@ -238,5 +238,4 @@ export const eden: Project = {
       "Torre médica especializada en Armenia, Quindío. Infraestructura diseñada desde cero para salud, habilitable para cualquier especialidad.",
   },
 
-  crmProjectId: "",
 };

@@ -133,5 +133,4 @@ export const mall: Project = {
     description:
       "Espacios comerciales en el norte de Armenia, integrados a Tres Nevados Reserva y al corredor de la Avenida Bolívar.",
   },
-  crmProjectId: "",
 };

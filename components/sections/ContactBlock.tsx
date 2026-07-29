@@ -1,4 +1,4 @@
-import { LeadForm } from "@/components/forms/LeadForm";
+import { DeferredLeadForm } from "@/components/forms/DeferredLeadForm";
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -18,6 +18,7 @@ export async function ContactBlock({
   projectSlug,
   whatsappMessage,
   formLocation,
+  defer = true,
 }: {
   title?: string;
   kicker?: string;
@@ -25,9 +26,22 @@ export async function ContactBlock({
   projectSlug?: string;
   whatsappMessage?: string;
   formLocation: string;
+  /**
+   * El formulario carga al acercarse a la pantalla. §17.1
+   * Se pone en `false` donde el formulario es el motivo de la visita, como
+   * /contacto: ahí diferirlo sería una pesimización.
+   */
+  defer?: boolean;
 }) {
   const [projects, settings] = await Promise.all([getProjects(), getSettings()]);
   const selectedProject = projects.find((project) => project.slug === projectSlug);
+
+  const formProps = {
+    projects: projects.map((p) => ({ slug: p.slug, name: p.name })),
+    defaultProjectSlug: projectSlug,
+    lockProject: Boolean(projectSlug),
+    formLocation,
+  };
 
   return (
     <Section tone="inverse" id="contacto" className="relative overflow-hidden">
@@ -86,12 +100,7 @@ export async function ContactBlock({
                 <span className="hidden text-[0.6875rem] text-text-muted sm:block">Formulario breve</span>
               </div>
 
-              <LeadForm
-                projects={projects.map((p) => ({ slug: p.slug, name: p.name }))}
-                defaultProjectSlug={projectSlug}
-                lockProject={Boolean(projectSlug)}
-                formLocation={formLocation}
-              />
+              <DeferredLeadForm {...formProps} defer={defer} />
             </div>
           </div>
         </div>

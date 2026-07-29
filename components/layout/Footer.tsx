@@ -85,6 +85,12 @@ export async function Footer() {
             <Link href="/legal/terminos" className="min-h-11 content-center hover:text-text-inverse">
               Términos de uso
             </Link>
+            <Link href="/legal/cookies" className="min-h-11 content-center hover:text-text-inverse">
+              Cookies
+            </Link>
+            <Link href="/legal" className="min-h-11 content-center hover:text-text-inverse">
+              Legal
+            </Link>
           </div>
         </div>
       </div>
