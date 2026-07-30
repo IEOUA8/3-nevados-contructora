@@ -159,7 +159,7 @@ function DesktopNav({ solid }: { solid: boolean }) {
       aria-label="Principal"
       className={cn("hidden items-stretch md:flex", solid ? "text-text" : "text-text-inverse")}
     >
-      {NAV_ITEMS.map((item, index) => {
+      {NAV_ITEMS.map((item) => {
         // — Entrada con submenú: el título lleva a su página; hover/foco despliega. —
         if (item.children) {
           const isOpen = openMenu === item.label;
@@ -191,9 +191,6 @@ function DesktopNav({ solid }: { solid: boolean }) {
                   (active || isOpen) && "after:scale-x-100",
                 )}
               >
-                <span className={cn("text-[0.625rem]", solid ? "text-text-muted" : "text-text-inverse/60")}>
-                  0{index + 1}
-                </span>
                 <span className="text-body-s">{item.label}</span>
                 <ChevronDown />
               </Link>
@@ -209,14 +206,13 @@ function DesktopNav({ solid }: { solid: boolean }) {
                     {item.menuLabel ?? item.label}
                   </p>
                   <ul>
-                    {item.children.map((child, childIndex) => (
+                    {item.children.map((child) => (
                       <li key={child.label} className="border-t border-border">
                         <Link
                           href={child.href}
                           onClick={() => setOpenMenu(null)}
-                          className="group/link grid min-h-16 grid-cols-[2rem_1fr_auto] items-center gap-3 px-4 transition-colors hover:bg-cool/45"
+                          className="group/link grid min-h-16 grid-cols-[1fr_auto] items-center gap-3 px-4 transition-colors hover:bg-cool/45"
                         >
-                          <span className="text-[0.6875rem] text-text-muted">0{childIndex + 1}</span>
                           <span>
                             <span className="block text-[0.5625rem] font-medium uppercase tracking-[0.18em] text-secondary">
                               {child.category}

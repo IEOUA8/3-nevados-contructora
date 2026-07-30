@@ -160,7 +160,7 @@ export function MobileMenu({
                 animate="open"
                 exit="closed"
               >
-                {NAV_ITEMS.map((item, index) => {
+                {NAV_ITEMS.map((item) => {
                   if (!item.children) {
                     return (
                       <motion.li key={item.href} variants={itemVariants} className="border-b border-border">
@@ -169,11 +169,10 @@ export function MobileMenu({
                           onClick={onClose}
                           aria-current={pathname === item.href ? "page" : undefined}
                           className={cn(
-                            "group grid min-h-[4.5rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 font-display text-[1.5rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1",
+                            "group grid min-h-[4.5rem] grid-cols-[1fr_auto] items-center gap-3 font-display text-[1.5rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1",
                             pathname === item.href && "text-accent",
                           )}
                         >
-                          <span className="font-sans text-[0.625rem] text-text-muted">0{index + 1}</span>
                           {item.label}
                           <span className="transition-transform duration-300 group-active:translate-x-1">
                             <ArrowIcon />
@@ -198,11 +197,10 @@ export function MobileMenu({
                           onClick={onClose}
                           aria-current={active ? "page" : undefined}
                           className={cn(
-                            "grid flex-1 grid-cols-[1.5rem_1fr] items-center gap-3 py-5 font-display text-[1.5rem] leading-tight text-text active:pl-1",
+                            "flex flex-1 items-center py-5 font-display text-[1.5rem] leading-tight text-text active:pl-1",
                             active && "text-accent",
                           )}
                         >
-                          <span className="font-sans text-[0.625rem] text-text-muted">0{index + 1}</span>
                           {item.label}
                         </Link>
                         <button

@@ -72,7 +72,7 @@ export default async function HomePage() {
         <Container>
           <div className="relative grid gap-12 md:grid-cols-12 md:gap-8">
             <Reveal className="md:col-span-5">
-              <Kicker>01 / La dirección</Kicker>
+              <Kicker>La dirección</Kicker>
               <h2 className="mt-8 max-w-xl font-display text-[clamp(3.25rem,6vw,6.75rem)] leading-[0.86] tracking-[-0.045em] text-text">
                 La vida está pasando ahora.
               </h2>

@@ -25,7 +25,7 @@ export default async function ProjectsIndexPage() {
       <Container>
         <div className="grid gap-8 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
-            <Kicker>Los proyectos · 03</Kicker>
+            <Kicker>Los proyectos</Kicker>
             <h1 className="mt-6 max-w-4xl font-display text-[clamp(3.25rem,7vw,7.5rem)] leading-[0.9] tracking-[-0.045em] text-text">
               Tres maneras de vivir la ciudad.
             </h1>

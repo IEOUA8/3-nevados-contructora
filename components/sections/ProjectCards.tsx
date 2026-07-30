@@ -76,7 +76,7 @@ export function ProjectCards({ projects }: { projects: ProjectCardData[] }) {
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 text-text-inverse md:p-10">
                 <div>
                   <p className="text-[0.625rem] font-medium uppercase tracking-[0.22em] text-text-inverse/65">
-                    {project.category} · 0{index + 1}
+                    {project.category}
                   </p>
                   <h3 className="mt-3 max-w-2xl font-display text-[clamp(2.15rem,4vw,4.25rem)] leading-[0.92] tracking-[-0.035em]">
                     {project.name}

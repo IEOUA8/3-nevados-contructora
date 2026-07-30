@@ -1,5 +1,6 @@
 import { DeferredLeadForm } from "@/components/forms/DeferredLeadForm";
 import { Container, Section } from "@/components/ui/Layout";
+import { Isotipo } from "@/components/ui/Isotipo";
 import { Kicker } from "@/components/ui/Kicker";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { getProjects, getSettings } from "@/lib/content";
@@ -45,12 +46,9 @@ export async function ContactBlock({
 
   return (
     <Section tone="inverse" id="contacto" className="relative overflow-hidden">
-      <span
-        aria-hidden="true"
-        className="absolute -right-4 top-8 font-display text-[11rem] leading-none text-text-inverse/[0.035] md:right-8 md:top-20 md:text-[22rem]"
-      >
-        03
-      </span>
+      <Isotipo
+        className="pointer-events-none absolute -right-6 top-8 w-36 text-text-inverse/[0.05] md:right-4 md:top-16 md:w-64"
+      />
       <Container>
         <div className="relative grid gap-12 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-5 md:pr-8">

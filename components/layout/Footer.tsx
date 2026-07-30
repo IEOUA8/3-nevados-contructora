@@ -9,7 +9,7 @@ import { whatsappUrl } from "@/lib/utils";
  *
  * La navegación, el contacto y los respaldos viven en planos claramente
  * diferenciados. En móvil cada enlace principal conserva un área táctil
- * generosa; en escritorio, la retícula y la numeración sostienen la jerarquía.
+ * generosa; en escritorio, la retícula sostiene la jerarquía.
  */
 export async function Footer() {
   const settings = await getSettings();
@@ -40,13 +40,13 @@ export async function Footer() {
             </p>
           </div>
 
-          <FooterColumn number="01" title="Explorar">
+          <FooterColumn title="Explorar">
             <FooterLink href="/manifiesto">Manifiesto</FooterLink>
             <FooterLink href="/constructora">La constructora</FooterLink>
             <FooterLink href="/contacto">Contacto</FooterLink>
           </FooterColumn>
 
-          <FooterColumn number="02" title="Proyectos">
+          <FooterColumn title="Proyectos">
             <FooterLink href="/proyectos/tres-nevados-reserva">
               Tres Nevados Reserva
             </FooterLink>
@@ -56,7 +56,7 @@ export async function Footer() {
             </FooterLink>
           </FooterColumn>
 
-          <FooterColumn number="03" title="Conectar">
+          <FooterColumn title="Conectar">
             <FooterExternal href={settings.social.instagram}>Instagram</FooterExternal>
             <FooterExternal href={settings.social.facebook}>Facebook</FooterExternal>
             <FooterExternal href={whatsapp}>WhatsApp</FooterExternal>
@@ -99,18 +99,15 @@ export async function Footer() {
 }
 
 function FooterColumn({
-  number,
   title,
   children,
 }: {
-  number: string;
   title: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="md:col-span-2">
-      <p className="flex items-center gap-3 text-[0.625rem] font-medium uppercase tracking-[0.2em] text-secondary">
-        <span className="text-text-inverse/35">{number}</span>
+      <p className="text-[0.625rem] font-medium uppercase tracking-[0.2em] text-secondary">
         {title}
       </p>
       <div className="mt-4 flex flex-col border-t border-text-inverse/15 md:border-0">

@@ -32,15 +32,12 @@ export function ProductTypesBlock({ products }: { products: ProductType[] }) {
           <ul className="border-t border-border md:col-span-8">
             {products.map((product, index) => (
               <Reveal as="li" key={product.name} delay={Math.min(index, 2) * 0.05}>
-                <div className="group relative grid grid-cols-[1.75rem_1fr] items-start gap-x-4 gap-y-3 border-b border-border py-6 transition-colors duration-200 hover:bg-cool/40 sm:grid-cols-[1.75rem_1fr_auto] sm:items-center sm:gap-x-6 md:px-4">
+                <div className="group relative grid grid-cols-1 items-start gap-x-6 gap-y-3 border-b border-border py-6 pl-4 transition-colors duration-200 hover:bg-cool/40 sm:grid-cols-[1fr_auto] sm:items-center">
                   {/* Barra de acento que aparece al hover. */}
                   <span
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-[2px] origin-center scale-y-0 bg-accent transition-transform duration-200 group-hover:scale-y-100"
                   />
-                  <span className="pt-1 font-display text-[0.9rem] leading-none text-secondary">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
                   <div>
                     <h3 className="font-display text-[1.6rem] leading-tight text-text">
                       {product.name}
@@ -49,7 +46,7 @@ export function ProductTypesBlock({ products }: { products: ProductType[] }) {
                       {product.description}
                     </p>
                   </div>
-                  <span className="col-start-2 justify-self-start whitespace-nowrap rounded-full bg-cool px-3.5 py-1.5 text-[0.6875rem] font-medium uppercase tracking-[0.06em] text-text sm:col-start-3 sm:justify-self-end">
+                  <span className="justify-self-start whitespace-nowrap rounded-full bg-cool px-3.5 py-1.5 text-[0.6875rem] font-medium uppercase tracking-[0.06em] text-text sm:justify-self-end">
                     {product.range}
                   </span>
                 </div>

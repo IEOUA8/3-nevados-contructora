@@ -57,11 +57,10 @@ export default async function CompanyPage() {
             <Reveal key={principle.title} delay={(index % 2) * 0.06}>
               <article
                 className={
-                  "grid min-h-48 grid-cols-[2rem_1fr] gap-4 border-b border-border py-7 md:min-h-56 md:px-8 " +
+                  "min-h-48 border-b border-border py-7 md:min-h-56 md:px-8 " +
                   (index % 2 === 0 ? "md:border-r md:pl-0" : "md:pr-0")
                 }
               >
-                <span className="text-[0.6875rem] text-secondary">0{index + 1}</span>
                 <div>
                   <h2 className="font-display text-display-m text-text">
                     {principle.title}
