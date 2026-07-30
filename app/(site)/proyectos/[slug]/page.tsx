@@ -9,7 +9,6 @@ import { LocationBlock } from "@/components/sections/LocationBlock";
 import { PillarsBlock } from "@/components/sections/PillarsBlock";
 import { ProductTypesBlock } from "@/components/sections/ProductTypesBlock";
 import { RelatedOfferingBlock } from "@/components/sections/RelatedOfferingBlock";
-import { StickyActionBar } from "@/components/sections/StickyActionBar";
 import { TypologyGrid } from "@/components/sections/TypologyGrid";
 import { Container, Section } from "@/components/ui/Layout";
 import { Reveal } from "@/components/ui/Reveal";
@@ -148,11 +147,18 @@ export default async function ProjectPage({
                 <p className="text-body-s text-text-muted">
                   {project.disclaimer}
                 </p>
-                <p className="text-body-s text-text-muted md:text-right">
+                <div className="md:text-right">
                   {project.brochure ? (
-                    <>Ficha del proyecto · PDF {project.brochure.sizeMb} MB</>
+                    <a
+                      href={project.brochure.url}
+                      download
+                      className="inline-flex min-h-12 items-center gap-3 border border-accent bg-accent px-5 text-body-s font-medium text-text-inverse shadow-[0_6px_18px_rgb(114_122_77/0.35)] transition-[background-color,transform,box-shadow] duration-200 hover:bg-accent-hover motion-safe:hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgb(114_122_77/0.48)]"
+                    >
+                      Descargar ficha · PDF {project.brochure.sizeMb} MB
+                      <span aria-hidden="true">↓</span>
+                    </a>
                   ) : (
-                    <>
+                    <p className="text-body-s text-text-muted">
                       La ficha vigente se solicita por{" "}
                       <WhatsAppLink
                         number={settings.whatsapp.number}
@@ -163,9 +169,9 @@ export default async function ProjectPage({
                       >
                         WhatsApp
                       </WhatsAppLink>
-                    </>
+                    </p>
                   )}
-                </p>
+                </div>
               </div>
             </Container>
           </Section>
@@ -177,13 +183,6 @@ export default async function ProjectPage({
           projectSlug={project.slug}
           whatsappMessage={project.whatsappMessage}
           formLocation="ficha"
-        />
-
-        <StickyActionBar
-          whatsappNumber={settings.whatsapp.number}
-          whatsappMessage={project.whatsappMessage}
-          projectSlug={project.slug}
-          brochure={project.brochure}
         />
       </div>
     </>

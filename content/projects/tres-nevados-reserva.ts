@@ -17,16 +17,16 @@ export const reserva: Project = {
   heroImage: {
     src: "/images/reserva/hero.jpg",
     alt: "Fachada de Tres Nevados Reserva al atardecer, sobre la vía del norte de Armenia.",
-    width: 1535,
-    height: 1024,
+    width: 1672,
+    height: 941,
   },
   tagline: "El día empieza con la luz antes que con el ruido.",
 
   cardImage: {
     src: "/images/reserva/card.jpg",
-    alt: "Apartamentos de Tres Nevados Reserva vistos desde la alameda interior.",
-    width: 1400,
-    height: 788,
+    alt: "Fachada iluminada de Tres Nevados Reserva vista desde la vía principal.",
+    width: 1535,
+    height: 1024,
   },
   cardLine:
     "Apartamentos en el norte de Armenia, con la cordillera en el horizonte.",
@@ -109,45 +109,59 @@ export const reserva: Project = {
   gallery: [
     {
       src: "/images/reserva/g-1.jpg",
-      alt: "Piscina exterior entre las torres, con terraza y arborización.",
+      alt: "Piscina exterior entre las torres, con terraza en madera y arborización.",
       width: 1536,
       height: 1024,
       caption: "La piscina",
     },
     {
       src: "/images/reserva/g-2.jpg",
-      alt: "Zona de juegos y cancha múltiple en el interior del conjunto.",
+      alt: "Piscina y terraza al final de la tarde, con la cordillera en el horizonte.",
       width: 1536,
       height: 1024,
-      caption: "Zonas de juego",
+      caption: "La piscina al atardecer",
     },
     {
       src: "/images/reserva/g-3.jpg",
-      alt: "Acceso peatonal al conjunto, con jardineras y vegetación.",
+      alt: "Recorrido junto a la piscina, con jardineras y zonas de descanso.",
       width: 1536,
       height: 1024,
-      caption: "El acceso",
+      caption: "La terraza de piscina",
     },
     {
       src: "/images/reserva/g-4.jpg",
-      alt: "Alameda interior entre torres al final de la tarde.",
+      alt: "Alameda interior entre las torres, vista desde lo alto hacia la cordillera.",
       width: 1536,
       height: 1024,
       caption: "La alameda",
     },
     {
       src: "/images/reserva/g-5.jpg",
+      alt: "Senderos peatonales y jardineras entre las torres del conjunto.",
+      width: 1536,
+      height: 1024,
+      caption: "Los senderos",
+    },
+    {
+      src: "/images/reserva/g-6.jpg",
       alt: "Pérgola de madera y bancas en la zona social exterior.",
       width: 1536,
       height: 1024,
       caption: "La zona social",
     },
     {
-      src: "/images/reserva/g-6.jpg",
-      alt: "Frente comercial del proyecto sobre la vía, al atardecer.",
-      width: 1672,
-      height: 941,
-      caption: "Las zonas comerciales",
+      src: "/images/reserva/g-7.jpg",
+      alt: "Zona social con pérgola iluminada al caer la tarde.",
+      width: 1536,
+      height: 1024,
+      caption: "La zona social al atardecer",
+    },
+    {
+      src: "/images/reserva/g-8.jpg",
+      alt: "Zona de juegos infantiles y cancha múltiple, con vista a la montaña.",
+      width: 1536,
+      height: 1024,
+      caption: "Juego y deporte",
     },
   ],
 
@@ -168,9 +182,9 @@ export const reserva: Project = {
     text: "Una oferta comercial con acceso directo desde la vía y relación con el entorno residencial.",
     image: {
       src: "/images/mall/hero.jpg",
-      alt: "Fachada del Mall Comercial Tres Nevados sobre la vía principal.",
-      width: 1600,
-      height: 900,
+      alt: "Acceso al Bulevar Comercial Tres Nevados, con locales y zona verde.",
+      width: 1672,
+      height: 941,
     },
   },
 
@@ -178,8 +192,11 @@ export const reserva: Project = {
     "Los planos y renders son ilustrativos. Áreas particulares, disponibilidad y especificaciones se confirman con el equipo comercial.",
 
   // — G · Ficha —
-  // PENDIENTE marca · sin PDF cargado, el botón no se renderiza. §20.3
-  brochure: undefined,
+  // Borrador descargable mientras la marca entrega la ficha comercial definitiva.
+  brochure: {
+    url: "/fichas/tres-nevados-reserva.pdf",
+    sizeMb: 0.1,
+  },
 
   // — H · Contacto —
   whatsappMessage: "Hola, quiero información sobre Tres Nevados Reserva.",

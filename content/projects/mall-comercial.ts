@@ -15,9 +15,9 @@ export const mall: Project = {
 
   heroImage: {
     src: "/images/mall/hero.jpg",
-    alt: "Fachada del Mall Comercial Tres Nevados sobre la vía principal.",
-    width: 1600,
-    height: 900,
+    alt: "Acceso al Bulevar Comercial Tres Nevados, con locales y zona verde sobre la vía.",
+    width: 1672,
+    height: 941,
   },
   tagline: "Comercio que encuentra a las personas en su recorrido cotidiano.",
 
@@ -80,9 +80,9 @@ export const mall: Project = {
   gallery: [
     {
       src: "/images/mall/hero.jpg",
-      alt: "Acceso principal del Mall Comercial Tres Nevados desde la vía.",
-      width: 1600,
-      height: 900,
+      alt: "Acceso principal del Bulevar Comercial Tres Nevados desde la vía.",
+      width: 1672,
+      height: 941,
       caption: "El acceso",
     },
     {

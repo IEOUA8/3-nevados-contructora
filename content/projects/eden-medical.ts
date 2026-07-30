@@ -62,19 +62,25 @@ export const eden: Project = {
       description: "Ambientes de atención con una experiencia más privada.",
     },
     {
+      name: "Plantas libres",
+      range: "Área configurable",
+      description:
+        "Superficies diáfanas para adaptar a clínicas o proyectos médicos a la medida.",
+    },
+    {
       name: "Suites médicas",
       range: "Rango por confirmar",
       description: "Espacios para atención y permanencia médica especializada.",
     },
     {
+      name: "Locales comerciales",
+      range: "34–140 m²",
+      description: "Servicios complementarios dentro del ecosistema médico.",
+    },
+    {
       name: "Quirófanos",
       range: "Infraestructura especializada",
       description: "Espacios planteados para procedimientos y atención clínica.",
-    },
-    {
-      name: "Locales",
-      range: "34–140 m²",
-      description: "Servicios complementarios dentro del ecosistema médico.",
     },
   ],
 
@@ -221,7 +227,11 @@ export const eden: Project = {
   disclaimer:
     "Las imágenes son representaciones ilustrativas y pueden presentar modificaciones durante el desarrollo del proyecto.",
 
-  brochure: undefined,
+  // Borrador descargable mientras la marca entrega la ficha comercial definitiva.
+  brochure: {
+    url: "/fichas/eden-medical.pdf",
+    sizeMb: 0.1,
+  },
 
   whatsappMessage: "Hola, quiero información sobre Edén Medical.",
 

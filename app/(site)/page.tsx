@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ContactBlock } from "@/components/sections/ContactBlock";
-import { HeroFullBleed } from "@/components/sections/HeroFullBleed";
+import { HeroSlider } from "@/components/sections/HeroSlider";
 import { ProjectCards } from "@/components/sections/ProjectCards";
 import { Container, Section } from "@/components/ui/Layout";
+import { Isotipo, IsotipoPattern } from "@/components/ui/Isotipo";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -45,28 +46,29 @@ export default async function HomePage() {
     image: project.cardImage,
   }));
 
+  // Un slide por proyecto para el hero de inicio. §10.1
+  const heroSlides = projects.map((project) => ({
+    image: project.heroImage,
+    name: project.name,
+    category: project.category,
+    href: `/proyectos/${project.slug}`,
+  }));
+
   return (
     <>
       <JsonLd data={homeJsonLd(settings)} />
 
-      {/* — Bloque 1 · Entrada — sin CTA. Se hace scroll. */}
-      <HeroFullBleed
-        image={home.hero.image}
-        title={home.hero.title}
-        subtitle={home.hero.subtitle}
-      />
+      {/* — Bloque 1 · Entrada — slider con un proyecto por slide. */}
+      <HeroSlider slides={heroSlides} title={home.hero.title} />
 
       {/* — Bloque 2 · La idea — */}
       <Section
         tone="cream"
         className="section-space-lg relative overflow-hidden border-b border-border-soft"
       >
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-[0.04em] -top-[0.28em] hidden font-display text-[38rem] leading-none text-accent/[0.035] lg:block"
-        >
-          3
-        </span>
+        <Isotipo
+          className="pointer-events-none absolute -right-16 -top-24 hidden w-[24rem] text-accent/[0.06] lg:block"
+        />
         <Container>
           <div className="relative grid gap-12 md:grid-cols-12 md:gap-8">
             <Reveal className="md:col-span-5">
@@ -116,9 +118,16 @@ export default async function HomePage() {
         </Container>
       </Section>
 
-      {/* — Bloque 4 · Respaldo — sin iconos. §10.1 */}
-      <Section tone="cream" className="section-space-sm border-t border-border-soft">
-        <Container>
+      {/* — Bloque 4 · Respaldo — panel Columbia Blue con patrón del isotipo. §10.1 */}
+      <Section
+        tone="cool"
+        className="section-space-sm relative overflow-hidden border-y border-border-soft"
+      >
+        <IsotipoPattern
+          className="pointer-events-none absolute inset-0 text-bg-inverse/[0.05]"
+          patternId="backing-iso"
+        />
+        <Container className="relative">
           <ul className="flex flex-col gap-6 md:flex-row md:gap-0">
             {home.backing.map((item, index) => (
               <li

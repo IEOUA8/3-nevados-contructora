@@ -32,9 +32,9 @@ export default async function CompanyPage() {
     <Section tone="cream" className="pt-32 md:pt-40">
       <JsonLd data={companyJsonLd(settings)} />
 
-      <Container size="read">
+      <Container>
         <Kicker>{company.kicker}</Kicker>
-        <h1 className="mt-6 font-display text-display-l text-text">
+        <h1 className="mt-6 max-w-4xl font-display text-display-l text-text">
           {company.title}
         </h1>
 
@@ -114,10 +114,89 @@ export default async function CompanyPage() {
           </Reveal>
         )}
 
+      </Container>
+
+      {/* — Conoce más · historia, trayectoria, entregas y videos. §10.4 — */}
+      <Container id="conoce-mas" className="mt-24 scroll-mt-24 md:mt-32">
+        <Reveal>
+          <Kicker>{company.knowMore.kicker}</Kicker>
+          <div className="mt-6 grid gap-8 md:grid-cols-[1fr_1.1fr] md:gap-16">
+            <div>
+              <h2 className="font-display text-display-l text-text">
+                {company.knowMore.title}
+              </h2>
+              <p className="mt-5 measure text-body-l text-text-muted">
+                {company.knowMore.intro}
+              </p>
+              <div className="mt-6 flex flex-col gap-4">
+                {company.knowMore.historia.map((parrafo) => (
+                  <p key={parrafo} className="measure text-body text-text">
+                    {parrafo}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <dl className="border-t border-border">
+              {company.knowMore.milestones.map((milestone) => (
+                <div
+                  key={milestone.label}
+                  className="flex items-baseline justify-between gap-6 border-b border-border py-4"
+                >
+                  <dt className="text-body-s text-text">{milestone.label}</dt>
+                  <dd
+                    className={
+                      "shrink-0 text-right text-body-s " +
+                      (milestone.status === "confirmed"
+                        ? "text-text-muted"
+                        : "text-secondary/70")
+                    }
+                  >
+                    {milestone.status === "confirmed"
+                      ? milestone.value
+                      : "Por confirmar"}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </Reveal>
+
+        <Reveal>
+          <div id="videos" className="mt-14 scroll-mt-24">
+            <Kicker>Videos institucionales</Kicker>
+            <div className="mt-6 grid gap-5 sm:grid-cols-2">
+              {company.knowMore.videos.map((video) => (
+                <div
+                  key={video.label}
+                  className="relative flex aspect-video items-center justify-center overflow-hidden border border-border bg-bg-alt"
+                >
+                  <div className="flex flex-col items-center gap-3 text-text-muted">
+                    <PlayBadge />
+                    <span className="text-body-s">{video.label}</span>
+                    <span className="text-[0.625rem] uppercase tracking-[0.16em] text-secondary/70">
+                      Próximamente
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
         <p className="mt-16">
           <TextLink href="/proyectos">Explorar los proyectos</TextLink>
         </p>
       </Container>
     </Section>
+  );
+}
+
+function PlayBadge() {
+  return (
+    <span className="flex size-12 items-center justify-center rounded-full border border-border">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M4 2.5v11l9-5.5z" />
+      </svg>
+    </span>
   );
 }

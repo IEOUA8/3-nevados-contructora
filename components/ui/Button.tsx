@@ -4,22 +4,27 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Botón del sistema. §11.1
- * Radio global 2px. Sin sombras. Sin degradados. Altura de toque ≥48px.
+ * Botón del sistema. §11.1 · Guía de marca 05
+ * Radio global 2px. Altura de touch ≥48px. Los botones sí llevan sombra y
+ * elevación al hover para distinguirse (la regla de «sin sombra» aplica solo
+ * al logo — §08 usos incorrectos, no a la UI). Sin degradados.
  */
 
 type Variant = "primary" | "secondary" | "ghost";
 
 const base =
   "group/button inline-flex min-h-12 items-center justify-center gap-3 rounded-[2px] border border-transparent " +
-  "px-7 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.11em] transition-[color,background-color,border-color,transform] duration-[180ms] " +
+  "px-7 py-3.5 text-[0.75rem] font-medium uppercase tracking-[0.11em] transition-[color,background-color,border-color,transform,box-shadow] duration-[180ms] " +
   "motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[0.985] " +
-  "disabled:cursor-not-allowed disabled:opacity-45";
+  "disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-accent text-text-inverse hover:bg-accent-hover",
+  primary:
+    "bg-accent text-text-inverse shadow-[0_6px_18px_rgb(114_122_77/0.35)] " +
+    "hover:bg-accent-hover hover:shadow-[0_12px_30px_rgb(114_122_77/0.48)]",
   secondary:
-    "border border-text/30 text-text hover:border-text/60 bg-transparent",
+    "border border-text/30 text-text bg-transparent hover:border-text/60 " +
+    "hover:shadow-[0_8px_22px_rgb(44_42_41/0.12)]",
   ghost:
     "min-h-0 px-0 py-0 text-accent underline underline-offset-4 " +
     "decoration-accent/40 hover:decoration-accent",

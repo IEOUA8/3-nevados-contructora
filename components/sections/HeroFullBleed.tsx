@@ -43,7 +43,7 @@ export function HeroFullBleed({
   return (
     <section
       ref={heroRef}
-      className="relative h-svh min-h-[560px] w-full overflow-hidden md:h-[96vh]"
+      className="relative h-svh min-h-[560px] w-full overflow-hidden bg-bg-inverse md:h-[96vh]"
     >
       <motion.div
         data-motion="hero-media"
@@ -70,13 +70,19 @@ export function HeroFullBleed({
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(24,28,25,0.48) 0%, rgba(24,28,25,0.08) 48%, rgba(24,28,25,0.76) 100%)",
+            "linear-gradient(180deg, rgba(24,28,25,0.52) 0%, rgba(24,28,25,0.10) 46%, rgba(24,28,25,0.80) 100%)",
         }}
+      />
+      {/* Franja superior: contraste del header sobre cielos claros. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-28 md:h-40"
+        style={{ background: "linear-gradient(180deg, rgba(24,28,25,0.42), transparent)" }}
       />
 
       <motion.div
         aria-hidden="true"
-        className="absolute inset-x-6 bottom-6 top-16 border border-text-inverse/20 md:inset-x-8 md:bottom-8 md:top-24"
+        className="absolute inset-x-6 bottom-6 top-16 border border-text-inverse/[0.08] md:inset-x-8 md:bottom-8 md:top-24"
         initial={reduced ? false : { opacity: 0, scale: 0.985 }}
         animate={reduced ? undefined : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}

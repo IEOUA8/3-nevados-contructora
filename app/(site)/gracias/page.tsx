@@ -22,8 +22,8 @@ export default async function ThanksPage() {
 
   return (
     <Section tone="cream" className="pt-32 md:pt-40">
-      <Container size="read">
-        <h1 className="font-display text-display-l text-text">
+      <Container>
+        <h1 className="max-w-3xl font-display text-display-l text-text">
           Recibimos tus datos.
         </h1>
         <p className="mt-6 measure text-body-l text-text-muted">

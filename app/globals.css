@@ -6,25 +6,30 @@
    ========================================================================= */
 
 @theme {
-  /* — Color · §5.1 — */
-  --color-bg: #f7f2e8; /* Cream — fondo primario */
+  /* — Color · §5.1 · Guía de marca 05 —
+     Paleta oficial: Pine Tree #727A4D · Columbia Blue #C7D7E1 · Light Taupe
+     #B7926E · Black Tarmac #2C2929. Cream es una base neutra fuera de paleta
+     (aprobada) para la legibilidad de párrafo. */
+  --color-bg: #f7f2e8; /* Cream — base neutra */
   --color-bg-alt: #ffffff; /* superficies elevadas */
-  --color-bg-inverse: #2c2a29; /* Pine Tree */
-  --color-text: #2c2a29;
-  --color-text-muted: rgb(44 42 41 / 0.65);
+  --color-bg-inverse: #2c2929; /* Black Tarmac */
+  --color-text: #2c2929; /* Black Tarmac */
+  --color-text-muted: rgb(44 41 41 / 0.65);
   --color-text-inverse: #f7f2e8;
-  --color-accent: #727a4c; /* Reed Green */
-  --color-accent-hover: #5d6440; /* −12% luminosidad */
-  --color-secondary: #b7926d; /* Light Taupe — decorativo, nunca cuerpo sobre Cream */
-  --color-cool: #c8d8e2; /* Columbia Blue */
-  --color-border: rgb(44 42 41 / 0.12);
-  --color-border-soft: rgb(44 42 41 / 0.08);
+  --color-accent: #727a4d; /* Pine Tree — verde principal */
+  --color-accent-hover: #5d6440; /* Pine Tree −12% luminosidad */
+  --color-secondary: #b7926e; /* Light Taupe — decorativo, nunca cuerpo sobre Cream */
+  --color-cool: #c7d7e1; /* Columbia Blue */
+  --color-border: rgb(44 41 41 / 0.12);
+  --color-border-soft: rgb(44 41 41 / 0.08);
   --color-error: #8b4a3f; /* terracota — nunca rojo de sistema */
-  --color-success: #727a4c;
+  --color-success: #727a4d; /* Pine Tree */
 
-  /* — Tipografía · §5.2 — */
-  --font-display: var(--font-display-family), Georgia, serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  /* — Tipografía · §5.2 · Guía de marca §06 —
+     Display = Clash Display; cuerpo = General Sans (sustituto de Neue Montreal).
+     Ambas sans geométricas: el fallback también es sans. */
+  --font-display: var(--font-display-family), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
 
   --text-display-xl: clamp(2.75rem, 7vw, 5.5rem);
   --text-display-xl--line-height: 1.05;

@@ -191,6 +191,25 @@ export type CompanyContent = {
   whereWeBuild: { title: string; text: string };
   backing: { title: string; items: string[] };
   trajectory: { title: string; text: string };
+  /**
+   * «Conoce más» · §10.4 — historia, antigüedad y entregas de la constructora,
+   * más los videos institucionales. Mientras la marca no entregue los datos,
+   * cada dato lleva `status: "pending"` y se pinta como un hueco visible, no se
+   * inventa. Los videos sin `url` se muestran como marcador «Próximamente».
+   */
+  knowMore: {
+    kicker: string;
+    title: string;
+    intro: string;
+    /** Historia / «nosotros». Párrafos en voz de marca, sin cifras inventadas. */
+    historia: string[];
+    milestones: {
+      label: string;
+      value?: string;
+      status: EssentialStatus;
+    }[];
+    videos: { label: string; url?: string }[];
+  };
   seo: Seo;
 };
 

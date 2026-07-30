@@ -90,7 +90,7 @@ export function Header() {
 
             <div
               className={cn(
-                "hidden border-l pl-5 lg:block",
+                "hidden border-l pl-5 xl:block",
                 solid ? "border-border" : "border-text-inverse/30",
               )}
             >
@@ -134,24 +134,17 @@ export function Header() {
 
 function DesktopNav({ solid }: { solid: boolean }) {
   const pathname = usePathname();
-  const projectsActive = pathname.startsWith("/proyectos/");
-  const [projectsOpen, setProjectsOpen] = useState(false);
-  const projectsMenuRef = useRef<HTMLDivElement>(null);
-  const projectsButtonRef = useRef<HTMLButtonElement>(null);
+  // Cuatro entradas con submenú; se abre una a la vez y se guarda su label.
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const closeOutside = (event: PointerEvent) => {
-      if (!projectsMenuRef.current?.contains(event.target as Node)) {
-        setProjectsOpen(false);
-      }
+      if (!navRef.current?.contains(event.target as Node)) setOpenMenu(null);
     };
-
     const closeWithEscape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      setProjectsOpen(false);
-      projectsButtonRef.current?.focus();
+      if (event.key === "Escape") setOpenMenu(null);
     };
-
     document.addEventListener("pointerdown", closeOutside);
     document.addEventListener("keydown", closeWithEscape);
     return () => {
@@ -162,118 +155,105 @@ function DesktopNav({ solid }: { solid: boolean }) {
 
   return (
     <nav
+      ref={navRef}
       aria-label="Principal"
       className={cn("hidden items-stretch md:flex", solid ? "text-text" : "text-text-inverse")}
     >
-      {NAV_ITEMS.map((item, index) =>
-        item.children ? (
-          <div
-            key={item.label}
-            ref={projectsMenuRef}
-            className="group relative flex"
-            onMouseEnter={() => setProjectsOpen(true)}
-            onMouseLeave={() => setProjectsOpen(false)}
-            onFocusCapture={() => setProjectsOpen(true)}
-            onBlurCapture={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                setProjectsOpen(false);
-              }
-            }}
-          >
-            <button
-              ref={projectsButtonRef}
-              type="button"
-              onClick={() => setProjectsOpen(true)}
-              aria-haspopup="menu"
-              aria-expanded={projectsOpen}
-              aria-current={projectsActive ? "page" : undefined}
-              className={cn(
-                "relative flex min-h-12 items-center gap-2.5 border-l px-5 text-left transition-colors after:absolute after:inset-x-5 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-accent after:transition-transform",
-                solid
-                  ? "border-border hover:bg-text/5"
-                  : "border-text-inverse/20 hover:bg-text-inverse/10",
-                projectsActive && "after:scale-x-100",
-              )}
-            >
-              <span className={cn("text-[0.625rem]", solid ? "text-text-muted" : "text-text-inverse/60")}>02</span>
-              <span className="text-body-s">{item.label}</span>
-              <ChevronDown />
-            </button>
+      {NAV_ITEMS.map((item, index) => {
+        // — Entrada con submenú: el título lleva a su página; hover/foco despliega. —
+        if (item.children) {
+          const isOpen = openMenu === item.label;
+          const active = item.activeMatch
+            ? pathname.startsWith(item.activeMatch)
+            : false;
+          return (
             <div
-              className={cn(
-                "invisible absolute right-0 top-full w-[26rem] pt-3 opacity-0",
-                "translate-y-1 transition-[opacity,transform] duration-200",
-                projectsOpen && "visible translate-y-0 opacity-100",
-              )}
+              key={item.label}
+              className="group relative flex"
+              onMouseEnter={() => setOpenMenu(item.label)}
+              onMouseLeave={() => setOpenMenu(null)}
+              onFocusCapture={() => setOpenMenu(item.label)}
+              onBlurCapture={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                  setOpenMenu(null);
+                }
+              }}
             >
-              <div className="border border-border bg-bg p-2 text-text shadow-[0_20px_60px_rgb(44_42_41/0.12)]">
-                <p className="px-4 pb-3 pt-2 text-[0.625rem] font-medium uppercase tracking-[0.2em] text-text-muted">
-                  Explora los proyectos
-                </p>
-                <ul>
-                  {item.children.map((child, childIndex) => (
-                    <li key={child.href} className="border-t border-border">
-                    <Link
-                      href={child.href}
-                      onClick={() => setProjectsOpen(false)}
-                      aria-current={pathname === child.href ? "page" : undefined}
-                      className={cn(
-                        "group/link grid min-h-20 grid-cols-[2rem_1fr_auto] items-center gap-3 px-4 transition-colors hover:bg-cool/45",
-                        pathname === child.href && "bg-cool/45",
-                      )}
-                    >
-                      <span className="text-[0.6875rem] text-text-muted">0{childIndex + 1}</span>
-                      <span>
-                        <span className="block text-[0.5625rem] font-medium uppercase tracking-[0.18em] text-secondary">
-                          {child.category}
-                        </span>
-                        <span className="mt-1 block font-display text-[1.35rem] leading-tight">
-                          {child.label}
-                        </span>
-                      </span>
-                      <ArrowUpRight className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
-                    </Link>
-                  </li>
-                  ))}
-                </ul>
+              <Link
+                href={item.href!}
+                aria-current={active ? "page" : undefined}
+                aria-expanded={isOpen}
+                className={cn(
+                  "relative flex min-h-12 items-center gap-2 whitespace-nowrap border-l px-4 text-left transition-colors after:absolute after:inset-x-4 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-accent after:transition-transform",
+                  solid
+                    ? "border-border hover:bg-text/5"
+                    : "border-text-inverse/20 hover:bg-text-inverse/10",
+                  (active || isOpen) && "after:scale-x-100",
+                )}
+              >
+                <span className={cn("text-[0.625rem]", solid ? "text-text-muted" : "text-text-inverse/60")}>
+                  0{index + 1}
+                </span>
+                <span className="text-body-s">{item.label}</span>
+                <ChevronDown />
+              </Link>
+              <div
+                className={cn(
+                  "invisible absolute right-0 top-full w-[24rem] pt-3 opacity-0",
+                  "translate-y-1 transition-[opacity,transform] duration-200",
+                  isOpen && "visible translate-y-0 opacity-100",
+                )}
+              >
+                <div className="border border-border bg-bg p-2 text-text shadow-[0_20px_60px_rgb(44_42_41/0.12)]">
+                  <p className="px-4 pb-3 pt-2 text-[0.625rem] font-medium uppercase tracking-[0.2em] text-text-muted">
+                    {item.menuLabel ?? item.label}
+                  </p>
+                  <ul>
+                    {item.children.map((child, childIndex) => (
+                      <li key={child.label} className="border-t border-border">
+                        <Link
+                          href={child.href}
+                          onClick={() => setOpenMenu(null)}
+                          className="group/link grid min-h-16 grid-cols-[2rem_1fr_auto] items-center gap-3 px-4 transition-colors hover:bg-cool/45"
+                        >
+                          <span className="text-[0.6875rem] text-text-muted">0{childIndex + 1}</span>
+                          <span>
+                            <span className="block text-[0.5625rem] font-medium uppercase tracking-[0.18em] text-secondary">
+                              {child.category}
+                            </span>
+                            <span className="mt-1 block font-display text-[1.2rem] leading-tight">
+                              {child.label}
+                            </span>
+                          </span>
+                          <ArrowUpRight className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-        ) : item.href === "/contacto" ? (
-          <Link
-            key={item.href}
-            href={item.href}
-            aria-current={pathname === item.href ? "page" : undefined}
-            className={cn(
-              "ml-3 flex min-h-12 items-center gap-3 border px-5 text-body-s font-medium transition-colors",
-              solid
-                ? "border-accent bg-accent text-text-inverse hover:bg-accent-hover"
-                : "border-text-inverse/55 bg-text-inverse/10 text-text-inverse hover:bg-text-inverse hover:text-text",
-            )}
-          >
-            Hablemos
-            <ArrowUpRight />
-          </Link>
-        ) : (
+          );
+        }
+
+        // — Contáctanos: CTA sólido, sin número. —
+        return (
           <Link
             key={item.href}
             href={item.href!}
             aria-current={pathname === item.href ? "page" : undefined}
             className={cn(
-              "flex min-h-12 items-center gap-2.5 border-l px-5 text-body-s transition-colors",
+              "ml-2 flex min-h-12 items-center gap-2.5 whitespace-nowrap border px-4 text-body-s font-medium transition-[color,background-color,border-color,transform,box-shadow] duration-200 motion-safe:hover:-translate-y-0.5",
               solid
-                ? "border-border hover:bg-text/5"
-                : "border-text-inverse/20 hover:bg-text-inverse/10",
-              pathname === item.href && (solid ? "bg-text/5" : "bg-text-inverse/10"),
+                ? "border-accent bg-accent text-text-inverse shadow-[0_6px_18px_rgb(114_122_77/0.4)] hover:bg-accent-hover hover:shadow-[0_12px_28px_rgb(114_122_77/0.5)]"
+                : "border-text-inverse/55 bg-text-inverse/10 text-text-inverse hover:bg-text-inverse hover:text-text",
             )}
           >
-            <span className={cn("text-[0.625rem]", solid ? "text-text-muted" : "text-text-inverse/60")}>
-              0{index + 1}
-            </span>
-            <span>{item.label}</span>
+            {item.label}
+            <ArrowUpRight />
           </Link>
-        ),
-      )}
+        );
+      })}
     </nav>
   );
 }

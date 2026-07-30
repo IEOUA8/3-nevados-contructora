@@ -14,14 +14,17 @@ export function Container({
   children,
   className,
   size = "site",
+  id,
 }: {
   children: ReactNode;
   className?: string;
   /** `read` centra la columna de lectura a 720px. §5.4 */
   size?: "site" | "read";
+  id?: string;
 }) {
   return (
     <div
+      id={id}
       className={cn(
         "mx-auto w-full px-6 md:px-8",
         size === "site" ? "max-w-site" : "max-w-read",

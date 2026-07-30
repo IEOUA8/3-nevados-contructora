@@ -36,7 +36,7 @@ export function TypologyGrid({
   if (typologies.length === 0) return null;
 
   return (
-    <Section tone="cream" className="border-t border-border-soft">
+    <Section tone="cream" id="tipologias" className="scroll-mt-24 border-t border-border-soft">
       <Container>
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>

@@ -1,5 +1,6 @@
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
+import { Isotipo } from "@/components/ui/Isotipo";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { splitEssentials } from "@/lib/content";
 import type { EssentialField } from "@/content/types";
@@ -7,15 +8,15 @@ import type { EssentialField } from "@/content/types";
 /**
  * BLOQUE C — «Lo esencial». §10.3
  *
- * El componente más importante del sitio. El 80% de los usuarios viene a
- * buscar exactamente esto.
+ * El componente más importante del sitio: el 80% de los usuarios viene a buscar
+ * exactamente esto. Se presenta como una ficha técnica —panel con relieve en
+ * escritorio— para que comunique de forma profesional, no como un listado suelto.
  *
- * OBJETIVO DURO: legible completo en una pantalla de 375×667 sin scroll interno.
- * Verificado por test visual de Playwright. Si no cabe, se reduce contenido —
- * nunca se reduce el tamaño del tipo.
+ * OBJETIVO DURO (móvil): legible completo en una pantalla de 375×667 sin scroll
+ * interno. Por eso el tratamiento de tarjeta y el titular son solo `md:` — en
+ * móvil se mantiene la matriz compacta.
  *
- * NO EXISTE CAMPO DE PRECIO. No está en el tipo `EssentialField`, no está en el
- * contrato de contenido, no está aquí. Agregarlo por error es imposible.
+ * NO EXISTE CAMPO DE PRECIO. No está en `EssentialField` ni en el contrato.
  */
 export function EssentialsBlock({
   fields,
@@ -33,61 +34,59 @@ export function EssentialsBlock({
   if (confirmed.length === 0 && pending.length === 0) return null;
 
   return (
-    // Ancla directa: los anuncios de Meta y los mensajes de WhatsApp llevan
-    // al usuario aquí sin dos scrolls de por medio. §25.1 E
-    //
-    // Este es el único bloque que no cumple el piso de aire de §5.3 en móvil.
-    // Es deliberado: cuando el criterio «cabe en una pantalla de celular»
-    // choca con el de espaciado, manda el primero — el brief dice que si hay
-    // que sacrificar algo de diseño para que quepa, se sacrifica.
     <Section
       id="lo-esencial"
       tone="cream"
-      // scroll-mt-16 = exactamente la altura del header en móvil. Un valor
-      // mayor regala píxeles de la única pantalla que importa.
-      className="scroll-mt-16 py-8 md:scroll-mt-20 md:py-48"
+      className="scroll-mt-16 py-10 md:scroll-mt-20 md:section-space-md"
     >
-      <Container size="read">
-        <Kicker>Lo esencial</Kicker>
+      <Container>
+        <div className="grid gap-8 md:grid-cols-12 md:gap-12">
+          <div className="md:col-span-4">
+            <Kicker>Lo esencial</Kicker>
+            <h2 className="mt-4 hidden max-w-[14rem] font-display text-display-m text-text md:block">
+              Lo que necesitas saber.
+            </h2>
+            <Isotipo className="mt-10 hidden w-16 text-cool md:block" />
+          </div>
 
-        <dl className="mt-2 grid grid-cols-2 gap-x-4 md:mt-6 md:gap-x-8">
-          {confirmed.map((field) => (
-            <EssentialRow key={field.label} field={field} />
-          ))}
+          <div className="md:col-span-8">
+            <dl className="grid grid-cols-2 gap-x-4 gap-y-0 md:gap-x-10 md:rounded-[2px] md:border md:border-border md:bg-bg-alt md:p-8 md:shadow-[0_12px_44px_rgb(44_41_41/0.06)] lg:p-10">
+              {confirmed.map((field) => (
+                <EssentialRow key={field.label} field={field} />
+              ))}
 
-          {/* §20.2 — los pendientes van agrupados AL FINAL, con estilo propio.
-              Ni ocultos (el usuario nota la ausencia y desconfía) ni mezclados
-              con los confirmados (se lee como descuido). */}
-          {pending.map((field) => (
-            <EssentialRow key={field.label} field={field} pending />
-          ))}
-        </dl>
+              {/* §20.2 — los pendientes van agrupados AL FINAL, con estilo propio. */}
+              {pending.map((field) => (
+                <EssentialRow key={field.label} field={field} pending />
+              ))}
+            </dl>
 
-        {/* Cuando hay dos o más pendientes, la ausencia se convierte en un
-            motivo de contacto en lugar de una fuga. §20.2 */}
-        {pending.length >= 2 && (
-          <p className="mt-2 text-body-s text-text-muted md:mt-4">
-            Estos datos se confirman con el equipo comercial.{" "}
-            <WhatsAppLink
-              number={whatsappNumber}
-              message={whatsappMessage}
-              projectSlug={projectSlug}
-              location="essentials_pending"
-              className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
-            >
-              Escribir por WhatsApp
-            </WhatsAppLink>
-          </p>
-        )}
+            {/* Con dos o más pendientes, la ausencia es un motivo de contacto. §20.2 */}
+            {pending.length >= 2 && (
+              <p className="mt-4 text-body-s text-text-muted">
+                Estos datos se confirman con el equipo comercial.{" "}
+                <WhatsAppLink
+                  number={whatsappNumber}
+                  message={whatsappMessage}
+                  projectSlug={projectSlug}
+                  location="essentials_pending"
+                  className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
+                >
+                  Escribir por WhatsApp
+                </WhatsAppLink>
+              </p>
+            )}
+          </div>
+        </div>
       </Container>
     </Section>
   );
 }
 
-/** Sin bordes de tabla. Solo una línea de 1px al 8% entre filas. §10.3 */
-const ROW = "border-b border-border-soft py-2 last:border-b-0 md:last:border-b";
+const ROW =
+  "border-b border-border-soft py-3 last:border-b-0 md:py-4 md:[&:nth-last-child(-n+2)]:border-b-0";
 const LABEL =
-  "text-[0.75rem] font-medium uppercase leading-tight tracking-[0.18em] text-secondary";
+  "text-[0.6875rem] font-medium uppercase leading-tight tracking-[0.18em] text-secondary";
 
 function EssentialRow({
   field,
@@ -96,23 +95,20 @@ function EssentialRow({
   field: EssentialField;
   pending?: boolean;
 }) {
-  // Los pendientes conservan el mismo módulo de la matriz en móvil. En
-  // escritorio recuperan la lectura horizontal etiqueta–valor del §10.3.
-  if (pending) {
-    return (
-      <div className={`${ROW} md:flex md:items-baseline md:justify-between md:gap-4`}>
-        <dt className={LABEL}>{field.label}</dt>
-        <dd className="mt-1 text-[0.9375rem] italic text-secondary md:mt-0">Por confirmar</dd>
-      </div>
-    );
-  }
-
   return (
     <div className={ROW}>
       <dt className={LABEL}>{field.label}</dt>
-      <dd className="mt-1 text-[0.9375rem] font-medium leading-snug text-text">
-        {field.value}
-      </dd>
+      {pending ? (
+        <dd className="mt-2">
+          <span className="inline-flex items-center rounded-full border border-secondary/45 px-2.5 py-0.5 text-[0.625rem] font-medium uppercase tracking-[0.1em] text-secondary">
+            Por confirmar
+          </span>
+        </dd>
+      ) : (
+        <dd className="mt-1.5 text-[1rem] font-medium leading-snug text-text md:text-[1.0625rem]">
+          {field.value}
+        </dd>
+      )}
     </div>
   );
 }

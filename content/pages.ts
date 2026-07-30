@@ -127,6 +127,35 @@ export const company: CompanyContent = {
     title: "Trayectoria",
     text: "",
   },
+  knowMore: {
+    kicker: "Conoce más",
+    title: "Quiénes somos.",
+    intro:
+      "Una reseña de quiénes somos. Los años de trayectoria y las entregas ya realizadas se agregan con el material que confirme la marca.",
+    // BORRADOR de historia en voz de marca (sin cifras ni entregas inventadas).
+    // La marca revisa y ajusta; los datos duros van en `milestones`.
+    historia: [
+      "Tres Nevados es una constructora del Eje Cafetero. Trabajamos en Armenia, Quindío, donde la cordillera y los tres nevados —el Ruiz, el Tolima y Santa Isabel— marcan el clima y el carácter de la región.",
+      "De ahí viene nuestro nombre: los nevados crean las condiciones para que la vida ocurra. Eso es lo que hacemos. No levantamos metros cuadrados; creamos las condiciones para habitar, atender y encontrarse.",
+      "Hoy desarrollamos proyectos de vivienda, salud y comercio en la ciudad, con el respaldo de Aval Fiduciaria y el crédito constructor de Grupo Bancolombia.",
+    ],
+    milestones: [
+      // PENDIENTE marca · historia, antigüedad y entregas previas.
+      { label: "Historia empresarial", status: "pending" },
+      { label: "Años de trayectoria", status: "pending" },
+      { label: "Entregas previas", status: "pending" },
+      {
+        label: "Presencia",
+        value: "Armenia, Quindío · Eje Cafetero",
+        status: "confirmed",
+      },
+    ],
+    // PENDIENTE marca · videos institucionales. Sin URL se pintan como marcador.
+    videos: [
+      { label: "Video institucional" },
+      { label: "Recorrido de proyectos" },
+    ],
+  },
   seo: {
     // El layout raíz ya añade «| Tres Nevados». Repetir la marca aquí gasta
     // caracteres de los 60 que Google muestra. §16.2

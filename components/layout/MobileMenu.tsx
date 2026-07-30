@@ -4,9 +4,10 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { NAV_ITEMS } from "@/components/layout/nav";
+import { Isotipo } from "@/components/ui/Isotipo";
 import { cn } from "@/lib/utils";
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
@@ -30,6 +31,13 @@ export function MobileMenu({
   const pathname = usePathname();
   const openerRef = useRef<HTMLElement | null>(null);
   const reduced = useReducedMotion();
+  // Acordeón: un grupo abierto a la vez. Colapsado por defecto para que el menú
+  // quepa en una pantalla en vez de desplegar 14 opciones de corrido.
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open) setOpenGroup(null);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -91,15 +99,15 @@ export function MobileMenu({
           exit={reduced ? undefined : { y: "-100%" }}
           transition={{ duration: reduced ? 0 : 0.48, ease: EASE_OUT }}
         >
-          <motion.span
+          <motion.div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-10 top-12 font-display text-[18rem] leading-none text-accent/[0.055]"
+            className="pointer-events-none absolute -right-12 top-10 w-[15rem] text-accent/[0.07]"
             initial={reduced ? false : { opacity: 0, rotate: -5, scale: 0.92 }}
             animate={{ opacity: 1, rotate: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.1, ease: EASE_OUT }}
           >
-            3
-          </motion.span>
+            <Isotipo />
+          </motion.div>
 
           <motion.div
             className="relative flex h-20 items-center justify-between border-b border-border px-6"
@@ -152,60 +160,88 @@ export function MobileMenu({
                 animate="open"
                 exit="closed"
               >
-                {NAV_ITEMS.map((item, index) =>
-                  item.children ? (
-                    <motion.li key={item.label} variants={itemVariants} className="border-b border-border py-5">
-                      <p className="flex items-center gap-3 text-kicker font-medium uppercase text-secondary">
-                        <span className="text-[0.625rem] text-text-muted">0{index + 1}</span>
-                        {item.label}
-                      </p>
-                      <ul className="mt-3">
-                        {item.children.map((child, childIndex) => (
-                          <li key={child.href}>
-                            <Link
-                              href={child.href}
-                              onClick={onClose}
-                              aria-current={pathname === child.href ? "page" : undefined}
-                              className={cn(
-                                "group grid min-h-[4.75rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 border-t border-border-soft font-display text-[1.45rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1",
-                                pathname === child.href && "text-accent",
-                              )}
-                            >
-                              <span className="font-sans text-[0.625rem] text-text-muted">0{childIndex + 1}</span>
-                              <span>
-                                <span className="block font-sans text-[0.5625rem] font-medium uppercase tracking-[0.18em] text-secondary">
-                                  {child.category}
+                {NAV_ITEMS.map((item, index) => {
+                  if (!item.children) {
+                    return (
+                      <motion.li key={item.href} variants={itemVariants} className="border-b border-border">
+                        <Link
+                          href={item.href!}
+                          onClick={onClose}
+                          aria-current={pathname === item.href ? "page" : undefined}
+                          className={cn(
+                            "group grid min-h-[4.5rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 font-display text-[1.5rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1",
+                            pathname === item.href && "text-accent",
+                          )}
+                        >
+                          <span className="font-sans text-[0.625rem] text-text-muted">0{index + 1}</span>
+                          {item.label}
+                          <span className="transition-transform duration-300 group-active:translate-x-1">
+                            <ArrowIcon />
+                          </span>
+                        </Link>
+                      </motion.li>
+                    );
+                  }
+
+                  const expanded = openGroup === item.label;
+                  const panelId = `mm-${item.label.replace(/\s+/g, "-").toLowerCase()}`;
+                  const active = item.activeMatch
+                    ? pathname.startsWith(item.activeMatch)
+                    : false;
+
+                  // Fila-acordeón: el título lleva a su página; el botón expande.
+                  return (
+                    <motion.li key={item.label} variants={itemVariants} className="border-b border-border">
+                      <div className="flex items-stretch">
+                        <Link
+                          href={item.href!}
+                          onClick={onClose}
+                          aria-current={active ? "page" : undefined}
+                          className={cn(
+                            "grid flex-1 grid-cols-[1.5rem_1fr] items-center gap-3 py-5 font-display text-[1.5rem] leading-tight text-text active:pl-1",
+                            active && "text-accent",
+                          )}
+                        >
+                          <span className="font-sans text-[0.625rem] text-text-muted">0{index + 1}</span>
+                          {item.label}
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setOpenGroup(expanded ? null : item.label)}
+                          aria-expanded={expanded}
+                          aria-controls={panelId}
+                          aria-label={`${expanded ? "Ocultar" : "Ver"} secciones de ${item.label}`}
+                          className="flex w-14 items-center justify-center text-text-muted transition-colors active:text-accent"
+                        >
+                          <Chevron className={cn("transition-transform duration-300", expanded && "rotate-180")} />
+                        </button>
+                      </div>
+                      {expanded && (
+                        <ul id={panelId} className="pb-3">
+                          {item.children.map((child) => (
+                            <li key={child.label}>
+                              <Link
+                                href={child.href}
+                                onClick={onClose}
+                                className="group grid grid-cols-[1fr_auto] items-center gap-3 border-t border-border-soft py-3 pl-9 pr-1 transition-[padding] duration-200 active:pl-10"
+                              >
+                                <span>
+                                  <span className="block font-sans text-[0.5rem] font-medium uppercase tracking-[0.18em] text-secondary">
+                                    {child.category}
+                                  </span>
+                                  <span className="mt-0.5 block text-body text-text">{child.label}</span>
                                 </span>
-                                <span className="mt-1 block">{child.label}</span>
-                              </span>
-                              <span className="transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-1">
-                                <ArrowIcon />
-                              </span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                                <span className="text-text-muted transition-transform duration-300 group-active:translate-x-1">
+                                  <ArrowIcon />
+                                </span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </motion.li>
-                  ) : (
-                    <motion.li key={item.href} variants={itemVariants} className="border-b border-border">
-                      <Link
-                        href={item.href!}
-                        onClick={onClose}
-                        aria-current={pathname === item.href ? "page" : undefined}
-                        className={cn(
-                          "group grid min-h-[5.25rem] grid-cols-[1.5rem_1fr_auto] items-center gap-3 font-display text-[1.65rem] leading-tight text-text transition-[padding,color] duration-200 active:pl-1",
-                          pathname === item.href && "text-accent",
-                        )}
-                      >
-                        <span className="font-sans text-[0.625rem] text-text-muted">0{index + 1}</span>
-                        {item.label}
-                        <span className="transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-1">
-                          <ArrowIcon />
-                        </span>
-                      </Link>
-                    </motion.li>
-                  ),
-                )}
+                  );
+                })}
               </motion.ul>
             </nav>
 
@@ -239,6 +275,14 @@ function ArrowIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
       <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Chevron({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M5 7l4 4 4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

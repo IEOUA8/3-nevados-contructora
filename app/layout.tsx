@@ -1,36 +1,39 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import localFont from "next/font/local";
 
 import "./globals.css";
 
 /**
- * Tipografía. §5.2
+ * Tipografía. §5.2 · Guía de marca §06.
  *
- * El PDF del brief incrusta Inter y Fraunces: son las familias que la marca ya
- * está usando en sus propios documentos. Fraunces es exactamente el «serif
- * humanista de alto contraste» que pide el documento, y ambas son libres (OFL).
+ * Las tipografías oficiales de Tres Nevados son Clash Display (títulos) y Neue
+ * Montreal (párrafos), ambas sans geométricas. Clash Display es libre (Fontshare)
+ * y se sirve local. Neue Montreal es de pago: hasta contar con la licencia se
+ * usa General Sans —también de Fontshare y del mismo foundry que Clash Display,
+ * diseñada para combinar con ella— como sustituto muy cercano.
  *
- * `next/font/google` descarga y sirve las fuentes desde nuestro propio dominio
- * en tiempo de compilación — no hay petición a Google en tiempo de ejecución,
- * que es lo que exige §17.3.2. Subset latino, `display: swap`.
- *
- * Máximo dos pesos por familia. §11.2
+ * Se sirven locales (woff2, subset ya optimizado) — sin petición externa en
+ * runtime, como exige §17.3.2. `display: swap`.
  */
-const fraunces = Fraunces({
+const clashDisplay = localFont({
   variable: "--font-display-family",
-  subsets: ["latin"],
-  weight: "variable",
   display: "swap",
-  // `opsz` deja que el trazo se afine en los display grandes y engorde en los
-  // tamaños pequeños. Es la única razón por la que se carga como variable.
-  axes: ["opsz"],
+  src: [
+    { path: "../assets/fonts/ClashDisplay-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../assets/fonts/ClashDisplay-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../assets/fonts/ClashDisplay-Semibold.woff2", weight: "600", style: "normal" },
+  ],
 });
 
-const inter = Inter({
+// Sustituto de Neue Montreal (pendiente licencia de la marca).
+const generalSans = localFont({
   variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500"],
   display: "swap",
+  src: [
+    { path: "../assets/fonts/GeneralSans-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../assets/fonts/GeneralSans-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../assets/fonts/GeneralSans-Semibold.woff2", weight: "600", style: "normal" },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -62,7 +65,7 @@ export default function RootLayout({
     <html
       lang="es-CO"
       data-scroll-behavior="smooth"
-      className={`${fraunces.variable} ${inter.variable}`}
+      className={`${clashDisplay.variable} ${generalSans.variable}`}
     >
       <body>{children}</body>
     </html>
