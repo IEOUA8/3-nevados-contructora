@@ -6,7 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import type { Pillar } from "@/content/types";
 
 /**
- * Pilares — bloque opcional de Edén Medical. §20.4
+ * Pilares — bloque opcional de Edén Médical. §20.4
  *
  * Ocupa la posición del bloque D cuando el proyecto no tiene tipologías. La
  * plantilla no puede dejar un hueco vertical donde falta un bloque: en un

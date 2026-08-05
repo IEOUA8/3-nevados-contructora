@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { BackingStrip } from "@/components/sections/BackingStrip";
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
 import { Reveal } from "@/components/ui/Reveal";
@@ -9,11 +10,12 @@ import { getCompany, getSettings } from "@/lib/content";
 import { companyJsonLd } from "@/lib/seo/jsonld";
 
 /**
- * LA CONSTRUCTORA — §10.4
+ * LA CONSTRUCTORA — reestructurada según ajustes v2 (R-07, R-08, R-09, R-10).
  *
- * Página corta, una sola columna de lectura.
- * Sin equipo con fotos. Sin timeline animado. Sin contadores de «años de
- * experiencia». Nada de eso corresponde a la voz.
+ * Orden: entrada · la alianza (R-07) · de dónde viene el nombre (R-08) · cómo
+ * trabajamos, tres focos (R-07) · respaldo, logos de aliados (R-10) · videos.
+ * Se eliminó el bloque de entregas previas (R-09): la historia que sostiene a
+ * la constructora es la de las dos empresas que la fundan. La página gana aire.
  */
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -32,153 +34,113 @@ export default async function CompanyPage() {
     <Section tone="cream" className="pt-32 md:pt-40">
       <JsonLd data={companyJsonLd(settings)} />
 
-      <Container>
+      {/* 1 · Entrada — */}
+      <Container id="conoce-mas" className="scroll-mt-24">
         <Kicker>{company.kicker}</Kicker>
         <h1 className="mt-6 max-w-4xl font-display text-display-l text-text">
           {company.title}
         </h1>
+      </Container>
 
+      {/* 2 · Qué es Tres Nevados · la alianza — R-07 */}
+      <Container size="read" className="mt-20 md:mt-28">
         <Reveal>
-          <div className="mt-12 flex flex-col gap-4">
-            {company.origin.map((line) => (
-              <p key={line} className="measure-narrow text-body-l text-text">
+          <Kicker>{company.alliance.kicker}</Kicker>
+          <h2 className="mt-5 font-display text-display-m text-text">
+            {company.alliance.title}
+          </h2>
+          <div className="mt-8 flex flex-col gap-5">
+            {company.alliance.body.map((line) => (
+              <p key={line} className="measure text-body-l text-text">
+                {line}
+              </p>
+            ))}
+          </div>
+          {company.alliance.pendingNote && (
+            <p className="mt-8 border-l-2 border-border pl-4 text-body-s text-text-muted">
+              {company.alliance.pendingNote}
+            </p>
+          )}
+        </Reveal>
+      </Container>
+
+      {/* 3 · De dónde viene el nombre — R-08. Mucho aire, sin CTA. */}
+      <Container size="read" className="mt-24 md:mt-36">
+        <Reveal>
+          <Kicker>{company.nameOrigin.kicker}</Kicker>
+          <div className="mt-8 flex flex-col gap-4">
+            {company.nameOrigin.lines.map((line) => (
+              <p
+                key={line}
+                className="measure font-display text-[clamp(1.5rem,3.2vw,2.4rem)] leading-[1.28] text-text"
+              >
                 {line}
               </p>
             ))}
           </div>
         </Reveal>
-
       </Container>
 
-      <Container className="mt-20 md:mt-28">
-        <Kicker>Cómo decidimos</Kicker>
-        <div className="mt-8 grid border-t border-border md:grid-cols-2">
-          {company.principles.map((principle, index) => (
-            <Reveal key={principle.title} delay={(index % 2) * 0.06}>
+      {/* 4 · Cómo trabajamos · tres focos — R-07. Mismo peso, sin iconografía. */}
+      <Container className="mt-24 md:mt-36">
+        <Kicker>Cómo trabajamos</Kicker>
+        <div className="mt-8 grid border-t border-border md:grid-cols-3">
+          {company.focuses.map((focus, index) => (
+            <Reveal key={focus.title} delay={index * 0.06}>
               <article
                 className={
-                  "min-h-48 border-b border-border py-7 md:min-h-56 md:px-8 " +
-                  (index % 2 === 0 ? "md:border-r md:pl-0" : "md:pr-0")
+                  "border-b border-border py-8 md:min-h-72 md:px-8 " +
+                  (index === 0 ? "md:pl-0" : "") +
+                  (index < company.focuses.length - 1 ? " md:border-r" : "") +
+                  (index === company.focuses.length - 1 ? " md:pr-0" : "")
                 }
               >
-                <div>
-                  <h2 className="font-display text-display-m text-text">
-                    {principle.title}
-                  </h2>
-                  <p className="mt-4 max-w-md text-body-s text-text-muted">
-                    {principle.text}
-                  </p>
-                </div>
+                <h3 className="font-display text-display-m text-text">
+                  {focus.title}
+                </h3>
+                <p className="mt-4 measure text-body text-text-muted">
+                  {focus.text}
+                </p>
               </article>
             </Reveal>
           ))}
         </div>
-      </Container>
 
-      <Container size="read" className="mt-20 md:mt-28">
-        <div className="grid gap-12 border-y border-border py-10 md:grid-cols-2 md:gap-16">
-          <Reveal>
-            <div>
-              <Kicker>{company.whereWeBuild.title}</Kicker>
-              <p className="mt-3 text-body-l text-text">
-                {company.whereWeBuild.text}
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div>
-              <Kicker>{company.backing.title}</Kicker>
-              <ul className="mt-3 flex flex-col gap-1">
-                {company.backing.items.map((item) => (
-                  <li key={item} className="text-body text-text">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
+        <div className="mt-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span className="text-kicker font-medium uppercase text-secondary">
+              {company.whereWeBuild.title}
+            </span>
+            <span className="text-body-s text-text-muted">
+              {company.whereWeBuild.text}
+            </span>
+          </p>
+          <TextLink href="/manifiesto">Leer el manifiesto</TextLink>
         </div>
-
-        {/* PENDIENTE marca — sin texto de trayectoria, la sección no se pinta.
-            Un titular con el cuerpo vacío se lee como un sitio sin terminar. */}
-        {company.trajectory.text && (
-          <Reveal>
-            <div className="mt-16">
-              <Kicker>{company.trajectory.title}</Kicker>
-              <p className="mt-3 measure text-body-l text-text">
-                {company.trajectory.text}
-              </p>
-            </div>
-          </Reveal>
-        )}
-
       </Container>
 
-      {/* — Conoce más · historia, trayectoria, entregas y videos. §10.4 — */}
-      <Container id="conoce-mas" className="mt-24 scroll-mt-24 md:mt-32">
-        <Reveal>
-          <Kicker>{company.knowMore.kicker}</Kicker>
-          <div className="mt-6 grid gap-8 md:grid-cols-[1fr_1.1fr] md:gap-16">
-            <div>
-              <h2 className="font-display text-display-l text-text">
-                {company.knowMore.title}
-              </h2>
-              <p className="mt-5 measure text-body-l text-text-muted">
-                {company.knowMore.intro}
-              </p>
-              <div className="mt-6 flex flex-col gap-4">
-                {company.knowMore.historia.map((parrafo) => (
-                  <p key={parrafo} className="measure text-body text-text">
-                    {parrafo}
-                  </p>
-                ))}
-              </div>
-            </div>
-            <dl className="border-t border-border">
-              {company.knowMore.milestones.map((milestone) => (
-                <div
-                  key={milestone.label}
-                  className="flex items-baseline justify-between gap-6 border-b border-border py-4"
-                >
-                  <dt className="text-body-s text-text">{milestone.label}</dt>
-                  <dd
-                    className={
-                      "shrink-0 text-right text-body-s " +
-                      (milestone.status === "confirmed"
-                        ? "text-text-muted"
-                        : "text-secondary/70")
-                    }
-                  >
-                    {milestone.status === "confirmed"
-                      ? milestone.value
-                      : "Por confirmar"}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </Reveal>
+      {/* 5 · Respaldo · logos de aliados — R-10 */}
+      <BackingStrip allies={settings.allies} />
 
+      {/* 6 · Institucional · videos — */}
+      <Container id="videos" className="mt-24 scroll-mt-24 md:mt-32">
         <Reveal>
-          <div id="videos" className="mt-14 scroll-mt-24">
-            <Kicker>Videos institucionales</Kicker>
-            <div className="mt-6 grid gap-5 sm:grid-cols-2">
-              {company.knowMore.videos.map((video) => (
-                <div
-                  key={video.label}
-                  className="relative flex aspect-video items-center justify-center overflow-hidden border border-border bg-bg-alt"
-                >
-                  <div className="flex flex-col items-center gap-3 text-text-muted">
-                    <PlayBadge />
-                    <span className="text-body-s">{video.label}</span>
-                    <span className="text-[0.625rem] uppercase tracking-[0.16em] text-secondary/70">
-                      Próximamente
-                    </span>
-                  </div>
+          <Kicker>Videos institucionales</Kicker>
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            {company.videos.map((video) => (
+              <div
+                key={video.label}
+                className="relative flex aspect-video items-center justify-center overflow-hidden border border-border bg-bg-alt"
+              >
+                <div className="flex flex-col items-center gap-3 text-text-muted">
+                  <PlayBadge />
+                  <span className="text-body-s">{video.label}</span>
+                  <span className="text-[0.625rem] uppercase tracking-[0.16em] text-secondary/70">
+                    Próximamente
+                  </span>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </Reveal>
 

@@ -1,7 +1,6 @@
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
 import { Isotipo } from "@/components/ui/Isotipo";
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { splitEssentials } from "@/lib/content";
 import type { EssentialField } from "@/content/types";
 
@@ -16,22 +15,16 @@ import type { EssentialField } from "@/content/types";
  * interno. Por eso el tratamiento de tarjeta y el titular son solo `md:` — en
  * móvil se mantiene la matriz compacta.
  *
+ * R-14 — los campos sin dato NO se muestran. Un campo que dice «por confirmar»
+ * comunica menos control del que hay; se oculta hasta tener el dato, en lugar
+ * de pintarlo vacío. La conversión la sostiene el bloque de contacto de la ficha.
+ *
  * NO EXISTE CAMPO DE PRECIO. No está en `EssentialField` ni en el contrato.
  */
-export function EssentialsBlock({
-  fields,
-  whatsappNumber,
-  whatsappMessage,
-  projectSlug,
-}: {
-  fields: EssentialField[];
-  whatsappNumber: string;
-  whatsappMessage: string;
-  projectSlug: string;
-}) {
-  const { confirmed, pending } = splitEssentials(fields);
+export function EssentialsBlock({ fields }: { fields: EssentialField[] }) {
+  const { confirmed } = splitEssentials(fields);
 
-  if (confirmed.length === 0 && pending.length === 0) return null;
+  if (confirmed.length === 0) return null;
 
   return (
     <Section
@@ -54,28 +47,7 @@ export function EssentialsBlock({
               {confirmed.map((field) => (
                 <EssentialRow key={field.label} field={field} />
               ))}
-
-              {/* §20.2 — los pendientes van agrupados AL FINAL, con estilo propio. */}
-              {pending.map((field) => (
-                <EssentialRow key={field.label} field={field} pending />
-              ))}
             </dl>
-
-            {/* Con dos o más pendientes, la ausencia es un motivo de contacto. §20.2 */}
-            {pending.length >= 2 && (
-              <p className="mt-4 text-body-s text-text-muted">
-                Estos datos se confirman con el equipo comercial.{" "}
-                <WhatsAppLink
-                  number={whatsappNumber}
-                  message={whatsappMessage}
-                  projectSlug={projectSlug}
-                  location="essentials_pending"
-                  className="text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
-                >
-                  Escribir por WhatsApp
-                </WhatsAppLink>
-              </p>
-            )}
           </div>
         </div>
       </Container>
@@ -88,27 +60,13 @@ const ROW =
 const LABEL =
   "text-[0.6875rem] font-medium uppercase leading-tight tracking-[0.18em] text-secondary";
 
-function EssentialRow({
-  field,
-  pending = false,
-}: {
-  field: EssentialField;
-  pending?: boolean;
-}) {
+function EssentialRow({ field }: { field: EssentialField }) {
   return (
     <div className={ROW}>
       <dt className={LABEL}>{field.label}</dt>
-      {pending ? (
-        <dd className="mt-2">
-          <span className="inline-flex items-center rounded-full border border-secondary/45 px-2.5 py-0.5 text-[0.625rem] font-medium uppercase tracking-[0.1em] text-secondary">
-            Por confirmar
-          </span>
-        </dd>
-      ) : (
-        <dd className="mt-1.5 text-[1rem] font-medium leading-snug text-text md:text-[1.0625rem]">
-          {field.value}
-        </dd>
-      )}
+      <dd className="mt-1.5 text-[1rem] font-medium leading-snug text-text md:text-[1.0625rem]">
+        {field.value}
+      </dd>
     </div>
   );
 }

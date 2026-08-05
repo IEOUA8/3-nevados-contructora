@@ -205,6 +205,29 @@ function DesktopNav({ solid }: { solid: boolean }) {
                   <p className="px-4 pb-3 pt-2 text-[0.625rem] font-medium uppercase tracking-[0.2em] text-text-muted">
                     {item.menuLabel ?? item.label}
                   </p>
+                  {/* R-03 — introducción al proyecto: contexto, no producto.
+                      Va primero y con tratamiento propio, separada del listado. */}
+                  {item.intro && (
+                    <Link
+                      href={item.intro.href}
+                      onClick={() => setOpenMenu(null)}
+                      className="group/intro mb-2 block bg-cool/40 px-4 py-3.5 transition-colors hover:bg-cool/70"
+                    >
+                      <span className="block text-[0.5625rem] font-medium uppercase tracking-[0.18em] text-secondary">
+                        {item.intro.category}
+                      </span>
+                      <span className="mt-1 block font-display text-[1.2rem] leading-tight text-text">
+                        {item.intro.label}
+                      </span>
+                      <span className="mt-1.5 block text-body-s leading-snug text-text-muted">
+                        {item.intro.blurb}
+                      </span>
+                      <span className="mt-2 inline-flex items-center gap-1.5 text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-accent">
+                        {item.intro.cta}
+                        <ArrowUpRight className="transition-transform group-hover/intro:-translate-y-0.5 group-hover/intro:translate-x-0.5" />
+                      </span>
+                    </Link>
+                  )}
                   <ul>
                     {item.children.map((child) => (
                       <li key={child.label} className="border-t border-border">

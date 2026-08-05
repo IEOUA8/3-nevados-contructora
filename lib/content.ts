@@ -1,5 +1,8 @@
 import "server-only";
 
+import { statSync } from "node:fs";
+import { join } from "node:path";
+
 import {
   LEGAL_PENDING,
   legalDocuments,
@@ -61,6 +64,41 @@ export async function getProject(slug: string): Promise<Project | null> {
 
 export async function getProjectSlugs(): Promise<string[]> {
   return (await getProjects()).map((p) => p.slug);
+}
+
+/**
+ * R-16 — Límite duro de peso para toda pieza descargable: 10 MB. El tráfico
+ * llega con datos móviles y una ficha pesada se abandona antes de abrirse.
+ *
+ * En el espíritu del contenido tipado (§types): esto no avisa, impide. Corre en
+ * el render de la ficha (build estático), así que un PDF pesado rompe el build
+ * en vez de publicarse. Si el archivo aún no existe (la marca no lo entregó),
+ * no se rompe nada: solo un archivo presente y pesado es un error.
+ */
+const MAX_BROCHURE_MB = 10;
+
+export function assertBrochureWithinLimit(project: Project): void {
+  const brochure = project.brochure;
+  if (!brochure) return;
+
+  if (brochure.sizeMb >= MAX_BROCHURE_MB) {
+    throw new Error(
+      `[R-16] La ficha de «${project.name}» declara ${brochure.sizeMb} MB y alcanza o supera el límite de ${MAX_BROCHURE_MB} MB. Comprime el PDF antes de enlazarlo.`,
+    );
+  }
+
+  try {
+    const bytes = statSync(join(process.cwd(), "public", brochure.url)).size;
+    if (bytes >= MAX_BROCHURE_MB * 1024 * 1024) {
+      throw new Error(
+        `[R-16] La ficha de «${project.name}» pesa ${(bytes / 1024 / 1024).toFixed(1)} MB y supera el límite de ${MAX_BROCHURE_MB} MB.`,
+      );
+    }
+  } catch (error) {
+    // Solo el archivo presente y pesado es un error. Un archivo que todavía no
+    // existe (marca sin entregar) no rompe el build.
+    if (error instanceof Error && error.message.startsWith("[R-16]")) throw error;
+  }
 }
 
 /**

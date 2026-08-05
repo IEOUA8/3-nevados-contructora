@@ -17,6 +17,19 @@ import type { Typology } from "@/content/types";
  * se mide, y por eso el lightbox permite zoom real (pinch en móvil, sin
  * maximum-scale que lo impida — §18).
  */
+/** R-06 — «2 habitaciones», «1 habitación». Una sola línea con alcobas y área. */
+function bedroomsLabel(bedrooms?: number): string | null {
+  if (!bedrooms) return null;
+  return `${bedrooms} ${bedrooms === 1 ? "habitación" : "habitaciones"}`;
+}
+
+function supportLine(typology: Typology): string | null {
+  const parts = [bedroomsLabel(typology.bedrooms), typology.area].filter(
+    Boolean,
+  );
+  return parts.length > 0 ? parts.join(" · ") : null;
+}
+
 export function TypologyGrid({
   typologies,
   projectSlug,
@@ -25,95 +38,194 @@ export function TypologyGrid({
   projectSlug: string;
 }) {
   const [open, setOpen] = useState<Typology | null>(null);
+
+  // R-06 — la primera división es por número de habitaciones, que es como busca
+  // la gente. La torre queda como filtro secundario. Ambos filtros solo
+  // aparecen cuando el dato existe; si la marca aún no entrega la tabla de
+  // correspondencia (alcobas por plano), el bloque se muestra sin filtro de
+  // habitaciones en lugar de inventar un dato.
+  const bedroomOptions = Array.from(
+    new Set(
+      typologies
+        .map((typology) => typology.bedrooms)
+        .filter((value): value is number => typeof value === "number"),
+    ),
+  ).sort((a, b) => a - b);
+
   const towers = Array.from(
     new Set(typologies.map((typology) => typology.tower).filter(Boolean)),
   ) as string[];
-  const [selectedTower, setSelectedTower] = useState(towers[0] ?? "");
-  const visibleTypologies = selectedTower
-    ? typologies.filter((typology) => typology.tower === selectedTower)
-    : typologies;
+
+  const [selectedBedrooms, setSelectedBedrooms] = useState<number | null>(null);
+  const [selectedTower, setSelectedTower] = useState<string | null>(null);
+
+  const visibleTypologies = typologies.filter((typology) => {
+    if (selectedBedrooms !== null && typology.bedrooms !== selectedBedrooms) {
+      return false;
+    }
+    if (selectedTower !== null && typology.tower !== selectedTower) {
+      return false;
+    }
+    return true;
+  });
 
   if (typologies.length === 0) return null;
 
   return (
     <Section tone="cream" id="tipologias" className="scroll-mt-24 border-t border-border-soft">
       <Container>
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-6">
           <div>
             <Kicker>Tipologías</Kicker>
             <h2 className="mt-4 max-w-xl font-display text-display-l text-text">
               Explora cada planta.
             </h2>
             <p className="mt-4 max-w-xl text-body-s text-text-muted">
-              Los códigos corresponden a los planos entregados. Áreas y disponibilidad se confirman con el equipo comercial.
+              {bedroomOptions.length > 1
+                ? "Elige por número de habitaciones. Áreas y disponibilidad se confirman con el equipo comercial."
+                : "Cada planta corresponde a un plano entregado. Áreas y disponibilidad se confirman con el equipo comercial."}
             </p>
           </div>
 
-          {towers.length > 1 && (
-            <div className="flex gap-2" aria-label="Filtrar tipologías por torre">
-              {towers.map((tower) => (
-                <button
-                  key={tower}
-                  type="button"
-                  onClick={() => setSelectedTower(tower)}
-                  aria-pressed={selectedTower === tower}
-                  className={
-                    "min-h-12 border px-5 text-body-s transition-colors " +
-                    (selectedTower === tower
-                      ? "border-accent bg-accent text-text-inverse"
-                      : "border-border bg-transparent text-text hover:border-accent")
-                  }
+          {(bedroomOptions.length > 1 || towers.length > 1) && (
+            <div className="flex flex-col gap-3">
+              {/* Filtro primario · habitaciones. R-06 */}
+              {bedroomOptions.length > 1 && (
+                <div
+                  className="flex flex-wrap gap-2"
+                  aria-label="Filtrar tipologías por número de habitaciones"
                 >
-                  Torre {tower}
-                </button>
-              ))}
+                  <FilterChip
+                    active={selectedBedrooms === null}
+                    onClick={() => setSelectedBedrooms(null)}
+                  >
+                    Todas
+                  </FilterChip>
+                  {bedroomOptions.map((bedrooms) => (
+                    <FilterChip
+                      key={bedrooms}
+                      active={selectedBedrooms === bedrooms}
+                      onClick={() => setSelectedBedrooms(bedrooms)}
+                    >
+                      {bedroomsLabel(bedrooms)}
+                    </FilterChip>
+                  ))}
+                </div>
+              )}
+
+              {/* Filtro secundario · torre. */}
+              {towers.length > 1 && (
+                <div
+                  className="flex flex-wrap gap-2"
+                  aria-label="Filtrar tipologías por torre"
+                >
+                  <FilterChip
+                    secondary
+                    active={selectedTower === null}
+                    onClick={() => setSelectedTower(null)}
+                  >
+                    Todas las torres
+                  </FilterChip>
+                  {towers.map((tower) => (
+                    <FilterChip
+                      key={tower}
+                      secondary
+                      active={selectedTower === tower}
+                      onClick={() => setSelectedTower(tower)}
+                    >
+                      Torre {tower}
+                    </FilterChip>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
 
         <ul className="-mx-6 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-5 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
-          {visibleTypologies.map((typology, index) => (
-            <Reveal
-              as="li"
-              key={typology.code ?? typology.name}
-              delay={Math.min(index, 2) * 0.05}
-              className="w-[78vw] shrink-0 snap-center sm:w-auto"
-            >
-              <button
-                type="button"
-                className="group block w-full text-left"
-                onClick={() => {
-                  setOpen(typology);
-                  trackEvent("view_typology", {
-                    project_slug: projectSlug,
-                    typology_name: typology.name,
-                    area: typology.area ?? "por confirmar",
-                  });
-                }}
+          {visibleTypologies.map((typology, index) => {
+            const support = supportLine(typology);
+            return (
+              <Reveal
+                as="li"
+                key={typology.code ?? typology.name}
+                delay={Math.min(index, 2) * 0.05}
+                className="w-[78vw] shrink-0 snap-center sm:w-auto"
               >
-                <div className="relative aspect-4/3 overflow-hidden border border-border-soft bg-bg-alt">
-                  <Image
-                    src={typology.image.src}
-                    alt={typology.image.alt}
-                    fill
-                    sizes="(min-width: 1024px) 23vw, (min-width: 640px) 46vw, 100vw"
-                    className="object-contain"
-                  />
-                </div>
-                <h3 className="mt-4 font-display text-[1.6rem] leading-tight text-text">
-                  {typology.code ?? typology.name}
-                </h3>
-                <p className="mt-1 text-body-s text-text-muted">
-                  Torre {typology.tower}{typology.area ? ` · ${typology.area}` : ""}
-                </p>
-              </button>
-            </Reveal>
-          ))}
+                <button
+                  type="button"
+                  className="group block w-full text-left"
+                  onClick={() => {
+                    setOpen(typology);
+                    trackEvent("view_typology", {
+                      project_slug: projectSlug,
+                      typology_name: typology.name,
+                      area: typology.area ?? "por confirmar",
+                    });
+                  }}
+                >
+                  <div className="relative aspect-4/3 overflow-hidden border border-border-soft bg-bg-alt">
+                    <Image
+                      src={typology.image.src}
+                      alt={typology.image.alt}
+                      fill
+                      sizes="(min-width: 1024px) 23vw, (min-width: 640px) 46vw, 100vw"
+                      className="object-contain"
+                    />
+                  </div>
+                  {/* R-06 — el nombre manda; el código va pequeño y tenue debajo. */}
+                  <h3 className="mt-4 font-display text-[1.6rem] leading-tight text-text">
+                    {typology.name}
+                    {typology.tower ? (
+                      <span className="text-text-muted"> · Torre {typology.tower}</span>
+                    ) : null}
+                  </h3>
+                  {support && (
+                    <p className="mt-1 text-body-s text-text-muted">{support}</p>
+                  )}
+                  {typology.code && (
+                    <p className="mt-1 text-[0.6875rem] uppercase tracking-[0.14em] text-text-muted/60">
+                      Plano {typology.code}
+                    </p>
+                  )}
+                </button>
+              </Reveal>
+            );
+          })}
         </ul>
       </Container>
 
       <Lightbox typology={open} onClose={() => setOpen(null)} />
     </Section>
+  );
+}
+
+function FilterChip({
+  active,
+  secondary = false,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  secondary?: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={
+        (secondary ? "min-h-10 px-4 text-body-s " : "min-h-12 px-5 text-body-s ") +
+        "border transition-colors " +
+        (active
+          ? "border-accent bg-accent text-text-inverse"
+          : "border-border bg-transparent text-text hover:border-accent")
+      }
+    >
+      {children}
+    </button>
   );
 }
 
@@ -176,8 +288,12 @@ function Lightbox({
       </div>
 
       <p className="pt-4 text-center text-body-s text-text-inverse/80">
-        {typology.code ?? typology.name}
-        {typology.area ? ` · ${typology.area}` : ""}
+        {typology.name}
+        {typology.tower ? ` · Torre ${typology.tower}` : ""}
+        {supportLine(typology) ? ` · ${supportLine(typology)}` : ""}
+        {typology.code ? (
+          <span className="text-text-inverse/45"> · Plano {typology.code}</span>
+        ) : null}
       </p>
     </div>
   );

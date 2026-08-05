@@ -31,6 +31,10 @@ export const reserva: Project = {
   cardLine:
     "Apartamentos en el norte de Armenia, con la cordillera en el horizonte.",
 
+  // — Introducción editable · R-04 —
+  intro:
+    "Siete torres en la entrada norte de Armenia. Más de seiscientos apartamentos de una, dos y tres alcobas, con vista directa a la cordillera y a los tres nevados. Zonas sociales, zona comercial propia y parqueadero para todos los propietarios.",
+
   // — B · Qué se vive aquí —
   experience: [
     "Hay mañanas que empiezan con una vista.",
@@ -104,8 +108,56 @@ export const reserva: Project = {
     })),
   ],
 
+  // — R-05 · Cifras del proyecto (Book) —
+  // BLOQUEADO: `published: false` hasta que la marca unifique el área mínima
+  // publicable. El Book reporta «desde 26 m²» y el sitio «desde 33 m²»; los dos
+  // rangos pueden ser correctos según lo que se mida, pero deben unificarse en
+  // una sola cifra pública antes de mostrar este bloque.
+  facts: {
+    published: false,
+    items: [
+      "7 torres",
+      "Más de 600 apartamentos",
+      "Áreas construidas desde 26 m² hasta 71 m²",
+      "Sistema constructivo aporticado sismorresistente",
+      "Posibilidad de parqueadero para todos los propietarios",
+      "Amplia zona comercial",
+    ],
+  },
+
+  // — R-05 · Atributos del proyecto (Book) · texto de la marca —
+  attributes: [
+    {
+      title: "Ubicación estratégica",
+      text: "En la zona de expansión urbanística del norte de la ciudad.",
+    },
+    {
+      title: "Calidad",
+      text: "Apartamentos totalmente terminados con especificaciones de alta calidad.",
+    },
+    {
+      title: "Accesibilidad e inversión",
+      text: "El metro cuadrado más accesible y rentable del norte de Armenia.",
+    },
+    {
+      title: "Confianza",
+      text: "Negocios a través de Aval Fiduciaria y respaldo de crédito constructor Grupo Bancolombia.",
+    },
+  ],
+
+  // — R-05 · Punto de precio · CONSTRUIDO Y DESACTIVADO —
+  // No se publica hasta confirmación de gerencia comercial. Para activarlo,
+  // poner `published: true`. El Book publica «desde $227.000.000».
+  priceFrom: {
+    published: false,
+    value: "Desde $227.000.000",
+    note: "Valor de referencia sujeto a disponibilidad y condiciones comerciales vigentes.",
+  },
+
   // — E · Zonas comunes —
   galleryTitle: "Zonas comunes",
+  // PENDIENTE marca · R-05 — párrafo de entrada a la sección de zonas sociales.
+  galleryIntro: undefined,
   gallery: [
     {
       src: "/images/reserva/g-1.jpg",

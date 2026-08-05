@@ -46,19 +46,28 @@ export async function Footer() {
             <FooterLink href="/contacto">Contacto</FooterLink>
           </FooterColumn>
 
+          {/* R-01 · R-02 — mismo orden que el menú: Reserva primero, con el Mall
+              Comercial anidado como parte de Reserva; luego Edén Médical. */}
           <FooterColumn title="Proyectos">
             <FooterLink href="/proyectos/tres-nevados-reserva">
               Tres Nevados Reserva
             </FooterLink>
-            <FooterLink href="/proyectos/eden-medical">Edén Medical</FooterLink>
             <FooterLink href="/proyectos/mall-comercial-tres-nevados">
               Mall Comercial
             </FooterLink>
+            <FooterLink href="/proyectos/eden-medical">Edén Médical</FooterLink>
           </FooterColumn>
 
           <FooterColumn title="Conectar">
             <FooterExternal href={settings.social.instagram}>Instagram</FooterExternal>
             <FooterExternal href={settings.social.facebook}>Facebook</FooterExternal>
+            {/* R-11 — LinkedIn y YouTube se pintan solo con URL confirmada. */}
+            {settings.social.linkedin && (
+              <FooterExternal href={settings.social.linkedin}>LinkedIn</FooterExternal>
+            )}
+            {settings.social.youtube && (
+              <FooterExternal href={settings.social.youtube}>YouTube</FooterExternal>
+            )}
             <FooterExternal href={whatsapp}>WhatsApp</FooterExternal>
           </FooterColumn>
         </div>

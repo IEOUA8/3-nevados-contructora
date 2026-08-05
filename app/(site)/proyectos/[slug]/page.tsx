@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { AttributesBlock } from "@/components/sections/AttributesBlock";
+import { BackingStrip } from "@/components/sections/BackingStrip";
 import { ContactBlock } from "@/components/sections/ContactBlock";
 import { EssentialsBlock } from "@/components/sections/EssentialsBlock";
+import { FactsBlock } from "@/components/sections/FactsBlock";
 import { Gallery } from "@/components/sections/Gallery";
 import { HeroFullBleed } from "@/components/sections/HeroFullBleed";
 import { LocationBlock } from "@/components/sections/LocationBlock";
 import { PillarsBlock } from "@/components/sections/PillarsBlock";
+import { PriceBlock } from "@/components/sections/PriceBlock";
 import { ProductTypesBlock } from "@/components/sections/ProductTypesBlock";
 import { RelatedOfferingBlock } from "@/components/sections/RelatedOfferingBlock";
 import { TypologyGrid } from "@/components/sections/TypologyGrid";
@@ -14,7 +18,12 @@ import { Container, Section } from "@/components/ui/Layout";
 import { Reveal } from "@/components/ui/Reveal";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getProject, getProjectSlugs, getSettings } from "@/lib/content";
+import {
+  assertBrochureWithinLimit,
+  getProject,
+  getProjectSlugs,
+  getSettings,
+} from "@/lib/content";
 import { breadcrumbJsonLd, projectJsonLd } from "@/lib/seo/jsonld";
 
 /**
@@ -71,6 +80,9 @@ export default async function ProjectPage({
 
   if (!project) notFound();
 
+  // R-16 — ninguna descarga por encima de 10 MB. Rompe el build si se incumple.
+  assertBrochureWithinLimit(project);
+
   return (
     <>
       <JsonLd data={projectJsonLd(project, settings)} />
@@ -92,6 +104,23 @@ export default async function ProjectPage({
           brandLogo={project.brandLogo}
         />
 
+        {/* — Introducción al proyecto · R-04 — qué es, dónde, para quién. */}
+        {project.intro && (
+          <Section
+            tone="cream"
+            id="introduccion"
+            className="section-space-sm scroll-mt-24"
+          >
+            <Container size="read">
+              <Reveal>
+                <p className="measure text-[clamp(1.15rem,2.2vw,1.5rem)] leading-relaxed text-text">
+                  {project.intro}
+                </p>
+              </Reveal>
+            </Container>
+          </Section>
+        )}
+
         {/* — B · Qué se vive aquí — */}
         <Section tone="cream" className="section-space-lg">
           <Container size="read">
@@ -108,13 +137,17 @@ export default async function ProjectPage({
           </Container>
         </Section>
 
-        {/* — C · Lo esencial — no más de dos scrolls desde el hero. §10.3 */}
-        <EssentialsBlock
-          fields={project.essentials}
-          whatsappNumber={settings.whatsapp.number}
-          whatsappMessage={project.whatsappMessage}
-          projectSlug={project.slug}
-        />
+        {/* — C · Lo esencial — no más de dos scrolls desde el hero. §10.3
+            R-14: los campos sin dato no se muestran. */}
+        <EssentialsBlock fields={project.essentials} />
+
+        {/* — R-05 · Cifras del Book — construido; se pinta solo si published. */}
+        {project.facts && <FactsBlock facts={project.facts} />}
+
+        {/* — R-05 · Atributos del Book — */}
+        {project.attributes && project.attributes.length > 0 && (
+          <AttributesBlock attributes={project.attributes} />
+        )}
 
         {project.productTypes && project.productTypes.length > 0 && (
           <ProductTypesBlock products={project.productTypes} />
@@ -128,9 +161,13 @@ export default async function ProjectPage({
           <PillarsBlock pillars={project.pillars} />
         )}
 
-        {/* — E · Zonas comunes / Infraestructura — */}
+        {/* — E · Zonas comunes / Infraestructura — R-05: párrafo de entrada. */}
         {project.gallery && (
-          <Gallery title={project.galleryTitle} images={project.gallery} />
+          <Gallery
+            title={project.galleryTitle}
+            images={project.gallery}
+            intro={project.galleryIntro}
+          />
         )}
 
         {/* — F · Ubicación — */}
@@ -138,6 +175,12 @@ export default async function ProjectPage({
 
         {project.relatedOffering && (
           <RelatedOfferingBlock offering={project.relatedOffering} />
+        )}
+
+        {/* — Respaldo · aliados estratégicos — R-10. En Reserva y Edén, después
+            de ubicación y antes del cierre de contacto. El Mall no la lleva. */}
+        {project.theme !== "mall" && (
+          <BackingStrip allies={settings.allies} />
         )}
 
         {(project.brochure || project.disclaimer) && (
@@ -176,6 +219,9 @@ export default async function ProjectPage({
             </Container>
           </Section>
         )}
+
+        {/* — R-05 · Punto de precio — construido; se pinta solo si published. */}
+        {project.priceFrom && <PriceBlock price={project.priceFrom} />}
 
         {/* — H · Contacto — con el proyecto resuelto y bloqueado. */}
         <ContactBlock

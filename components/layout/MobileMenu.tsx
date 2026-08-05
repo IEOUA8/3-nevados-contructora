@@ -216,6 +216,29 @@ export function MobileMenu({
                       </div>
                       {expanded && (
                         <ul id={panelId} className="pb-3">
+                          {/* R-03 — introducción al proyecto, primero y distinta. */}
+                          {item.intro && (
+                            <li>
+                              <Link
+                                href={item.intro.href}
+                                onClick={onClose}
+                                className="mb-1 block bg-cool/40 py-3.5 pl-9 pr-4 transition-colors active:bg-cool/70"
+                              >
+                                <span className="block text-[0.5rem] font-medium uppercase tracking-[0.18em] text-secondary">
+                                  {item.intro.category}
+                                </span>
+                                <span className="mt-0.5 block font-display text-[1.15rem] leading-tight text-text">
+                                  {item.intro.label}
+                                </span>
+                                <span className="mt-1 block text-body-s leading-snug text-text-muted">
+                                  {item.intro.blurb}
+                                </span>
+                                <span className="mt-1.5 inline-block text-[0.625rem] font-medium uppercase tracking-[0.14em] text-accent">
+                                  {item.intro.cta} →
+                                </span>
+                              </Link>
+                            </li>
+                          )}
                           {item.children.map((child) => (
                             <li key={child.label}>
                               <Link

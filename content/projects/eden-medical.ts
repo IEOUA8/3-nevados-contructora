@@ -1,8 +1,8 @@
 import type { Project } from "../types";
 
 /**
- * Contenido de Edén Medical.
- * Fuente: Brief de desarrollo web, §6 «Contenido — Edén Medical».
+ * Contenido de Edén Médical.
+ * Fuente: Brief de desarrollo web, §6 «Contenido — Edén Médical».
  *
  * Este proyecto tiene cinco campos «Por confirmar» en el bloque C. No se
  * inventa ninguno ni se ocultan: se agrupan al final con tratamiento propio y
@@ -12,7 +12,7 @@ import type { Project } from "../types";
  * ocupan esa posición. §20.4
  */
 export const eden: Project = {
-  name: "Edén Medical",
+  name: "Edén Médical",
   slug: "eden-medical",
   order: 2,
   isPublished: true,
@@ -20,7 +20,7 @@ export const eden: Project = {
   theme: "eden",
   brandLogo: {
     src: "/images/eden/brand/logo-wordmark.png",
-    alt: "Edén Medical",
+    alt: "Edén Médical",
     width: 1784,
     height: 700,
   },
@@ -28,7 +28,7 @@ export const eden: Project = {
   // — A · Entrada —
   heroImage: {
     src: "/images/eden/hero.jpg",
-    alt: "Fachada de la torre médica Edén Medical, con la cordillera al fondo.",
+    alt: "Fachada de la torre médica Edén Médical, con la cordillera al fondo.",
     width: 2400,
     height: 1350,
   },
@@ -36,12 +36,16 @@ export const eden: Project = {
 
   cardImage: {
     src: "/images/eden/card.jpg",
-    alt: "Acceso peatonal de Edén Medical, con el frente de consultorios.",
+    alt: "Acceso peatonal de Edén Médical, con el frente de consultorios.",
     width: 1400,
     height: 788,
   },
   cardLine:
     "Consultorios, suites y espacios especializados para ejercer la medicina.",
+
+  // — Introducción editable · R-04 —
+  intro:
+    "Una torre de salud en Armenia. Consultorios, plantas libres, suites, locales y quirófanos en un mismo edificio, pensados para que un especialista ejerza al nivel de su especialidad.",
 
   // — B · Qué se vive aquí —
   experience: [
@@ -127,7 +131,7 @@ export const eden: Project = {
       text: "Espacios pensados para recibir, esperar y atender con calma.",
       image: {
         src: "/images/eden/g-2.jpg",
-        alt: "Acceso al lobby principal de Edén Medical.",
+        alt: "Acceso al lobby principal de Edén Médical.",
         width: 1800,
         height: 1012,
       },
@@ -149,7 +153,7 @@ export const eden: Project = {
       text: "Una visión del bienestar que también reconoce la vida cotidiana.",
       image: {
         src: "/images/eden/g-1.jpg",
-        alt: "Fachada de acceso de Edén Medical desde la calle.",
+        alt: "Fachada de acceso de Edén Médical desde la calle.",
         width: 1800,
         height: 1012,
       },
@@ -161,7 +165,7 @@ export const eden: Project = {
   gallery: [
     {
       src: "/images/eden/g-1.jpg",
-      alt: "Fachada de acceso de Edén Medical desde la calle.",
+      alt: "Fachada de acceso de Edén Médical desde la calle.",
       width: 1800,
       height: 1012,
       caption: "El acceso",
@@ -209,7 +213,7 @@ export const eden: Project = {
     address: "Calle 3 Norte #12-87, Armenia, Quindío",
     mapImage: {
       src: "/images/eden/location/localizacion.jpg",
-      alt: "Plano de localización de Edén Medical en el sector médico de Armenia.",
+      alt: "Plano de localización de Edén Médical en el sector médico de Armenia.",
       width: 2019,
       height: 1615,
     },
@@ -233,7 +237,7 @@ export const eden: Project = {
     sizeMb: 0.1,
   },
 
-  whatsappMessage: "Hola, quiero información sobre Edén Medical.",
+  whatsappMessage: "Hola, quiero información sobre Edén Médical.",
 
   audience: [
     "Un médico que quiere atender mejor",
@@ -243,7 +247,7 @@ export const eden: Project = {
 
   seo: {
     // Título completo: la ficha no recibe el sufijo de marca del layout.
-    title: "Edén Medical · Consultorios en Armenia | Tres Nevados",
+    title: "Edén Médical · Consultorios en Armenia | Tres Nevados",
     description:
       "Torre médica especializada en Armenia, Quindío. Infraestructura diseñada desde cero para salud, habilitable para cualquier especialidad.",
   },

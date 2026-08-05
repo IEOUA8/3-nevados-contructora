@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ContactBlock } from "@/components/sections/ContactBlock";
+import { ContactChannels } from "@/components/sections/ContactChannels";
 import { Container, Section } from "@/components/ui/Layout";
 import { Kicker } from "@/components/ui/Kicker";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -26,19 +27,27 @@ export default async function ContactPage() {
         <Container>
           <div className="max-w-4xl">
             <Kicker>Contacto</Kicker>
+            {/* R-12 — nombra el peso de la decisión sin volverla solemne. */}
             <h1 className="mt-6 font-display text-display-l text-text">
-              Una conversación puede empezar aquí.
+              Algunas decisiones se toman una vez.
+              <br />
+              Y se viven todos los días.
             </h1>
+            {/* R-12 — se elimina «directamente» por redundante. */}
             <p className="mt-6 measure text-body-l text-text-muted">
-              Escríbenos directamente por WhatsApp o déjanos tus datos y te
-              contactamos.
-              {!settings.salesRoom.address &&
-                " Las visitas a la sala de ventas se coordinan por ese mismo canal."}
+              Escríbenos por WhatsApp o déjanos tus datos. Las visitas a la sala
+              de ventas se coordinan por ese mismo canal.
             </p>
           </div>
 
           {/* §26 R5 — circulan dos direcciones distintas en los materiales.
               No se publica ninguna hasta que la marca confirme cuál es. */}
+
+          {/* R-11 — canales completos desde el dato maestro. Los pendientes no
+              se pintan hasta que la marca entregue el valor. */}
+          <div className="mt-14 max-w-2xl">
+            <ContactChannels settings={settings} formLocation="contacto_canales" />
+          </div>
         </Container>
       </Section>
 

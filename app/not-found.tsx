@@ -26,7 +26,7 @@ export default function NotFound() {
               href="/proyectos/eden-medical"
               className="text-body-s text-accent underline underline-offset-4 decoration-accent/40 hover:decoration-accent"
             >
-              Edén Medical
+              Edén Médical
             </Link>
           </li>
           <li>

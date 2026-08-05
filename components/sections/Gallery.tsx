@@ -22,12 +22,15 @@ import type { ImageRef } from "@/content/types";
 export function Gallery({
   title,
   images,
+  intro,
   bleed = true,
   autoplay = true,
   interval = 5000,
 }: {
   title: string;
   images: ImageRef[];
+  /** R-05 — párrafo de entrada a la sección de zonas sociales. */
+  intro?: string;
   bleed?: boolean;
   autoplay?: boolean;
   interval?: number;
@@ -186,6 +189,9 @@ export function Gallery({
             {number} <span className="mx-1 text-border">/</span> {total}
           </p>
         </div>
+        {intro && (
+          <p className="mt-5 measure text-body-l text-text-muted">{intro}</p>
+        )}
       </Container>
 
       {/* Escenario a borde completo cuando `bleed`; si no, dentro de la columna. */}

@@ -38,9 +38,16 @@ export type EssentialField = {
 };
 
 export type Typology = {
-  /** Código comercial del plano: RTB T1, RTC T3, etc. */
+  /** Código comercial del plano: RTB T1, RTC T3, etc. Referencia para el asesor. */
   code?: string;
+  /** Etiqueta visible al cliente: «Tipo 1», «Tipo 2». Nunca el código. R-06 */
   name: string;
+  /**
+   * R-06 — número de habitaciones. Es el criterio primario de filtrado, porque
+   * es como busca la gente. Se omite hasta que la marca entregue la tabla de
+   * correspondencia plano → Tipo · alcobas · área · torre.
+   */
+  bedrooms?: number;
   /** Se omite mientras la ficha comercial no lo haya validado. */
   area?: string;
   tower?: string;
@@ -117,6 +124,14 @@ export type Project = {
   /** Línea descriptiva de la tarjeta del home. */
   cardLine: string;
 
+  /**
+   * R-04 — Introducción editable al proyecto (qué es, dónde, para quién).
+   * Es el bloque que abren los desplegables del menú (R-03). Contenido de la
+   * marca, pensado para ajustarse a medida que se confirmen fecha de entrega,
+   * estado de obra y avance comercial. Se edita aquí, no en los componentes.
+   */
+  intro?: string;
+
   // — B · Qué se vive aquí —
   experience: string[];
 
@@ -129,11 +144,38 @@ export type Project = {
   // — D · Tipologías (opcional) —
   typologies?: Typology[];
 
+  /**
+   * R-05 — Cifras del proyecto (Book). Datos duros, en línea, sin iconografía.
+   * `published: false` mientras la marca no unifique el área mínima publicable
+   * (el Book reporta desde 26 m² y el sitio desde 33 m²). Sin esa confirmación
+   * el bloque queda construido pero no se pinta.
+   */
+  facts?: {
+    published: boolean;
+    items: string[];
+  };
+
+  /** R-05 — Atributos del proyecto (Book). Cuatro, con el texto de la marca. */
+  attributes?: { title: string; text: string }[];
+
+  /**
+   * R-05 — Punto de precio. Construido y DESACTIVADO: no se publica hasta
+   * confirmación de gerencia comercial. Se activa con una sola edición
+   * (`published: true`). El resto del sitio sigue sin ningún campo de precio.
+   */
+  priceFrom?: {
+    published: boolean;
+    value: string;
+    note?: string;
+  };
+
   // — E · Galería (opcional) —
   galleryTitle: string;
+  /** R-05 — Párrafo de entrada a la galería de zonas sociales. */
+  galleryIntro?: string;
   gallery?: ImageRef[];
 
-  // — Pilares (opcional, Edén Medical) —
+  // — Pilares (opcional, Edén Médical) —
   pillars?: Pillar[];
 
   // — F · Ubicación —
@@ -183,33 +225,49 @@ export type ManifestoContent = {
   seo: Seo;
 };
 
+/**
+ * LA CONSTRUCTORA — reestructurada según ajustes v2 (ago 2026).
+ *
+ * Estructura de la página (doc §R-07 a R-10):
+ *   1. Entrada · antetítulo + título          → `kicker`, `title`
+ *   2. Qué es Tres Nevados · la alianza  R-07  → `alliance`
+ *   3. De dónde viene el nombre          R-08  → `nameOrigin`
+ *   4. Cómo trabajamos · tres focos      R-07  → `focuses`
+ *   5. Respaldo · logos de aliados       R-10  → `BackingStrip` (settings.allies)
+ *   6. Institucional · videos                  → `videos`
+ *   7. Entregas previas                  R-09  → ELIMINADO
+ */
 export type CompanyContent = {
   kicker: string;
   title: string;
-  origin: string[];
-  principles: { title: string; text: string }[];
-  whereWeBuild: { title: string; text: string };
-  backing: { title: string; items: string[] };
-  trajectory: { title: string; text: string };
-  /**
-   * «Conoce más» · §10.4 — historia, antigüedad y entregas de la constructora,
-   * más los videos institucionales. Mientras la marca no entregue los datos,
-   * cada dato lleva `status: "pending"` y se pinta como un hueco visible, no se
-   * inventa. Los videos sin `url` se muestran como marcador «Próximamente».
-   */
-  knowMore: {
+
+  /** R-07 — Qué es Tres Nevados: la alianza que la funda. */
+  alliance: {
     kicker: string;
     title: string;
-    intro: string;
-    /** Historia / «nosotros». Párrafos en voz de marca, sin cifras inventadas. */
-    historia: string[];
-    milestones: {
-      label: string;
-      value?: string;
-      status: EssentialStatus;
-    }[];
-    videos: { label: string; url?: string }[];
+    body: string[];
+    /** Aviso interno: dato que la marca debe confirmar antes de publicar. */
+    pendingNote?: string;
   };
+
+  /** R-08 — De dónde viene el nombre. Fondo crema, mucho aire, sin CTA. */
+  nameOrigin: {
+    kicker: string;
+    lines: string[];
+  };
+
+  /** R-07 (continuación) — Cómo trabajamos: tres focos con el mismo peso. */
+  focuses: { title: string; text: string }[];
+
+  whereWeBuild: { title: string; text: string };
+  backing: { title: string; items: string[] };
+
+  /**
+   * Institucional · videos. Mientras la marca no entregue las URLs, cada video
+   * se pinta como marcador «Próximamente». Sin `url` no se enlaza nada.
+   */
+  videos: { label: string; url?: string }[];
+
   seo: Seo;
 };
 
@@ -257,6 +315,24 @@ export type LegalDocument = {
   seo: Seo;
 };
 
+/** R-10 — Aliado estratégico / respaldo. El logo se publica solo cuando la
+ * marca entrega el vectorial y autoriza el uso; hasta entonces va el nombre. */
+export type Ally = {
+  name: string;
+  logo?: ImageRef;
+};
+
+/**
+ * R-11 — Canal de contacto con enlace activo.
+ * `href` se arma con esquema (`tel:`, `mailto:`). Sin `value` el campo queda
+ * construido pero no se pinta: la marca entrega los datos en un solo envío.
+ */
+export type ContactChannel = {
+  label: string;
+  value?: string;
+  href?: string;
+};
+
 export type SiteSettings = {
   siteName: string;
   siteUrl: string;
@@ -266,11 +342,40 @@ export type SiteSettings = {
     display: string;
     defaultMessage: string;
   };
-  social: { instagram: string; facebook: string };
+  social: {
+    instagram: string;
+    facebook: string;
+    /** R-11 — agregar. Sin URL no se pinta el enlace. */
+    linkedin?: string;
+    /** R-11 — agregar si existe canal institucional activo. */
+    youtube?: string;
+  };
+  /**
+   * R-11 — canales completos. Todos los campos existen desde ahora; los que la
+   * marca no ha entregado quedan sin `value` y no se pintan (R-14: nada de
+   * «por confirmar» visible). Un cambio, un lugar: este objeto alimenta el pie,
+   * la página de contacto y las fichas de proyecto.
+   */
+  contact: {
+    phoneFixed?: ContactChannel;
+    phoneAlt?: ContactChannel;
+    emailComercial?: ContactChannel;
+    emailAdministrativo?: ContactChannel;
+    emailProveedores?: ContactChannel;
+  };
   salesRoom: {
     /** Bloqueado hasta resolver la ambigüedad de las dos direcciones. §26 R5 */
     address?: string;
     hours?: string;
+  };
+  /**
+   * R-10 — Aliados estratégicos y respaldo. Franja en tres páginas del sitio.
+   * `note` es la redacción de apoyo (la valida jurídica antes de publicar).
+   */
+  allies: {
+    kicker: string;
+    note: string;
+    items: Ally[];
   };
   backing: string[];
 };
